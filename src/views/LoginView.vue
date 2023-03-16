@@ -7,8 +7,8 @@ import TheHeader from '@/components/TheHeader.vue'
 
     <TheHeader /> 
     
-    <div class="about">
-      <h1>This is an about page</h1>
+    <div class="login">
+      <h1>This is a login page</h1>
     </div>
   </main>
 </template>
