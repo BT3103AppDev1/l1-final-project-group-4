@@ -1,58 +1,58 @@
 <template>
 <!-- HEADER IF NOT LOGGED IN -->
-  <div class="not-logged-in-header" v-if="!loggedIn">
-    <div class = "logo-section">
-        <img id = "logo" src="@/assets/food.png" />
-    </div>
-    <div class = "buttons-section">
-        <RouterLink to = "/" > <button> HOME </button> </RouterLink>
+<div class ="container" v-if = "!loggedIn">
+    <div class="logo-nav-container"> 
+        <img alt="Elsa" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+        <nav>
+            <router-link class="headerButton" to = "/"> 
+              <text class="navButton">HOME</text> 
+            </router-link>
 
-        <RouterLink to = "/about" custom v-slot= "{ navigate }">
-          <button @click = "navigate" role = "link" id = "about-us-button"> ABOUT US </button>
-        </RouterLink>
+            <router-link class="headerButton" to = "/about"> 
+              <text class="navButton">ABOUT US</text> 
+            </router-link>
 
-        <RouterLink to = "/services" custom v-slot= "{ navigate }">
-          <button @click = "navigate" role = "link" id = "services-button"> SERVICES </button>
-        </RouterLink>
+            <router-link class="headerButton" to = "/services"> 
+              <text class="navButton">SERVICES</text> 
+            </router-link>
 
-        <RouterLink to = "/login" custom v-slot= "{ navigate }">
-          <button @click = "navigate" role = "link" id = "login-button"> LOGIN </button>
-        </RouterLink>
-    </div>
+            <router-link class="headerButton" to = "/login"> 
+              <text class="navButton">LOGIN</text> 
+            </router-link>
+        </nav>
+        <img alt="Menu" class="drawer" src="@/assets/drawer.png" width="75" height="75" />
   </div>
+</div>
 
 <!-- HEADER IF LOGGED IN -->
-  <div class="logged-in-header" v-if="loggedIn">
-    <div class = "logo-section">
-        <img id = "logo" src="@/assets/food.png" />
-    </div>
-    <div class = "buttons-section">
-        <RouterLink to = "/" > <button> HOME </button> </RouterLink>
+<div class ="container" v-if = "loggedIn">
+    <div class="logo-nav-container"> 
+        <img alt="Elsa" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+        <nav>
+          <router-link class="headerButton" to = "/"> <text class="navButton">HOME</text> </router-link>
 
-        <RouterLink to = "/about" custom v-slot= "{ navigate }">
-          <button @click = "navigate" role = "link" id = "about-us-button"> ABOUT US </button>
-        </RouterLink>
+          <router-link class="headerButton" to = "/about"> 
+            <text class="navButton">ABOUT US</text> 
+          </router-link>
 
-        <RouterLink to = "/services" custom v-slot= "{ navigate }">
-          <button @click = "navigate" role = "link" id = "services-button"> SERVICES </button>
-        </RouterLink>
+          <router-link class="headerButton" to = "/services"> 
+            <text class="navButton">SERVICES</text> 
+          </router-link>
 
-        <RouterLink to = "/bookappointment" custom v-slot= "{ navigate }">
-          <button @click = "navigate" role = "link" id = "login-button"> BOOK AN APPOINTMENT </button>
-        </RouterLink>
-
-        <RouterLink to = "/profile" custom v-slot= "{ navigate }">
-          <button @click = "navigate" role = "link" id = "profile-button"> PROFILE </button>
-        </RouterLink>
-    </div>
-  </div>  
+          <router-link class="headerButton" to = "/profile"> 
+              <text class="navButton">PROFILE</text> 
+          </router-link>
+        </nav>
+        <img alt="Menu" class="drawer" src="@/assets/drawer.png" width="75" height="75" />
+  </div>
+</div>
 </template>
 
 <script>
   export default {
     data() {
       return {
-        loggedIn: false
+        loggedIn: true
       }
     },
     mounted() {
@@ -63,27 +63,85 @@
   function checkLoginStatus() { //type of header shown will change based on this function???? if thats possible???
     return true;
   }
-
 </script>
 
 <style scoped>
+    .container {
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+    }
 
-.logged-in-header, .not-logged-in-header {
-    display: flex;
-    flex-direction: row;
-    height: 100px;
-    align-items: center;
-}
+    .headerButton {
+        margin-inline: 3em;
+    }
 
-.logo-section {
-    flex: 1;
-}
+    .logo-nav-container {
+        line-height: 1.5;
+        flex-direction: row;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
 
-#logo {
-    height: 100px;
-    width: 100px;
-    display: inline-block;
-    text-align: left;
-}
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+    }
 
+    a { 
+        text-decoration: none; 
+        background-color: #193A6A;
+        padding: 0.5em;
+        border-radius: 0.5em;
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); 
+    }
+
+    nav a:hover {
+        background-color: #2c5b94; 
+        transition: 0.2s;
+    }
+
+    nav a.router-link-exact-active:hover {
+        background-color:#193A6A;
+    }
+
+    .navButton {
+        color: white;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* change font */
+        font-size: 1em;
+        font-weight: bold;
+        padding: 0.5em 1.2em;
+    }
+
+    .logo {
+        display: flex;
+        margin: 0em 0em 0em 1em;
+    }
+
+    .drawer {
+        margin: 0em 2em 0em 0em;
+    }
+
+    .header h1 {
+        flex: 1 0 auto;
+        text-align: center;
+        margin: 0 10px; 
+        padding-inline: 100px;
+        padding-top: 2em;
+        align-self: center;
+    }
+    
+    @media (min-width: 1025px) {
+        .drawer {
+            display: none;
+        }
+    }
+    @media (max-width: 1024px) {
+        nav {
+            display: none;
+        }
+    }
 </style>

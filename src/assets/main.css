@@ -1,18 +1,8 @@
 @import './base.css';
 
 #app {
-  max-width: 1280px;
+  max-width: 1920px;
+  margin: 0 auto;
+
   font-weight: normal;
 }
-
-button {
-  padding: 12px;
-  background-color: var(--color-button);
-  color: var(--color-button-text);
-  border-radius: 10px;
-  border-style: none;
-  font-weight: bold;
-  margin: 0px 10px 0px 10px;
-}
-
-

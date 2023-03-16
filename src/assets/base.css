@@ -1,53 +1,10 @@
-
-:root {
-  --vt-c-lightblue: #d4e5f3; 
-  --vt-c-black: #222222;
-  --vt-c-darkblue: #193a6a;
-  --vt-c-white: #ffffff;
-}
-
-/* semantic color variables for this project */
-:root {
-  --color-background: var(--vt-c-lightblue);
-  --color-text: var(--vt-c-black);
-  --color-button: var(--vt-c-darkblue);
-  --color-button-text: var(--vt-c-white)
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  
-}
-
-body {
-  color: var(--color-text);
-  background: var(--color-background);
-  transition: color 0.5s, background-color 0.5s;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-    Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  font-size: 15px;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-
-
-
-
-
-/*
-
- color palette from <https://github.com/vuejs/theme> 
+/* color palette from <https://github.com/vuejs/theme> */
 :root {
   --vt-c-white: #ffffff;
   --vt-c-white-soft: #f8f8f8;
   --vt-c-white-mute: #f2f2f2;
 
-  --vt-c-black: #181818; 
+  --vt-c-black: #181818;
   --vt-c-black-soft: #222222;
   --vt-c-black-mute: #282828;
 
@@ -64,7 +21,7 @@ body {
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
 }
 
- semantic color variables for this project 
+/* semantic color variables for this project */
 :root {
   --color-background: var(--vt-c-white);
   --color-background-soft: var(--vt-c-white-soft);
@@ -79,7 +36,7 @@ body {
   --section-gap: 160px;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --color-background: var(--vt-c-black);
     --color-background-soft: var(--vt-c-black-soft);
@@ -91,7 +48,7 @@ body {
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var(--vt-c-text-dark-2);
   }
-}
+} */
 
 *,
 *::before,
@@ -115,4 +72,3 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-*/
