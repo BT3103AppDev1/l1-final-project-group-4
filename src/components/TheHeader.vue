@@ -1,3 +1,19 @@
+<script>
+  export default {
+    data() {
+      return {
+        loggedIn: true
+      }
+    },
+    mounted() {
+      this.loggedIn = checkLoginStatus();
+    }
+  }
+    function checkLoginStatus() { //type of header shown will change based on this function???? if thats possible???
+      return false;
+    }
+</script>
+
 <template>
 <!-- HEADER IF NOT LOGGED IN -->
 <div class ="container" v-if = "!loggedIn">
@@ -47,23 +63,6 @@
   </div>
 </div>
 </template>
-
-<script>
-  export default {
-    data() {
-      return {
-        loggedIn: true
-      }
-    },
-    mounted() {
-      this.loggedIn = checkLoginStatus();
-    }
-  }
-
-  function checkLoginStatus() { //type of header shown will change based on this function???? if thats possible???
-    return true;
-  }
-</script>
 
 <style scoped>
     .container {

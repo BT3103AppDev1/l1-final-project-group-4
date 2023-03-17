@@ -21,7 +21,7 @@ import TheHeader from '@/components/TheHeader.vue'
 }
 .body {
   background-image: url('../assets/GroupPortrait.png');
-  background-color: aquamarine;
+  background-color: rgb(215, 229, 243);
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
