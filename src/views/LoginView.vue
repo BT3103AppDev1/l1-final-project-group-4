@@ -1,32 +1,51 @@
 <script>
-import { auth } from "../firebase.js"
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { ref } from "vue"
+import { useStore } from "vuex"
+import { useRouter } from "vue-router"
 
 export default {
-  data() {
-    return {
-      email: "",
-      password: ""
+  setup() {
+    const email = ref('')
+    const password = ref('')
+    const errorMsg = ref(null)
+
+    const store = useStore()
+    const router = useRouter()
+
+    const goBack = () => {
+      router.push("/")
     }
-  },
-  methods: {
-    goBack() {
-      this.$router.push({path: "/"})
-    },
-    login() {
-      console.log(this.email)
-      signInWithEmailAndPassword(auth, this.email, this.password).then((data) => {
-      console.log("Login Successful!");
-      console.log(auth.currentUser);
-      this.$router.push("/");
-      }) 
-      .catch((error) => {
-        console.log(error.code);
-        alert(error.message);
-        this.email = "";
-        this.password = "";
-      })  
+
+    const handleSubmit = async () => {
+      try {
+            await store.dispatch('logIn', {
+                email: email.value,
+                password: password.value
+            })
+            router.push("/")
+        } catch (error) {
+            console.log(error.code);
+        
+            switch (error.code) {
+              case  "auth/invalid-email":
+                errorMsg.value = "Invalid Email";
+                break;
+              case "auth/user-not-found":
+                errorMsg.value = "No account with that email was found";
+                break;
+              case "auth/wrong-password":
+                errorMsg.value = "Incorrect Password";
+                break;
+              default:
+                errorMsg.value = "Email or password was incorrect";
+                break;
+            }
+        } finally {
+          email.value = ''
+          password.value = ''
+        }
     }
+    return {goBack, handleSubmit, email, password, errorMsg}
   }
 }
 </script>
@@ -34,7 +53,7 @@ export default {
 <template>
   <div class="main">
     <div class="login-container">
-      <img alt="Back" class="backButton" src="@/assets/back-button.png" width="30" height="30" @click="goBack"/>
+      <img alt="Back" class="backButton" src="@/assets/back-button.png" width="30" height="30" @click="goBack()"/>
       <div class="sub-container">
         <h1>Login to your account</h1>
       
@@ -42,7 +61,8 @@ export default {
         <input type="password" placeholder="Password" v-model="password" required>
       </div>
       <div class="sub-container">
-        <button type="submit" class="submit" @click="login">Log In</button>
+        <button type="submit" class="submit" @click="handleSubmit()">Log In</button>
+        <h4 v-if="errorMsg" class = "errorMsg">{{errorMsg}}</h4>
       </div>
     </div>
   </div>
@@ -73,7 +93,7 @@ export default {
 
   .backButton {
     display: flex;
-    margin: 0.5em 0em 0em 0.5em;
+    margin: 0em 0em 0em 1em;
   }
 
   .backButton:hover {
@@ -153,10 +173,19 @@ export default {
     margin: 1em 2em;
   }
 
+  .submit:hover {
+    background-color:whitesmoke;
+  }
+
   .sub-container h1 {
     padding-top: 1em;
     padding-left: 0.5em;
     font-weight: bold;
+  }
+
+  .errorMsg {
+    text-align: center;
+    color: red;
   }
 
   @media (max-width: 840px) {
@@ -181,5 +210,5 @@ export default {
     justify-content: space-around;
     flex-direction: column;
   }
-  }
+}
 </style>
