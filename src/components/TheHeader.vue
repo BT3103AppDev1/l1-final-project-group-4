@@ -1,22 +1,22 @@
 <script>
+  import { computed } from "vue"
+  import { useStore } from "vuex"
+
   export default {
-    data() {
-      return {
-        loggedIn: true
+    setup() {
+      const store = useStore()
+
+      return { 
+        user: computed(() => store.state.user),
+        authIsReady: computed(() => store.state.authIsReady)
       }
-    },
-    mounted() {
-      this.loggedIn = checkLoginStatus();
     }
   }
-    function checkLoginStatus() { //type of header shown will change based on this function???? if thats possible???
-      return false;
-    }
 </script>
 
 <template>
 <!-- HEADER IF NOT LOGGED IN -->
-<div class ="container" v-if = "!loggedIn">
+<div class ="container" v-if = "authIsReady">
     <div class="logo-nav-container"> 
         <img alt="Elsa" class="logo" src="@/assets/logo.svg" width="125" height="125" />
         <nav>
@@ -32,32 +32,15 @@
               <text class="navButton">SERVICES</text> 
             </router-link>
 
-            <router-link class="headerButton" to = "/login"> 
+            <!-- HEADER IF NOT LOGGED IN -->
+            <router-link class="headerButton" to = "/login" v-if = "!user"> 
               <text class="navButton">LOGIN</text> 
             </router-link>
-        </nav>
-        <img alt="Menu" class="drawer" src="@/assets/drawer.png" width="75" height="75" />
-  </div>
-</div>
 
-<!-- HEADER IF LOGGED IN -->
-<div class ="container" v-if = "loggedIn">
-    <div class="logo-nav-container"> 
-        <img alt="Elsa" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-        <nav>
-          <router-link class="headerButton" to = "/"> <text class="navButton">HOME</text> </router-link>
-
-          <router-link class="headerButton" to = "/about"> 
-            <text class="navButton">ABOUT US</text> 
-          </router-link>
-
-          <router-link class="headerButton" to = "/services"> 
-            <text class="navButton">SERVICES</text> 
-          </router-link>
-
-          <router-link class="headerButton" to = "/profile"> 
+            <!-- HEADER IF LOGGED IN -->            
+            <router-link class="headerButton" to = "/profile" v-if = "user"> 
               <text class="navButton">PROFILE</text> 
-          </router-link>
+            </router-link>
         </nav>
         <img alt="Menu" class="drawer" src="@/assets/drawer.png" width="75" height="75" />
   </div>
