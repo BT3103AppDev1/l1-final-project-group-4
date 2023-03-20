@@ -1,25 +1,17 @@
 <template>
   <div class="card">
     <div class="card-body">
-      <h3>Caleb Low</h3>
       <img
         class="card-profile-img"
         src="https://therichpost.com/wp-content/uploads/2021/03/avatar2.png"
         alt="Profile Picture"
       />
+      <h3>Caleb Low</h3>
       <button>Information</button>
       <button>Appointments</button>
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  data() {
-    return {}
-  }
-}
-</script>
 
 <style scoped>
 .card {
@@ -36,8 +28,8 @@ export default {
 
 .card-profile-img {
   position: relative;
-  max-width: 8rem;
-  margin-top: -6rem;
+  max-width: 15rem;
+  margin-top: 2rem;
   margin-bottom: 1rem;
   border: 3px solid #fff;
   border-radius: 100%;
