@@ -1,14 +1,14 @@
 <script setup>
 import TheHeader from '@/components/TheHeader.vue'
+import ProfileCard from '@/components/ProfileCard.vue'
 </script>
 
 <template>
   <main>
+    <TheHeader />
 
-    <TheHeader /> 
-    
     <div class="profile">
-      <h1>This is a profile page</h1>
+      <ProfileCard />
     </div>
   </main>
 </template>
