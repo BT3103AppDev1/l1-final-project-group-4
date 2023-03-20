@@ -1,10 +1,13 @@
 <script>
-import TheHeader from '@/components/TheHeader.vue'
+import TheHeader from '../components/TheHeader.vue'
 import { ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 
 export default {
+  components: {
+    TheHeader
+  },
   setup() {
     const errorMsg = ref(null)
     
@@ -20,7 +23,7 @@ export default {
         }
     }
 
-    return {TheHeader, handleSubmit}
+    return {handleSubmit}
   }
 }
 </script>
