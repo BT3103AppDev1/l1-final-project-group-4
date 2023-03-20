@@ -16,6 +16,10 @@ export default {
       router.push("/")
     }
 
+    const goRegister = () => {
+      router.push("/signup")
+    }
+
     const handleSubmit = async () => {
       try {
             await store.dispatch('logIn', {
@@ -24,28 +28,28 @@ export default {
             })
             router.push("/")
         } catch (error) {
-            console.log(error.code);
-        
-            switch (error.code) {
-              case  "auth/invalid-email":
-                errorMsg.value = "Invalid Email";
-                break;
-              case "auth/user-not-found":
-                errorMsg.value = "No account with that email was found";
-                break;
-              case "auth/wrong-password":
-                errorMsg.value = "Incorrect Password";
-                break;
-              default:
-                errorMsg.value = "Email or password was incorrect";
-                break;
-            }
+          console.log(error.code);
+      
+          switch (error.code) {
+            case  "auth/invalid-email":
+              errorMsg.value = "Invalid Email";
+              break;
+            case "auth/user-not-found":
+              errorMsg.value = "No account with that email was found";
+              break;
+            case "auth/wrong-password":
+              errorMsg.value = "Incorrect Password";
+              break;
+            default:
+              errorMsg.value = "Email or password was incorrect";
+              break;
+          }
         } finally {
           email.value = ''
           password.value = ''
         }
     }
-    return {goBack, handleSubmit, email, password, errorMsg}
+    return {goBack, goRegister, handleSubmit, email, password, errorMsg}
   }
 }
 </script>
@@ -63,6 +67,7 @@ export default {
       <div class="sub-container">
         <button type="submit" class="submit" @click="handleSubmit()">Log In</button>
         <h4 v-if="errorMsg" class = "errorMsg">{{errorMsg}}</h4>
+        <p class="register">Do not have an account? <span class = "registerButton" @click="goRegister()">Register</span></p>
       </div>
     </div>
   </div>
@@ -71,13 +76,17 @@ export default {
 <style scoped>
   .main {
     min-width: 840px;
-    min-height: 600px;
+    min-height: 680px;
     display: flex;
-    background-color: rgb(215, 229, 243);
     height: 100vh;
     width: 100vw;
     justify-content: center;
     align-items: center;
+    background-image: url('../assets/loginBg.png');
+    background-color: rgb(215, 229, 243);
+    background-repeat: no-repeat;
+    background-position: left;
+    background-size: cover;
   }
 
   .login-container {
@@ -188,16 +197,31 @@ export default {
     color: red;
   }
 
+  .register {
+    text-align: end;
+    padding-right: 2em;
+  }
+
+  .registerButton {
+    color:#193A6A;
+  }
+
+  .registerButton:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
   @media (max-width: 840px) {
     .main {
     min-width: 400px;
-    min-height: 600px;
+    min-height: 680px;
     display: flex;
     background-color: rgb(215, 229, 243);
     height: 100vh;
     width: 100vw;
     justify-content: center;
     align-items: center;
+    background-image: none;
   }
   .login-container {
     flex-wrap: wrap;
