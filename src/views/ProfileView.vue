@@ -12,7 +12,6 @@ export default {
   },
   setup() {
     const errorMsg = ref(null)
-
     const store = useStore()
     const router = useRouter()
     const handleSubmit = async () => {
@@ -23,7 +22,6 @@ export default {
         errorMsg.value = err.message
       }
     }
-
     return { handleSubmit }
   }
 }

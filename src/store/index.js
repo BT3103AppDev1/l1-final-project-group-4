@@ -1,11 +1,13 @@
 import { createStore } from 'vuex'
-import { auth } from '../firebase.js'
 import {
+  getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged
 } from 'firebase/auth'
+import app from '../firebase.js'
+const auth = getAuth(app)
 
 const store = createStore({
   state: {
@@ -13,11 +15,11 @@ const store = createStore({
     authIsReady: false
   },
 
-  // getters: {
-  //     user(state){
-  //     return state.user
-  //     }
-  // },
+  getters: {
+    user(state) {
+      return state.user
+    }
+  },
 
   mutations: {
     setUser(state, payload) {
