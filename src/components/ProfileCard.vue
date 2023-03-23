@@ -1,18 +1,22 @@
 <script>
 import app from '../firebase.js'
-import { getAuth } from 'firebase/auth'
-const auth = getAuth(app)
-
+import { onMounted } from "vue"
 import { getFirestore } from 'firebase/firestore'
 import { doc, getDoc } from 'firebase/firestore'
-const db = getFirestore(app)
+import { useStore } from 'vuex'
+
 
 export default {
   setup() {
-    var user = auth.currentUser
-    var userEmail = user.email
+    const db = getFirestore(app)
+    const store = useStore()
 
-    async function getProfile() {
+    console.log("READ USEREMAIL")
+    const userEmail = store.state.userEmail
+    console.log(userEmail)
+    console.log("DONE READING")
+    onMounted(async () => {
+      console.log(userEmail)
       const docRef = doc(db, 'customers', userEmail)
       const docSnap = await getDoc(docRef)
 
@@ -29,11 +33,9 @@ export default {
       } else {
         console.log('No such document!')
       }
-    }
-
-    getProfile()
-
-    return { user, userEmail }
+    })
+  
+    return { userEmail }
   }
 }
 </script>
@@ -46,9 +48,9 @@ export default {
         src="https://therichpost.com/wp-content/uploads/2021/03/avatar2.png"
         alt="Profile Picture"
       />
-      <h3 id="customer_name"></h3>
-      <h3 id="customer_email"></h3>
-      <h3 id="customer_phone"></h3>
+      <h2 id="customer_name" >Name:</h2>
+      <h3 id="customer_email">Email:</h3>
+      <h3 id="customer_phone">Phone Number:</h3>
       <button>Information</button>
       <button>Appointments</button>
     </div>

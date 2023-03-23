@@ -6,14 +6,17 @@ import {
   signOut,
   onAuthStateChanged
 } from 'firebase/auth'
+import createPersistedState from "vuex-persistedstate";
 import app from '../firebase.js'
 const auth = getAuth(app)
 
 const store = createStore({
   state: {
     user: null,
-    authIsReady: false
+    authIsReady: false,
+    userEmail: null
   },
+  plugins: [createPersistedState()],
 
   getters: {
     user(state) {
@@ -28,6 +31,9 @@ const store = createStore({
     },
     setAuthIsReady(state, payload) {
       state.authIsReady = payload
+    },
+    setUserEmail(state, payload) {
+        state.userEmail = payload
     }
   },
   actions: {
@@ -36,6 +42,7 @@ const store = createStore({
       // console.log(response)
       if (response) {
         context.commit('setUser', response.user)
+        context.commit('setUserEmail', auth.currentUser.email)
       } else {
         throw new Error('login failed')
       }
@@ -53,6 +60,7 @@ const store = createStore({
       console.log('Logging out')
       await signOut(auth)
       context.commit('setUser', null)
+      context.commit('setUserEmail', null)
     }
   }
 })
@@ -60,6 +68,7 @@ const store = createStore({
 const unsub = onAuthStateChanged(auth, (user) => {
   store.commit('setAuthIsReady', true)
   store.commit('setUser', user)
+//   store.commit('setUserEmail', auth.currentUser.email)
   unsub()
 })
 // export the store
