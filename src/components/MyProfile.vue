@@ -28,6 +28,7 @@ export default {
         document.getElementById('customer_phone').innerHTML = 'Contact Number: ' + phone
       } else {
         console.log('No such document!')
+        console.log(userEmail)
       }
     }
 

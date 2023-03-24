@@ -30,14 +30,14 @@ export default {
     const handleSubmit = async () => {
       try {
         await store.dispatch('signUp', {
-          email: email.value,
+          email: email.value.toLowerCase(),
           password: password.value,
           displayName: name.value,
           phoneNumber: phone.value
         })
-        await setDoc(doc(db, 'customers', email.value), {
+        await setDoc(doc(db, 'customers', email.value.toLowerCase()), {
           customer_name: name.value,
-          customer_email: email.value,
+          customer_email: email.value.toLowerCase(),
           customer_phone: phone.value
         })
         router.push('/')
