@@ -38,6 +38,11 @@ const router = createRouter({
       path: '/bookappointment',
       name: 'bookappointment',
       component: () => import('../views/BookAppointmentView.vue')
+    },
+    {
+      path: '/groomingprogress',
+      name: 'groomingprogress',
+      component: () => import('../views/GroomingProgressView.vue')
     }
   ]
 })

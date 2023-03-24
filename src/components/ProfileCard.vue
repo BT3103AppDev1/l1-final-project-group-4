@@ -1,93 +1,61 @@
 <script>
-import app from '../firebase.js'
-import { getAuth } from 'firebase/auth'
-const auth = getAuth(app)
 
-import { getFirestore } from 'firebase/firestore'
-import { doc, getDoc } from 'firebase/firestore'
-const db = getFirestore(app)
+//just need to pull owners profile photo from database
 
-export default {
-  setup() {
-    var user = auth.currentUser
-    var userEmail = user.email
-
-    async function getProfile() {
-      const docRef = doc(db, 'customers', userEmail)
-      const docSnap = await getDoc(docRef)
-
-      if (docSnap.exists()) {
-        console.log('Document data:', docSnap.data())
-        let documentData = docSnap.data()
-        let name = documentData.customer_name
-        let email = documentData.customer_email
-        let phone = documentData.customer_phone
-
-        document.getElementById('customer_name').innerHTML = name
-        document.getElementById('customer_email').innerHTML = 'Email: ' + email
-        document.getElementById('customer_phone').innerHTML = 'Phone Number: ' + phone
-      } else {
-        console.log('No such document!')
-      }
-    }
-
-    getProfile()
-
-    return { user, userEmail }
-  }
-}
 </script>
 
 <template>
   <div class="card">
     <div class="card-body">
-      <img
-        class="card-profile-img"
-        src="https://therichpost.com/wp-content/uploads/2021/03/avatar2.png"
-        alt="Profile Picture"
-      />
-      <h3 id="customer_name"></h3>
-      <h3 id="customer_email"></h3>
-      <h3 id="customer_phone"></h3>
-      <button>Information</button>
-      <button>Appointments</button>
+        <img class="card-profile-img" src="@/assets/appts-img.png"/>
+        <br>
+        <br>
+        <button id= "info-page">Information</button>
+        
+        <br>
+      <router-link  to="/groomingprogress">
+        <button id = "progress-page"> Dog Progress</button>
+      </router-link>
     </div>
   </div>
 </template>
 
 <style scoped>
-.card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  background-color: #fff;
-  background-clip: border-box;
-  border: none;
-  box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
-  border-radius: 1rem;
-}
-
-.card-profile-img {
-  position: relative;
-  max-width: 15rem;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  border: 3px solid #fff;
-  border-radius: 100%;
-  box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
-  z-index: 2;
-}
 
 .card-body {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  background-color: #fff;
-  background-clip: border-box;
-  border: none;
-  box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
-  border-radius: 1rem;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
+.card-profile-img {
+    height: 200px;
+    border-radius: 50%;
+    margin-top: 50px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+}
+
+#info-page, #progress-page {
+    background-color: #2c5b94;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* change font */
+    font-size: 1em;
+    font-weight: bold;
+    padding: 0.7em 1.2em;
+    border-radius: 15px;
+    border:none;
+    width: 200px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.4);
+    transition: opacity 0.2s ease-in-out;
+  
+}
+
+#info-page:hover, #progress-page:hover {
+  opacity: 0.9
+}
+
 </style>

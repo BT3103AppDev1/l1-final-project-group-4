@@ -38,6 +38,11 @@ export default {
         </router-link>
 
         <!-- HEADER IF LOGGED IN -->
+        <router-link class="headerButton" to="/bookappointment" v-if="user">
+          <text class="navButton">BOOK APPOINTMENT</text>
+        </router-link>
+
+        <!-- HEADER IF LOGGED IN -->
         <router-link class="headerButton" to="/profile" v-if="user">
           <text class="navButton">PROFILE</text>
         </router-link>

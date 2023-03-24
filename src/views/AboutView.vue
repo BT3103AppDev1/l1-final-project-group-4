@@ -6,8 +6,9 @@ import TheHeader from '@/components/TheHeader.vue'
   <main>
     <TheHeader />
 
-    <div class="about">
+    <div class="about">\<br>
       <h1>ABOUT US</h1>
+      
       <h2>
         We are a team of dedicated pet lovers who understand the importance of keeping your furry
         family members healthy and well-groomed. At our shop, we believe that every pet deserves to
@@ -23,8 +24,9 @@ import TheHeader from '@/components/TheHeader.vue'
       Saturday : 9am - 4pm <br />
       Sunday: Closed
     </div>
-
-      <h4>What people say</h4>
+     
+      <br>
+      <h1>What people say</h1>
 
       <div class="comment1">
         <div class="circle"></div>
@@ -39,11 +41,12 @@ import TheHeader from '@/components/TheHeader.vue'
           <span class="fa fa-star checked"></span>
           <span class="fa fa-star"></span>
         </div>
-
+        <div class = "description" >
         "As a first time pet parent, I was very clueless about the grooming procedure for my dog.
         The team helped me soothe my nerves by guiding me through the grooming procedure and gave me
         reassurance that my pet was in good hands. Will definitely visit this grooming shop the next
         time!"
+        </div>
       </div>
 
       <div class="comment2">
@@ -59,11 +62,12 @@ import TheHeader from '@/components/TheHeader.vue'
           <span class="fa fa-star checked"></span>
           <span class="fa fa-star checked"></span>
           </div>
-  
-        "I recently had the pleasure of taking my furry friend to this dog grooming website, and I
-        must say that I was thoroughly impressed with the level of service they provided. They were
-        friendly, knowledgeable, and took the time to listen to my concerns and answer any questions
-        I had."
+          <div class = "description" >
+            "I recently had the pleasure of taking my furry friend to this dog grooming website, and I
+            must say that I was thoroughly impressed with the level of service they provided. They were
+            friendly, knowledgeable, and took the time to listen to my concerns and answer any questions
+            I had."
+            </div>
       </div>
     </div>
   </main>
@@ -71,7 +75,7 @@ import TheHeader from '@/components/TheHeader.vue'
 
 <style scoped>
 .about {
-  height: calc(100vh - 125px);
+  height: 100vh;
   background: linear-gradient(to top, #193a6a 0%, #193a6a 50%, #d4e5f3 50%, #d4e5f3 100%);
 }
 
@@ -92,19 +96,11 @@ h3 {
   margin-left: 20px;
   color: white;
 }
-
-h4{
-  font-size: 3em;
-  font-weight: bold;
-  margin-left: 20px;
-  color: white;
-  padding: 5px;
-}
 .white-box {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 400px;
+  width: 350px;
   height: 180px;
   padding: 20px;
   font-size: 20px;
@@ -113,8 +109,9 @@ h4{
   position: absolute;
   top: 0;
   right: 0;
-  margin-top: 60px;
+  margin-top: 100px;
   margin-right: 60px;
+  font-weight: bold;
 }
 .comment1 {
   display: flex;
@@ -126,9 +123,9 @@ h4{
   backdrop-filter: blur(21px);
   border-radius: 25px;
   margin-left: 20px;
-  height: 200px;
+  height: 300px;
   width: 48%;
-  bottom: 20px;
+  bottom: 100px;
   text-align: center;
   color: white;
   border-radius: 10px;
@@ -143,15 +140,13 @@ h4{
   position: absolute;
   background-color: black;
   right: 0;
-  height: 200px;
+  height: 300px;
   margin-right: 20px;
   width: 48%;
   text-align: center;
   color: white;
   border-radius: 10px;
-  bottom: 20px;
-  margin-top: auto;
-  margin-bottom: auto;
+  bottom: 100px;
   background-image: url('../assets/QuotationSign.png');
   background-repeat: no-repeat;
 }
@@ -179,5 +174,8 @@ h4{
 .comment2 .star {
   display: flex;
   margin-bottom: 10px;
+}
+.description {
+  width: 500px;
 }
 </style>
