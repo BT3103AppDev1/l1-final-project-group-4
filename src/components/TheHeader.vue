@@ -28,13 +28,19 @@ export default {
           <text class="navButton">ABOUT US</text>
         </router-link>
 
-        <router-link class="headerButton" to="/services">
+        <!-- HEADER IF NOT LOGGED IN -->
+        <router-link class="headerButton" to="/services" v-if="!user">
           <text class="navButton">SERVICES</text>
         </router-link>
 
         <!-- HEADER IF NOT LOGGED IN -->
         <router-link class="headerButton" to="/login" v-if="!user">
           <text class="navButton">LOGIN</text>
+        </router-link>
+
+        <!-- HEADER IF LOGGED IN -->
+        <router-link class="headerButton" to="/bookappointment" v-if="user">
+          <text class="navButton">BOOK APPOINTMENT</text>
         </router-link>
 
         <!-- HEADER IF LOGGED IN -->
@@ -116,12 +122,12 @@ nav a.router-link-exact-active:hover {
   align-self: center;
 }
 
-@media (min-width: 1025px) {
+@media (min-width: 1125px) {
   .drawer {
     display: none;
   }
 }
-@media (max-width: 1024px) {
+@media (max-width: 1124px) {
   nav {
     display: none;
   }

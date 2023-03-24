@@ -1,4 +1,5 @@
 <script>
+
 import app from '../firebase.js'
 import { onMounted } from "vue"
 import { getFirestore } from 'firebase/firestore'
@@ -43,53 +44,24 @@ export default {
 <template>
   <div class="card">
     <div class="card-body">
-      <img
-        class="card-profile-img"
-        src="https://therichpost.com/wp-content/uploads/2021/03/avatar2.png"
-        alt="Profile Picture"
-      />
-      <h2 id="customer_name" >Name:</h2>
-      <h3 id="customer_email">Email:</h3>
-      <h3 id="customer_phone">Phone Number:</h3>
-      <button>Information</button>
-      <button>Appointments</button>
+
+      <img class="card-profile-img" src="@/assets/appts-img.png" />
+      <br />
     </div>
   </div>
 </template>
 
 <style scoped>
-.card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  background-color: #fff;
-  background-clip: border-box;
-  border: none;
-  box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
-  border-radius: 1rem;
-}
-
-.card-profile-img {
-  position: relative;
-  max-width: 15rem;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  border: 3px solid #fff;
-  border-radius: 100%;
-  box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
-  z-index: 2;
-}
-
 .card-body {
-  position: relative;
   display: flex;
   flex-direction: column;
-  min-width: 0;
-  background-color: #fff;
-  background-clip: border-box;
-  border: none;
-  box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
-  border-radius: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+.card-profile-img {
+  height: 200px;
+  border-radius: 50%;
+  margin-top: 50px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 </style>
