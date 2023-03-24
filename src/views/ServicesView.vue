@@ -12,15 +12,32 @@ import TheHeader from '@/components/TheHeader.vue'
     </div>
   </main>
 </template> -->
-<script setup>
+
+<script>
 import TheHeader from '@/components/TheHeader.vue'
+import { RouterLink } from 'vue-router'
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 
+export default {
+  components: {
+    RouterLink,
+    TheHeader
+  },
+  setup() {
+    const store = useStore()
 
+    return {
+      user: computed(() => store.state.user),
+      authIsReady: computed(() => store.state.user != null)
+    }
+  }
+}
 </script>
 
 <template>
   <main>
-    <TheHeader /> 
+    <TheHeader />
     <div id="body">
       <div class="services">
         <h1>Our Pet Care Services</h1>
@@ -28,32 +45,31 @@ import TheHeader from '@/components/TheHeader.vue'
       <div class="cards">
         <div class="card">
           <div id="card-header">
-            <img id = "logo" src="@/assets/food.png"/>          
+            <img id="logo" src="@/assets/food.png" />
             <h2>Basic Grooming</h2>
           </div>
           <div id="card-body">
-            Professional Pet Groomers with magical hands for your pets.
-            We provide bathing, cleaning, haircuts, nail trimming and medicated
-            bath to make your dog look smart and healthy.
-            <br><br>
+            Professional Pet Groomers with magical hands for your pets. We provide bathing,
+            cleaning, haircuts, nail trimming and medicated bath to make your dog look smart and
+            healthy.
+            <br /><br />
             <strong>Price:</strong> From $55 (Toy), $65 (S), $75 (M)
-            
           </div>
-          <router-link to="/bookappointment" v-if = "authIsReady"><h3>Get Service &#x2794;</h3></router-link>
-          <router-link to="/login" v-if = "!authIsReady"><h3>Get Service &#x2794;</h3></router-link>
-          
-          
+          <router-link to="/bookappointment" v-if="authIsReady"
+            ><h3>Get Service &#x2794;</h3></router-link
+          >
+          <router-link to="/login" v-if="!authIsReady"><h3>Get Service &#x2794;</h3></router-link>
         </div>
 
         <div class="card">
           <div id="card-header">
-            <img id = "logo" src="@/assets/food.png" />
+            <img id="logo" src="@/assets/food.png" />
             <h2>Full Grooming</h2>
           </div>
           <div id="card-body">
-            For our full grooming services, we have 3 different cuts available and all
-            basic grooming will be covered.
-            <br>
+            For our full grooming services, we have 3 different cuts available and all basic
+            grooming will be covered.
+            <br />
             <ol>
               <li>Puppy Cut</li>
               <ul>
@@ -68,61 +84,58 @@ import TheHeader from '@/components/TheHeader.vue'
                 <li><strong>From:</strong> $130 (Toy), $160 (S), $180 (M)</li>
               </ul>
             </ol>
-            
           </div>
-          <router-link to="/bookappointment" v-if = "authIsReady"><h3>Get Service &#x2794;</h3></router-link>
-          <router-link to="/login" v-if = "!authIsReady"><h3>Get Service &#x2794;</h3></router-link>
-       
-          
+          <router-link to="/bookappointment" v-if="authIsReady"
+            ><h3>Get Service &#x2794;</h3></router-link
+          >
+          <router-link to="/login" v-if="!authIsReady"><h3>Get Service &#x2794;</h3></router-link>
         </div>
-      </div>  
+      </div>
       <div class="cards">
         <div class="card">
           <div id="card-header">
-            <img id = "logo" src="@/assets/food.png" />
+            <img id="logo" src="@/assets/food.png" />
             <h2>Teeth Cleaning</h2>
           </div>
           <div id="card-body">
-            With the use of an ultrasonic cleaning device and precise handling 
-            techniques, our pet techs can effectively clean both above &
-            below the gum line and polish while your dog remains alert & comfortable.
-            <br><br>
+            With the use of an ultrasonic cleaning device and precise handling techniques, our pet
+            techs can effectively clean both above & below the gum line and polish while your dog
+            remains alert & comfortable.
+            <br /><br />
             <strong>Price:</strong> From $80
-            
           </div>
-          <router-link to="/bookappointment" v-if = "authIsReady"><h3>Get Service &#x2794;</h3></router-link>
-          <router-link to="/login" v-if = "!authIsReady"><h3>Get Service &#x2794;</h3></router-link>
+          <router-link to="/bookappointment" v-if="authIsReady"
+            ><h3>Get Service &#x2794;</h3></router-link
+          >
+          <router-link to="/login" v-if="!authIsReady"><h3>Get Service &#x2794;</h3></router-link>
         </div>
 
         <div class="card">
           <div id="card-header">
-            <img id = "logo" src="@/assets/food.png" />
+            <img id="logo" src="@/assets/food.png" />
             <h2>Spa Treatment</h2>
           </div>
-          
+
           <div id="card-body">
-            Each of the spa treatment consist of beneficial properties
-            for your dog or cat's skin & coat:
+            Each of the spa treatment consist of beneficial properties for your dog or cat's skin &
+            coat:
             <ol>
               <li>Japan Nanotechnology Spa Treatment</li>
               <li>Japan Ayurveda Herb Spa Treatment</li>
               <li>Charcoal Mud Dog Spa Treatment</li>
             </ol>
-            <br>
+            <br />
             <strong>Price:</strong> From $45
-            
           </div>
-          <router-link to="/bookappointment" v-if = "authIsReady"><h3>Get Service &#x2794;</h3></router-link>
-          <router-link to="/login" v-if = "!authIsReady"><h3>Get Service &#x2794;</h3></router-link>
-          
-          
+          <router-link to="/bookappointment" v-if="authIsReady"
+            ><h3>Get Service &#x2794;</h3></router-link
+          >
+          <router-link to="/login" v-if="!authIsReady"><h3>Get Service &#x2794;</h3></router-link>
         </div>
-    </div>
+      </div>
     </div>
   </main>
 </template>
-
-
 
 <style scoped>
 .card-body a {
@@ -130,22 +143,24 @@ import TheHeader from '@/components/TheHeader.vue'
 }
 
 #body {
-  background: url(@/assets/dog1.png) bottom left no-repeat, url(@/assets/dog2.png) bottom right no-repeat;
-  background-color: #D4E5F3
+  background: url(@/assets/dog1.png) bottom left no-repeat,
+    url(@/assets/dog2.png) bottom right no-repeat;
+  background-color: #d4e5f3;
 }
 
 #body::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  
+
   opacity: 0.3;
 }
 
-.cards, .services {
+.cards,
+.services {
   min-width: 1100px;
 }
 
@@ -158,7 +173,6 @@ import TheHeader from '@/components/TheHeader.vue'
   width: 100;
   justify-content: center;
   margin: 15px 0;
-  
 }
 
 .card h3 {
@@ -166,7 +180,7 @@ import TheHeader from '@/components/TheHeader.vue'
   margin-bottom: 30px;
   margin-left: 20px;
   bottom: 0;
-  color: #193A6A;
+  color: #193a6a;
   white-space: nowrap;
   font-weight: bold;
 }
@@ -199,19 +213,19 @@ import TheHeader from '@/components/TheHeader.vue'
   background: white;
   border-radius: 25px;
   border-style: solid;
-  border-color: #193A6A;
+  border-color: #193a6a;
   border-width: thin;
   position: relative;
 }
 
 .card:hover {
-  background: #193A6A;
+  background: #193a6a;
   transition: 0.2s;
   color: white;
 }
 
 .card:hover h3 {
-  color: #FFDA47;
+  color: #ffda47;
 }
 .card #logo {
   width: 120px;
@@ -220,31 +234,8 @@ import TheHeader from '@/components/TheHeader.vue'
 .services {
   margin-top: 20px;
 }
-.services h1{
+.services h1 {
   text-align: center;
   font-size: 40px;
 }
-
 </style>
-<script>
-import { RouterLink } from 'vue-router';
-import { computed } from "vue"
-import { useStore } from "vuex"
-
-export default {
-  components: {
-    RouterLink,
-  },
-  setup() {
-      const store = useStore()
-
-      return { 
-        user: computed(() => store.state.user),
-        authIsReady: computed(() => store.state.authIsReady)
-      }
-    }
-};
-
-    
-
-</script>

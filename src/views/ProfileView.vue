@@ -32,35 +32,40 @@ export default {
 </script>
 
 <template>
-    <TheHeader /> 
-    <div class="main">
-        <div class="flexbox">
-          <div class="profile-toggle">
-            <ProfileCard />
-          
-          </div>
+  <TheHeader />
+  <div class="main">
+    <div class="flexbox">
+      <div class="profile-toggle">
+        <div>
+          <ProfileCard />
+          <br />
+          <button class="btn" id="info-page">Information</button>
 
-          <div class="profile-info"> 
-            <div class = "profile-info-box"> 
-              <div class = "dog-info" > 
-                    <DogProfileCard />
-                    <DogProfileCard />
-              </div>
-              <button id="edit-dog-info">Edit dog information</button>
-
-              <div class = "my-info"> 
-                <MyProfile />
-              </div>
-              <button id="edit-my-info">Edit my information</button>
-
-            </div>
-          </div>
-      
+          <br />
+          <router-link style="text-decoration: none; color: inherit" to="/groomingprogress">
+            <button class="btn" id="progress-page">Dog Progress</button>
+          </router-link>
+          <br />
+          <button class="btn" id="log-out" @click="handleSubmit()">Log Out</button>
         </div>
-    </div>
-    
+      </div>
 
-  
+      <div class="profile-info">
+        <div class="profile-info-box">
+          <div class="dog-info">
+            <DogProfileCard />
+            <DogProfileCard />
+          </div>
+          <button id="edit-dog-info">Edit dog information</button>
+
+          <div class="my-info">
+            <MyProfile />
+          </div>
+          <button id="edit-my-info">Edit my information</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -72,7 +77,7 @@ export default {
   width: 100vw;
   justify-content: center;
   align-items: center;
-  }
+}
 
 .flexbox {
   display: flex;
@@ -83,7 +88,6 @@ export default {
   flex: 1;
   display: flex;
   justify-content: center;
-  
 }
 
 .profile-info {
@@ -92,7 +96,6 @@ export default {
   justify-content: center;
   padding-top: 40px;
   height: 100vh;
-
 }
 
 .profile-info-box {
@@ -102,43 +105,60 @@ export default {
   width: 95%;
   background-color: #2c5b94;
   border-radius: 20px;
-  
 }
-
 
 .dog-info {
   flex: 1;
   display: flex;
   padding-top: 22px;
-
-  
 }
 
 .my-info {
   flex: 1;
   display: flex;
-
 }
 
-#edit-dog-info, #edit-my-info {
-    background-color: rgb(215, 229, 243);
-    color: #2c5b94;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* change font */
-    font-size: 1.2em;
-    font-weight: bold;
-    padding: 10px;
-    border-radius: 10px;
-    border:none;
-    display: block;
-    margin-left: 50px;
-    margin-top: 20px;
-    margin-bottom: 40px;
-    width: 90%;
-    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.4);
-    transition: opacity 0.2s ease-in-out;
+#edit-dog-info,
+#edit-my-info {
+  background-color: rgb(215, 229, 243);
+  color: #2c5b94;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* change font */
+  font-size: 1.2em;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  display: block;
+  margin-left: 50px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  width: 90%;
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.4);
+  transition: opacity 0.2s ease-in-out;
 }
-#edit-dog-info:hover, #edit-my-info:hover {
-  opacity: 0.9
+#edit-dog-info:hover,
+#edit-my-info:hover {
+  opacity: 0.9;
 }
 
+.btn {
+  background-color: #2c5b94;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* change font */
+  font-size: 1em;
+  font-weight: bold;
+  padding: 0.7em 1.2em;
+  border-radius: 15px;
+  border: none;
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.4);
+  transition: opacity 0.2s ease-in-out;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
 </style>
