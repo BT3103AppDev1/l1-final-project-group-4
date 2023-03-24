@@ -4,11 +4,10 @@ import TheHeader from '@/components/TheHeader.vue'
 
 <template>
   <main>
+    <TheHeader />
 
-    <TheHeader /> 
-    
     <div class="services">
       <h1>This is a services page</h1>
-    </div>
+      </div>
   </main>
 </template>

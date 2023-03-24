@@ -24,7 +24,7 @@ import TheHeader from '@/components/TheHeader.vue'
       Sunday: Closed
     </div>
 
-      <h1>What people say</h1>
+      <h4>What people say</h4>
 
       <div class="comment1">
         <div class="circle"></div>
@@ -70,8 +70,9 @@ import TheHeader from '@/components/TheHeader.vue'
 </template>
 
 <style scoped>
+
 .about {
-  height: 100vh;
+  height: calc(100vh - 125px);
   background: linear-gradient(to top, #193a6a 0%, #193a6a 50%, #d4e5f3 50%, #d4e5f3 100%);
 }
 
@@ -79,6 +80,7 @@ h1 {
   font-size: 3em;
   font-weight: bold;
   margin-left: 20px;
+  
 }
 
 h2 {
@@ -89,6 +91,13 @@ h2 {
 
 h3 {
   text-align: justify;
+  margin-left: 20px;
+  color: white;
+}
+
+h4 {
+  font-size: 3em;
+  font-weight: bold;
   margin-left: 20px;
   color: white;
 }
@@ -120,7 +129,7 @@ h3 {
   margin-left: 20px;
   height: 200px;
   width: 48%;
-  bottom: 140px;
+  bottom: 20px;
   text-align: center;
   color: white;
   border-radius: 10px;
@@ -141,7 +150,7 @@ h3 {
   text-align: center;
   color: white;
   border-radius: 10px;
-  bottom: 140px;
+  bottom: 20px;
   margin-top: auto;
   margin-bottom: auto;
   background-image: url('../assets/QuotationSign.png');
