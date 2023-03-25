@@ -28,8 +28,7 @@ export default {
           <text class="navButton">ABOUT US</text>
         </router-link>
 
-        <!-- HEADER IF NOT LOGGED IN -->
-        <router-link class="headerButton" to="/services" v-if="!user">
+        <router-link class="headerButton" to="/services">
           <text class="navButton">SERVICES</text>
         </router-link>
 
