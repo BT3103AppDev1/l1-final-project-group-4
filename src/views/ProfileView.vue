@@ -54,7 +54,6 @@ export default {
         <div class="profile-info-box">
           <div class="dog-info">
             <DogProfileCard />
-            <DogProfileCard />
           </div>
           <button id="edit-dog-info">Edit dog information</button>
 
@@ -108,8 +107,8 @@ export default {
 }
 
 .dog-info {
-  flex: 1;
   display: flex;
+  flex-direction: row;
   padding-top: 22px;
 }
 

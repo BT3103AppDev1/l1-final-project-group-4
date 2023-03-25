@@ -1,40 +1,15 @@
 <script>
-import app from '../firebase.js'
-import { getAuth } from 'firebase/auth'
-const auth = getAuth(app)
-
-import { getFirestore } from 'firebase/firestore'
-import { doc, getDoc } from 'firebase/firestore'
-const db = getFirestore(app)
+import { useStore } from 'vuex'
 
 export default {
   setup() {
-    var user = auth.currentUser
-    var userEmail = user.email
+    const store = useStore()
 
-    async function getProfile() {
-      const docRef = doc(db, 'customers', userEmail)
-      const docSnap = await getDoc(docRef)
+    const userEmail = store.state.userEmail
+    const userName = store.state.userName
+    const userPhone = store.state.userPhone
 
-      if (docSnap.exists()) {
-        console.log('Document data:', docSnap.data())
-        let documentData = docSnap.data()
-        let name = documentData.customer_name
-        let email = documentData.customer_email
-        let phone = documentData.customer_phone
-
-        document.getElementById('customer_name').innerHTML = 'Name: ' + name
-        document.getElementById('customer_email').innerHTML = 'Email: ' + email
-        document.getElementById('customer_phone').innerHTML = 'Contact Number: ' + phone
-      } else {
-        console.log('No such document!')
-        console.log(userEmail)
-      }
-    }
-
-    getProfile()
-
-    return { user, userEmail }
+    return { userEmail, userName, userPhone }
   }
 }
 </script>
@@ -43,9 +18,9 @@ export default {
   <div class="personal-info">
     <h1>Profile</h1>
     <div class="my-details">
-      <h3 id="customer_name">Name: {{ name }}</h3>
-      <h3 id="customer_email">Email: {{ email }}</h3>
-      <h3 id="customer_phone">Contact Number: {{ contactno }}</h3>
+      <h3 id="customer_name">Name: {{ userName }}</h3>
+      <h3 id="customer_email">Email: {{ userEmail }}</h3>
+      <h3 id="customer_phone">Contact Number: {{ userPhone }}</h3>
     </div>
   </div>
 </template>
