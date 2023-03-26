@@ -55,7 +55,6 @@ export default {
           <div class="dog-info">
             <DogProfileCard />
           </div>
-          <button id="edit-dog-info">Edit dog information</button>
 
           <div class="my-info">
             <MyProfile />
@@ -117,7 +116,6 @@ export default {
   display: flex;
 }
 
-#edit-dog-info,
 #edit-my-info {
   background-color: rgb(215, 229, 243);
   color: #2c5b94;
@@ -135,7 +133,7 @@ export default {
   box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.4);
   transition: opacity 0.2s ease-in-out;
 }
-#edit-dog-info:hover,
+
 #edit-my-info:hover {
   opacity: 0.9;
 }
