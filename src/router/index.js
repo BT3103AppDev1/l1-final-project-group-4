@@ -47,6 +47,21 @@ const router = createRouter({
       name: 'groomingprogress',
       component: () => import('../views/GroomingProgressView.vue'),
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/scheduler',
+      name: 'scheduler',
+      component: () => import('../views/admin/SchedulerView.vue')
+    },
+    {
+      path: '/manpower',
+      name: 'manpower',
+      component: () => import('../views/admin/ManpowerView.vue')
+    },
+    {
+      path: '/leave',
+      name: 'leave',
+      component: () => import('../views/admin/LeaveView.vue')
     }
   ]
 })
