@@ -2,6 +2,9 @@
 import { ref } from "vue"
 import { useStore } from "vuex"
 import { useRouter } from "vue-router"
+import app from '../firebase.js'
+import { getFirestore } from 'firebase/firestore'
+import { doc, getDoc } from 'firebase/firestore'
 
 export default {
   setup() {
@@ -11,6 +14,7 @@ export default {
 
     const store = useStore()
     const router = useRouter()
+    const db = getFirestore(app)
 
     const goBack = () => {
       router.push("/")
@@ -26,7 +30,21 @@ export default {
                 email: email.value,
                 password: password.value
             })
-            router.push("/")
+            console.log("doc ref is customers/" + email.value )
+            const docRef = doc(db, "customers", email.value);
+            console.log()
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+              if (docSnap.data().isAdmin == true) {
+                router.push("/admin/scheduler")
+              } else {
+                router.push("/")
+              }
+            } else {
+              // doc.data() will be undefined in this case
+              console.log("No such document!");
+            }
         } catch (error) {
           console.log(error.code);
       

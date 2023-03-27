@@ -1,109 +1,112 @@
 <script>
+import { computed, ref } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from "vue-router"
+
 export default {
-  
+  setup() {
+    const router = useRouter()
+    const store = useStore()
+    const errorMsg = ref(null)
+
+    const handleSubmit = async () => {
+      try {
+        await store.dispatch('logOut')
+        router.push('/')
+      } catch (err) {
+        errorMsg.value = err.message
+      }
+    }
+
+    return {
+      user: computed(() => store.state.user),
+      authIsReady: computed(() => store.state.authIsReady),
+      handleSubmit
+    }
+  }
 }
 </script>
+
 <template>
-    <nav>
+    <div class="container" v-if="authIsReady">
         <div id="admin">
             <h3>ADMINISTRATOR</h3>
-        </div>        
-        <div id="buttons">
-            <router-link to="/scheduler">
-                <h3>SCHEDULER</h3>
-            </router-link>
-
-            <router-link to="/manpower">
-                <h3>MANPOWER</h3>
-            </router-link>
-
-            <router-link to="/leave">
-                <h3>LEAVE</h3>
-            </router-link>
         </div>
+        <nav>        
+            <div id="buttons">
+                <router-link class = "headerButton" to="/admin/scheduler">
+                    <h3>SCHEDULER</h3>
+                </router-link>
 
-        <div id="logout">
-            <div id="button">
-                <router-link to="/">LOGOUT</router-link>
+                <router-link class = "headerButton" to="/admin/manpower">
+                    <h3>MANPOWER</h3>
+                </router-link>
+
+                <router-link class = "headerButton" to="/admin/leave">
+                    <h3>LEAVES</h3>
+                </router-link>
             </div>
+        </nav>
+        <div id="logout">
+            <button class="logoutButton" @click="handleSubmit()">LOGOUT</button>
         </div>
-    </nav>
+    </div>
 </template>
 
 <style scoped>
 
 @import url('https://fonts.googleapis.com/css?family=Nunito');
 
-#logout {
-    height: 90px;
-    line-height: 90px;
-    margin-right: 50px;
-    margin-left: auto;
+.container {
+    display: flex;
+    flex-direction: row;
+    background-color: #193a6a;
+    color: white;
+    text-align: center;
+    height: 4em;
+    justify-content: space-between;
+    width: 100vw;
+    padding-inline: 2em;
+    align-items: center;
 }
-
-#logout a {
-    
-    background-color: white;
-    color: #193a6a;
-    font-weight: bolder;
-    padding: 0.5em 0.8em;
-    border-radius: 0.5em;
-    
-}
-
-#logout a:hover {
-    background-color: rgb(230, 230, 230);
-    color: #193a6a;
-    font-weight: bolder;
-    padding: 0.5em 0.8em;
-    border-radius: 0.5em;
-    transition: 0.2s;
-    
-}
-
 nav {
     display: flex;
     font-family: 'Nunito', sans-serif;
-    width: 100%;
-    height: 90px;
-    background-color: #193a6a;
+    font-size: 1em;
+    /* background-color: #193a6a; */
     color: white;
+    flex-direction: row;
 }
 nav a.router-link-exact-active h3 {
-  border-bottom: 4px solid #64cad8;
+  border-bottom: 0.2em solid #64cad8;
 }
-
-#admin h3 {
-    height: 90px;
-    width: 180px;
-    line-height: 90px;
-    margin: 0 50px;
-    font-weight: bold;
-}
-
 #buttons {
     display: flex;
-    margin-left: 200px;
+    flex-direction: row;
 }
-
-#buttons h3 {
-    height: 90px;
-    line-height: 90px;
-    margin: 0 60px;
-    font-weight: bold;
+.headerButton {
+    margin-inline: 3em;
+    text-decoration: none;
+    color: white;
 }
-
-#buttons h3:hover {
-    font-weight: bold;
-    text-decoration: underline;
+#logout {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1em;
+    color: white;
 }
-
-
-a {
-  text-decoration: none;
-  color: white;
+.logoutButton {
+    padding: 0.5em 1em;
+    background-color: white;
+    border-radius: 0.5em;
 }
-
+.logoutButton:hover {
+    background-color: rgb(230, 230, 230);
+    color: #193a6a;
+    font-weight: bolder;
+    padding: 0.5em 1em;
+    border-radius: 0.5em;
+    transition: 0.2s;
+}
 @media (min-width: 1025px) {
   .drawer {
     display: none;
