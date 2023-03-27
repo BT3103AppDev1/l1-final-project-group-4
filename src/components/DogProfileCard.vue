@@ -87,7 +87,6 @@ export default {
       }
       display()
     }
-
     return { userEmail }
   }
 }
