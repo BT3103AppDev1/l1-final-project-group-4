@@ -1,14 +1,16 @@
 <script>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
   setup() {
     const store = useStore()
+    var drawerVisible = ref(false)
 
     return {
       user: computed(() => store.state.user),
-      authIsReady: computed(() => store.state.authIsReady)
+      authIsReady: computed(() => store.state.authIsReady),
+      drawerVisible
     }
   }
 }
@@ -50,7 +52,55 @@ export default {
           <text class="navButton">PROFILE</text>
         </router-link>
       </nav>
-      <img alt="Menu" class="drawer" src="@/assets/drawer.png" width="75" height="75" />
+
+
+      <img alt="Menu" class="drawer" src="@/assets/drawer.png" width="75" height="75" @click="drawerVisible = true"/>
+      <div
+        class="right-drawer"
+        :style="{
+          width: drawerVisible? '20vw' : '0',
+          paddingLeft: drawerVisible? '10px' : '0',
+        }"
+        >
+          <router-link class="headerButtonDrawer" to="/">
+            <text class="navButtonDrawer">HOME</text>
+          </router-link>
+
+          <router-link class="headerButtonDrawer" to="/about">
+            <text class="navButtonDrawer">ABOUT US</text>
+          </router-link>
+
+          <router-link class="headerButtonDrawer" to="/services">
+            <text class="navButtonDrawer">SERVICES</text>
+          </router-link>
+
+          <!-- HEADER IF NOT LOGGED IN -->
+          <router-link class="headerButtonDrawer" to="/login" v-if="!user">
+            <text class="navButtonDrawer">LOGIN</text>
+          </router-link>
+
+          <!-- HEADER IF LOGGED IN -->
+          <router-link class="headerButtonDrawer" to="/bookappointment" v-if="user">
+            <text class="navButtonDrawer">BOOK APPOINTMENT</text>
+          </router-link>
+
+          <!-- HEADER IF LOGGED IN -->
+          <router-link class="headerButtonDrawer" to="/profile" v-if="user">
+            <text class="navButtonDrawer">PROFILE</text>
+          </router-link>
+
+        <div style="text-align:right; margin:5px">
+        </div>
+      </div>
+      <div
+        class="drawer-mask"
+        :style="{
+          width: drawerVisible ? '100vw' : '0',
+          opacity: drawerVisible ? '0.6' : '0',
+        }"
+        @click="drawerVisible = false"
+        >
+      </div>
     </div>
   </div>
 </template>
@@ -64,6 +114,12 @@ export default {
 
 .headerButton {
   margin-inline: 3em;
+}
+
+.headerButtonDrawer {
+  margin-inline: 3em;
+  margin-block: 2em;
+  text-align: center;
 }
 
 .logo-nav-container {
@@ -106,6 +162,17 @@ nav a.router-link-exact-active:hover {
   padding: 0.5em 1.2em;
 }
 
+.navButtonDrawer {
+  display: flex;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* change font */
+  font-size: 0.6em;
+  font-weight: bold;
+  padding: 0.5em 0.8em;
+  width: 10vw;
+  justify-content: center;
+}
+
 .logo {
   display: flex;
   margin: 0em 0em 0em 1em;
@@ -123,7 +190,33 @@ nav a.router-link-exact-active:hover {
   padding-top: 2em;
   align-self: center;
 }
-
+.right-drawer {
+  display: flex;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0; /* initially */
+  overflow: hidden;
+  height: 100vh;
+  padding-left: 0; /* initially */
+  border-left: 1px solid whitesmoke;
+  background: white;
+  z-index: 200;
+  transition: all 0.2s; /* for the animation */
+  flex-direction: column;
+  align-items: center;
+  background-color:rgb(215, 229, 243);
+}
+.drawer-mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0; /* initially */
+  height: 100vh;
+  background: #000;
+  opacity: 0.3;
+  z-index: 199;
+}
 @media (min-width: 1125px) {
   .drawer {
     display: none;

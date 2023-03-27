@@ -16,6 +16,22 @@ export default {
     const errorMsg = ref(null)
     const store = useStore()
     const router = useRouter()
+    const db = getFirestore(app)
+
+    const email = store.state.userEmail
+
+    const createDoggo = async () => {
+      console.log("runs")
+      console.log(email)
+      const docRef = await addDoc(collection(db, "customers", email, "dogs"), {
+        dog_name: "Jodi",
+        dog_breed: "Chihuahua",
+        dog_dob: Date.now(),
+        dog_sex: "F"
+      });
+      console.log("Document written with ID: ", docRef.id);
+    }
+
     const handleSubmit = async () => {
       try {
         await store.dispatch('logOut')
@@ -24,7 +40,7 @@ export default {
         errorMsg.value = err.message
       }
     }
-    return { handleSubmit }
+    return { handleSubmit, createDoggo }
   }
 }
 </script>
