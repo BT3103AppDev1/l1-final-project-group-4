@@ -3,6 +3,8 @@ import TheHeader from '@/components/TheHeader.vue'
 import ProfileCard from '@/components/ProfileCard.vue'
 import DogProfileCard from '@/components/DogProfileCard.vue'
 import MyProfile from '@/components/MyProfile.vue'
+import app from '../firebase.js'
+import { collection, addDoc, getFirestore } from 'firebase/firestore'
 import { ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -18,6 +20,22 @@ export default {
     const errorMsg = ref(null)
     const store = useStore()
     const router = useRouter()
+    const db = getFirestore(app)
+
+    const email = store.state.userEmail
+
+    const createDoggo = async () => {
+      console.log("runs")
+      console.log(email)
+      const docRef = await addDoc(collection(db, "customers", email, "dogs"), {
+        dog_name: "Jodi",
+        dog_breed: "Chihuahua",
+        dog_dob: Date.now(),
+        dog_sex: "F"
+      });
+      console.log("Document written with ID: ", docRef.id);
+    }
+
     const handleSubmit = async () => {
       try {
         await store.dispatch('logOut')
@@ -26,7 +44,7 @@ export default {
         errorMsg.value = err.message
       }
     }
-    return { handleSubmit }
+    return { handleSubmit, createDoggo }
   }
 }
 </script>
@@ -59,7 +77,7 @@ export default {
           <div class="my-info">
             <MyProfile />
           </div>
-          <button id="edit-my-info">Edit my information</button>
+          <button id="edit-my-info" @click="createDoggo()">Edit my information</button>
         </div>
       </div>
     </div>
