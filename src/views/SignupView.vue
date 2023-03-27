@@ -27,6 +27,14 @@ export default {
       router.push('/login')
     }
 
+    const checkPassword = () => {
+      if (password.value == confirmPassword.value) {
+        handleSubmit()
+      } else {
+        errorMsg.value = "Passwords don't match"
+      }
+    }
+
     const handleSubmit = async () => {
       try {
         await store.dispatch('signUp', {
@@ -70,6 +78,7 @@ export default {
     return {
       goBack,
       goLogin,
+      checkPassword,
       handleSubmit,
       name,
       phone,
@@ -102,7 +111,7 @@ export default {
         <input type="password" placeholder="Confirm Password" v-model="confirmPassword" required />
       </div>
       <div class="sub-container">
-        <button type="submit" class="submit" @click="handleSubmit()">Register</button>
+        <button type="submit" class="submit" @click="checkPassword()">Register</button>
         <h4 v-if="errorMsg" class="errorMsg">{{ errorMsg }}</h4>
         <p class="login">
           Already have an account? <span class="loginButton" @click="goLogin()">Login</span>
@@ -115,7 +124,7 @@ export default {
 <style scoped>
 .main {
   min-width: 840px;
-  min-height: 760px;
+  min-height: 780px;
   display: flex;
   height: 100vh;
   width: 100vw;
@@ -133,7 +142,7 @@ export default {
   display: flex;
   border-style: solid;
   border-width: 0.1em;
-  height: 80%;
+  height: 85%;
   width: 40vw;
   justify-content: space-around;
   flex-direction: column;
@@ -141,7 +150,7 @@ export default {
 
 .backButton {
   display: flex;
-  margin: 0em 0em 0em 1em;
+  margin: 0em 0em 1em 1em;
 }
 
 .backButton:hover {
@@ -242,6 +251,10 @@ input:focus {
   background-color: whitesmoke;
 }
 
+.submit:hover:disabled {
+  background-color: none;
+}
+
 .sub-container h1 {
   padding-top: 1em;
   padding-left: 0.5em;
@@ -270,7 +283,7 @@ input:focus {
 @media (max-width: 840px) {
   .main {
     min-width: 400px;
-    min-height: 760px;
+    min-height: 780px;
     display: flex;
     background-color: rgb(215, 229, 243);
     height: 100vh;
@@ -280,11 +293,11 @@ input:focus {
     background-image: none;
   }
   .login-container {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     display: flex;
     border-style: solid;
     border-width: 0.1em;
-    height: 80%;
+    height: 85%;
     margin-inline: 30vw;
     width: 336px;
     justify-content: space-around;
