@@ -20,50 +20,58 @@ export default {
         let table = document.getElementById('employee-table')
         let tr = document.createElement('tr')
         table.appendChild(tr)
-        let td = document.createElement('td')
-        tr.appendChild(td)
+
+        let td1 = document.createElement('td')
+        tr.appendChild(td1)
 
         let div1 = document.createElement('div')
         div1.id = 'employee-info'
-        td.appendChild(div1)
+        td1.appendChild(div1)
+
+        let imgDiv = document.createElement('div')
+        imgDiv.id = 'employee-img'
+        div1.appendChild(imgDiv)
 
         let img = document.createElement('img')
         img.id = 'employee-profile-img'
-        img.src = 'src/assets/avatar2.png'
-        div1.appendChild(img)
+        img.src = '/assets/avatar2.png'
+        img.width = 100
+        img.height = 100
+        imgDiv.appendChild(img)
+
+        let td2 = document.createElement('td')
+        tr.appendChild(td2)
 
         let header1 = document.createElement('h3')
         header1.id = 'employee-name'
-        td.appendChild(header1)
+        td2.appendChild(header1)
         header1.innerHTML = 'Name: ' + employeeName
 
         let header2 = document.createElement('h3')
         header2.id = 'employee-fulltime'
-        td.appendChild(header2)
+        td2.appendChild(header2)
         header2.innerHTML = employeeFullTime
 
         let deleteButton = document.createElement('button')
-        deleteButton.id = String(employeeName)
         deleteButton.className = 'bwt-small'
         deleteButton.innerHTML = 'Delete'
+        deleteButton.dataset.employeeId = doc.id // add the document ID as a data attribute
         div1.appendChild(deleteButton)
         deleteButton.onclick = function () {
-          deleteEmployee(String(employeeName))
+          deleteEmployee(doc.id) // pass the document ID as parameter to the delete function
         }
       })
     }
     display()
-
-    async function deleteEmployee(employeeName) {
-      alert('You are going to delete ' + employeeName)
-      const docRef = doc(db, employeeName)
+    async function deleteEmployee(employeeId) {
+      alert('You are going to delete employee with ID ' + employeeId)
+      const docRef = doc(db, 'employees', employeeId) // use the document ID to create the document reference
       await deleteDoc(docRef)
-      console.log('Document successfully deleted!', employeeName)
-      let tb = document.getElementById('table')
-      while (tb.rows.length > 0) {
-        tb.deleteRow(0)
-      }
-      display()
+      console.log('Document successfully deleted!', employeeId)
+
+      // remove the row from the HTML table
+      let row = document.querySelector(`[data-employee-id="${employeeId}"]`).closest('tr')
+      row.remove()
     }
   }
 }
@@ -80,32 +88,37 @@ export default {
 
 <style>
 .container {
-  width: 20%;
   display: flex;
-  flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin-left: 75%; 
-  padding-top: 22px;
+  align-content: space-between;
+  margin-left: auto;
 }
 
 #employee-profile-cards {
-  width: 90%;
-  display: flex;
+  display: flex-start;
   flex-direction: column;
-  align-items: center;
-  border: 2px solid green;
-}
+  border: 5px solid green;
+  height: 80vh;
+  overflow: scroll;
 
-#employee-profile-img {
-  width: 10vw;
-  height: 20vh;
 }
 
 h3 {
-  margin-bottom: 10px;
   color: black;
   font-weight: bold;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#employee-table {
+  overflow: auto;
+}
+
+#employee-table tr:nth-child(odd) {
+  background-color: lightgray;
+}
+
+#employee-table tr:nth-child(even) {
+  background-color: #D4E5F3;
 }
 </style>

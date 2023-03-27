@@ -30,43 +30,52 @@ export default {
 
 <template>
 
-  <body>
+  <div class="main">
     <TheAdminHeader />
-    <div>
+    <div class="body">
       <h1>This is Scheduler Admin Page</h1>
-
-      <table id="table" class="auto-index">
-        <tr>
-          <th>S.NO</th>
-          <th>BOOKING ID</th>
-          <th>EMAIL</th>
-          <th>CUSTOMER</th>
-          <th>PET</th>
-          <th>DATE</th>
-          <th>TIME</th>
-          <th>EMPLOYEE</th>
-        </tr>
-      </table>
-      <EmployeeProfileCard />
+      
+      <div class="schedule">
+        <div class = "appointmentCard">
+          <!-- fill in the appointmentCard -->
+        </div>
+        <div class="employeeCard">
+          <EmployeeProfileCard />
+        </div>
+      </div>
     </div>
-  </body>
+  </div>
 </template>
 
 <style>
-main {
+.main {
   height: 100vh;
   display: flex;
+  flex-direction: column;
 }
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 70%;
+.body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+}
+.schedule {
+  display:flex;
+  flex-direction:row;
+  height: 100%; 
+}
+.appointmentCard{
+  display: flex;
+  width: 60%;
+  background-color: black;
+  height: 100%;
 }
 
-th,
-td {
-  border: 3px solid red;
-  font-weight: bold;
-}
+.employeeCard {
+  display: flex;
+  padding-right: 20px;
+  width: 40%;
+  align-self: flex-start;
+ }
+
 </style>
-
