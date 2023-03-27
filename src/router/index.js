@@ -49,19 +49,22 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      path: '/scheduler',
+      path: '/admin/scheduler',
       name: 'scheduler',
-      component: () => import('../views/admin/SchedulerView.vue')
+      component: () => import('../views/admin/SchedulerView.vue'),
+      meta: { requiresAuth: true, requiresAdmin: true }
     },
     {
-      path: '/manpower',
+      path: '/admin/manpower',
       name: 'manpower',
-      component: () => import('../views/admin/ManpowerView.vue')
+      component: () => import('../views/admin/ManpowerView.vue'),
+      meta: { requiresAuth: true, requiresAdmin: true }
     },
     {
-      path: '/leave',
+      path: '/admin/leave',
       name: 'leave',
-      component: () => import('../views/admin/LeaveView.vue')
+      component: () => import('../views/admin/LeaveView.vue'),
+      meta: { requiresAuth: true, requiresAdmin: true }
     }
   ]
 })
@@ -76,6 +79,13 @@ router.beforeEach((to, from) => {
       path: '/login',
       // save the location we were at to come back later
       query: { redirect: to.fullPath },
+    }
+  }
+  let isAdmin = store.state.isAdmin
+  if (to.meta.requiresAdmin && !isAdmin) {
+    return {
+      path: '/',
+      query: { redirect: to.fullPath}
     }
   }
 })

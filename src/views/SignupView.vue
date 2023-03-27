@@ -46,7 +46,8 @@ export default {
         await setDoc(doc(db, 'customers', email.value.toLowerCase()), {
           customer_name: name.value,
           customer_email: email.value.toLowerCase(),
-          customer_phone: phone.value
+          customer_phone: phone.value,
+          isAdmin: false
         })
         router.push('/')
       } catch (error) {
