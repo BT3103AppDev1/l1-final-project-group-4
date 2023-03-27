@@ -5,6 +5,9 @@ import DogProfileCard from '@/components/DogProfileCard.vue'
 import { ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import app from '../firebase.js'
+import { getFirestore } from 'firebase/firestore'
+import { collection, addDoc } from 'firebase/firestore'
 
 export default {
   components: {
