@@ -26,7 +26,7 @@ export default {
 
     let selectedOptionPet = ref('Select Pet');
     let selectedOptionService = ref('Select Service');
-    let date = ref('Select Date');
+    let selectedDate = ref('Select Date');
     let selectedOptionTime = ref('Select Time');
     let selectedOptionTimeSlot = ref('');
 
@@ -54,6 +54,32 @@ export default {
       if (isTimeMenuOpen.value && timeMenu && !timeMenu.contains(event.target)) {
         isTimeMenuOpen.value = false;
       }
+    }
+
+    function toIsoString(date) {
+      var tzo = -date.getTimezoneOffset(),
+        dif = tzo >= 0 ? '+' : '-',
+        pad = function (num) {
+          return (num < 10 ? '0' : '') + num;
+        };
+
+      return (
+        date.getFullYear() +
+        '-' +
+        pad(date.getMonth() + 1) +
+        '-' +
+        pad(date.getDate()) +
+        'T' +
+        pad(date.getHours()) +
+        ':' +
+        pad(date.getMinutes()) +
+        ':' +
+        pad(date.getSeconds()) +
+        dif +
+        pad(Math.floor(Math.abs(tzo) / 60)) +
+        ':' +
+        pad(Math.abs(tzo) % 60)
+      );
     }
 
     // Attach click event listener to document
@@ -90,9 +116,11 @@ export default {
     getDogs();
 
     async function getSlots() {
-      if (date.value == 'Select Date') {
+      if (selectedDate.value == 'Select Date') {
         return;
       }
+
+      console.log('selected date: ', toIsoString(selectedDate.value).substring(0, 10));
 
       let ul = document.getElementById('select-time');
       ul.innerHTML = '';
@@ -153,10 +181,10 @@ export default {
         const docid = 's' + i;
         const coll = collection(
           db,
-          'appointments/' + date.value.toISOString().substring(0, 10) + '/' + docid
+          'appointments/' + toIsoString(selectedDate.value).substring(0, 10) + '/' + docid
         );
         const snapshot = await getCountFromServer(coll);
-        // console.log('count: ' + i, snapshot.data().count);
+        console.log('count: ' + i, snapshot.data().count);
         if (snapshot.data().count >= 3) {
           console.log('cant select: ' + docid);
           let a = document.getElementById(docid);
@@ -170,25 +198,25 @@ export default {
       console.log(
         selectedOptionPet.value,
         selectedOptionService.value,
-        date.value.toISOString().substring(0, 10),
+        toIsoString(selectedDate.value).substring(0, 10),
         selectedOptionTime.value,
         selectedOptionTimeSlot.value
       );
 
-      await setDoc(doc(db, 'appointments', date.value.toISOString().substring(0, 10)), {
-        date: date.value.toISOString().substring(0, 10)
+      await setDoc(doc(db, 'appointments', toIsoString(selectedDate.value).substring(0, 10)), {
+        date: toIsoString(selectedDate.value).substring(0, 10)
       });
 
       await addDoc(
         collection(
           db,
           'appointments/' +
-            date.value.toISOString().substring(0, 10) +
+            toIsoString(selectedDate.value).substring(0, 10) +
             '/' +
             selectedOptionTimeSlot.value
         ),
         {
-          appt_date: date.value.toISOString().substring(0, 10),
+          appt_date: toIsoString(selectedDate.value).substring(0, 10),
           appt_pet: selectedOptionPet.value,
           appt_time: selectedOptionTime.value,
           appt_email: userEmail,
@@ -201,7 +229,7 @@ export default {
       userEmail,
       selectedOptionPet,
       selectedOptionService,
-      date,
+      selectedDate,
       selectedOptionTime,
       isServiceMenuOpen,
       isPetMenuOpen,
@@ -287,7 +315,11 @@ export default {
 
       <div class="select-date">Select Date</div>
       <div class="dropdown toggle" id="date">
-        <VueDatePicker v-model="date" :enable-time-picker="false" auto-apply></VueDatePicker>
+        <VueDatePicker
+          v-model="selectedDate"
+          :enable-time-picker="false"
+          auto-apply
+        ></VueDatePicker>
       </div>
 
       <br />
