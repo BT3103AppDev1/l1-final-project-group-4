@@ -15,7 +15,6 @@ export default {
 </script>
 
 <template>
-  <!-- HEADER IF NOT LOGGED IN -->
   <div class="container" v-if="authIsReady">
     <div class="logo-nav-container">
       <img alt="Elsa" class="logo" src="@/assets/logo.svg" width="125" height="125" />
@@ -32,7 +31,7 @@ export default {
           <text class="navButton">SERVICES</text>
         </router-link>
         <!-- delete this once login page works to admin side -->
-        <router-link class="headerButton" to="/scheduler">
+        <router-link class="headerButton" to="/admin/scheduler">
           <text class="navButton">SCHEDULER</text>
         </router-link>
 

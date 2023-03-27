@@ -117,11 +117,11 @@ export default {
   flex-direction: row;
   justify-content: space-evenly;
   border: 1px solid red;
-  overflow-x: scroll;
 }
 
 #dog-info {
   height: 93%;
+  border: 1px solid green;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -150,7 +150,7 @@ h3 {
 
 table {
   table-layout: fixed;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 tr {

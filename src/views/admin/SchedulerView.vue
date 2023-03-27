@@ -24,10 +24,12 @@ export default {
     }
     return { handleSubmit, TheAdminHeader, EmployeeProfileCard }
   }
+
 }
 </script>
 
 <template>
+
   <body>
     <TheAdminHeader />
     <div>
@@ -67,3 +69,4 @@ td {
   font-weight: bold;
 }
 </style>
+

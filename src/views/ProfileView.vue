@@ -2,7 +2,6 @@
 import TheHeader from '@/components/TheHeader.vue'
 import ProfileCard from '@/components/ProfileCard.vue'
 import DogProfileCard from '@/components/DogProfileCard.vue'
-import MyProfile from '@/components/MyProfile.vue'
 import { ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -11,8 +10,7 @@ export default {
   components: {
     TheHeader,
     ProfileCard,
-    DogProfileCard,
-    MyProfile
+    DogProfileCard
   },
   setup() {
     const errorMsg = ref(null)
@@ -39,9 +37,6 @@ export default {
         <div>
           <ProfileCard />
           <br />
-          <button class="btn" id="info-page">Information</button>
-
-          <br />
           <router-link style="text-decoration: none; color: inherit" to="/groomingprogress">
             <button class="btn" id="progress-page">Dog Progress</button>
           </router-link>
@@ -55,11 +50,6 @@ export default {
           <div class="dog-info">
             <DogProfileCard />
           </div>
-
-          <div class="my-info">
-            <MyProfile />
-          </div>
-          <button id="edit-my-info">Edit my information</button>
         </div>
       </div>
     </div>
@@ -109,33 +99,6 @@ export default {
   display: flex;
   flex-direction: row;
   padding-top: 22px;
-}
-
-.my-info {
-  flex: 1;
-  display: flex;
-}
-
-#edit-my-info {
-  background-color: rgb(215, 229, 243);
-  color: #2c5b94;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* change font */
-  font-size: 1.2em;
-  font-weight: bold;
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-  display: block;
-  margin-left: 50px;
-  margin-top: 20px;
-  margin-bottom: 40px;
-  width: 90%;
-  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.4);
-  transition: opacity 0.2s ease-in-out;
-}
-
-#edit-my-info:hover {
-  opacity: 0.9;
 }
 
 .btn {

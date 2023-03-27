@@ -20,7 +20,8 @@ const store = createStore({
     authIsReady: false,
     userEmail: null,
     userName: null,
-    userPhone: null
+    userPhone: null,
+    isAdmin: false
   },
   plugins: [createPersistedState()],
 
@@ -46,6 +47,9 @@ const store = createStore({
     },
     setUserPhone(state, payload) {
       state.userPhone = payload
+    },
+    setIsAdmin(state, payload) {
+      state.isAdmin = payload
     }
   },
   actions: {
@@ -60,17 +64,23 @@ const store = createStore({
         let documentData = docSnap.data()
         let name = documentData.customer_name
         let phone = documentData.customer_phone
+        let isAdmin = documentData.isAdmin
         context.commit('setUserName', name)
         context.commit('setUserPhone', phone)
+        context.commit('setIsAdmin', isAdmin)
       } else {
         throw new Error('login failed')
       }
     },
-    async signUp(context, { email, password }) {
+    async signUp(context, { email, password, name, phone }) {
       const response = await createUserWithEmailAndPassword(auth, email, password)
       // console.log(response)
       if (response) {
         context.commit('setUser', response.user)
+        context.commit('setUserEmail', auth.currentUser.email)
+        context.commit('setUserName', name)
+        context.commit('setUserPhone', phone)
+        context.commit('setIsAdmin', false)
       } else {
         throw new Error('Could not complete login')
       }
@@ -80,6 +90,9 @@ const store = createStore({
       await signOut(auth)
       context.commit('setUser', null)
       context.commit('setUserEmail', null)
+      context.commit('setUserName', null)
+      context.commit('setUserPhone', null)
+      context.commit('setIsAdmin', false)
     }
   }
 })
@@ -87,7 +100,6 @@ const store = createStore({
 const unsub = onAuthStateChanged(auth, (user) => {
   store.commit('setAuthIsReady', true)
   store.commit('setUser', user)
-  //   store.commit('setUserEmail', auth.currentUser.email)
   unsub()
 })
 // export the store
