@@ -1,28 +1,13 @@
-<!-- <script setup>
-import TheHeader from '@/components/TheHeader.vue'
-</script>
-
-<template>
-  <main>
-
-    <TheHeader /> 
-    
-    <div class="services">
-      <h1>This is a services page</h1>
-    </div>
-  </main>
-</template> -->
-
 <script>
 import TheHeader from '@/components/TheHeader.vue'
-import { RouterLink } from 'vue-router'
 import { computed } from 'vue'
 import { useStore } from 'vuex'
+import ServicesCard from '@/components/ServicesCard.vue'
 
 export default {
   components: {
-    RouterLink,
-    TheHeader
+    TheHeader,
+    ServicesCard
   },
   setup() {
     const store = useStore()
@@ -43,81 +28,45 @@ export default {
         <h1>Our Pet Care Services</h1>
       </div>
       <div class="cards">
-        <div class="card">
-          <div id="card-header">
-            <img id="logo" src="@/assets/food.png" />
-            <h2>Basic Grooming</h2>
-          </div>
-          <div id="card-body">
-            Professional Pet Groomers with magical hands for your pets. We provide bathing,
-            cleaning, haircuts, nail trimming and medicated bath to make your dog look smart and
-            healthy.
-            <br /><br />
-            <strong>Price:</strong> From $55 (Toy), $65 (S), $75 (M)
-          </div>
-          <router-link to="/bookappointment" v-if="authIsReady"
-            ><h3>Get Service &#x2794;</h3></router-link
-          >
-          <router-link to="/login" v-if="!authIsReady"><h3>Get Service &#x2794;</h3></router-link>
-        </div>
-
-        <div class="card">
-          <div id="card-header">
-            <img id="logo" src="@/assets/food.png" />
-            <h2>Full Grooming</h2>
-          </div>
-          <div id="card-body">
-            For our full grooming services, we have 3 different cuts available and all basic
-            grooming will be covered.
-            <br />
-            <ol>
-              <li>Puppy Cut</li>
-              <ul>
-                <li><strong>From:</strong> $85 (Toy), $95 (S), $105(M)</li>
-              </ul>
-              <li>Teddy Bear Cut</li>
-              <ul>
-                <li><strong>From:</strong> $120 (Toy), $130 (S), $160 (M)</li>
-              </ul>
-              <li>Full Scissoring</li>
-              <ul>
-                <li><strong>From:</strong> $130 (Toy), $160 (S), $180 (M)</li>
-              </ul>
-            </ol>
-          </div>
-          <router-link to="/bookappointment" v-if="authIsReady"
-            ><h3>Get Service &#x2794;</h3></router-link
-          >
-          <router-link to="/login" v-if="!authIsReady"><h3>Get Service &#x2794;</h3></router-link>
-        </div>
+        <ServicesCard serviceName="Basic Grooming" :image-src="'/src/assets/food.png'">
+          Professional Pet Groomers with magical hands for your pets. We provide bathing,
+          cleaning, haircuts, nail trimming and medicated bath to make your dog look smart and
+          healthy.
+          <br /><br />
+          <strong>Price:</strong> From $55 (Toy), $65 (S), $75 (M)
+        </ServicesCard>
+        
+        <ServicesCard serviceName="Full Grooming" :image-src="'/src/assets/food.png'">
+          For our full grooming services, we have 3 different cuts available and all basic
+          grooming will be covered.
+          <br />
+          <ol>
+            <li>Puppy Cut</li>
+            <ul>
+              <li><strong>From:</strong> $85 (Toy), $95 (S), $105(M)</li>
+            </ul>
+            <li>Teddy Bear Cut</li>
+            <ul>
+              <li><strong>From:</strong> $120 (Toy), $130 (S), $160 (M)</li>
+            </ul>
+            <li>Full Scissoring</li>
+            <ul>
+              <li><strong>From:</strong> $130 (Toy), $160 (S), $180 (M)</li>
+            </ul>
+          </ol>
+        </ServicesCard>
       </div>
       <div class="cards">
-        <div class="card">
-          <div id="card-header">
-            <img id="logo" src="@/assets/food.png" />
-            <h2>Teeth Cleaning</h2>
-          </div>
-          <div id="card-body">
-            With the use of an ultrasonic cleaning device and precise handling techniques, our pet
-            techs can effectively clean both above & below the gum line and polish while your dog
-            remains alert & comfortable.
-            <br /><br />
-            <strong>Price:</strong> From $80
-          </div>
-          <router-link to="/bookappointment" v-if="authIsReady"
-            ><h3>Get Service &#x2794;</h3></router-link
-          >
-          <router-link to="/login" v-if="!authIsReady"><h3>Get Service &#x2794;</h3></router-link>
-        </div>
+        <ServicesCard serviceName="Teeth Cleaning" :image-src="'/src/assets/food.png'">
+          With the use of an ultrasonic cleaning device and precise handling techniques, our pet
+          techs can effectively clean both above & below the gum line and polish while your dog
+          remains alert & comfortable.
+          <br /><br />
+          <strong>Price:</strong> From $80
+        </ServicesCard>
 
-        <div class="card">
-          <div id="card-header">
-            <img id="logo" src="@/assets/food.png" />
-            <h2>Spa Treatment</h2>
-          </div>
-
-          <div id="card-body">
-            Each of the spa treatment consist of beneficial properties for your dog or cat's skin &
+        <ServicesCard serviceName="Spa Cleaning" :image-src="'/src/assets/food.png'">
+          Each of the spa treatment consist of beneficial properties for your dog or cat's skin &
             coat:
             <ol>
               <li>Japan Nanotechnology Spa Treatment</li>
@@ -126,18 +75,18 @@ export default {
             </ol>
             <br />
             <strong>Price:</strong> From $45
-          </div>
-          <router-link to="/bookappointment" v-if="authIsReady"
-            ><h3>Get Service &#x2794;</h3></router-link
-          >
-          <router-link to="/login" v-if="!authIsReady"><h3>Get Service &#x2794;</h3></router-link>
-        </div>
+        </ServicesCard>
       </div>
     </div>
   </main>
 </template>
 
 <style scoped>
+
+main {
+  height: 100vh;
+  width: 100vw;
+}
 .card-body a {
   width: 50%;
 }
@@ -155,7 +104,6 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-
   opacity: 0.3;
 }
 
@@ -170,7 +118,7 @@ export default {
 .cards {
   display: flex;
   height: 350px;
-  width: 100;
+  width: 100%;
   justify-content: center;
   margin: 15px 0;
 }
