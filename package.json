@@ -11,6 +11,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@vuepic/vue-datepicker": "^4.2.3",
     "cookie": "^0.5.0",
     "firebase": "^9.18.0",
     "js-cookie": "^3.0.1",
