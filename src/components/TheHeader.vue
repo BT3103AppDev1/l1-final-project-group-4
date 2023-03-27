@@ -31,6 +31,10 @@ export default {
         <router-link class="headerButton" to="/services">
           <text class="navButton">SERVICES</text>
         </router-link>
+        <!-- delete this once login page works to admin side -->
+        <router-link class="headerButton" to="/scheduler">
+          <text class="navButton">SCHEDULER</text>
+        </router-link>
 
         <!-- HEADER IF NOT LOGGED IN -->
         <router-link class="headerButton" to="/login" v-if="!user">
