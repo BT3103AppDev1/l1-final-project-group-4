@@ -30,12 +30,12 @@ export default {
 
 <template>
 
-  <body>
+  <div class="main">
     <TheAdminHeader />
-    <div>
+    <div class="body">
       <h1>This is Scheduler Admin Page</h1>
 
-      <table id="table" class="auto-index">
+      <!-- <table id="table" class="auto-index">
         <tr>
           <th>S.NO</th>
           <th>BOOKING ID</th>
@@ -46,21 +46,47 @@ export default {
           <th>TIME</th>
           <th>EMPLOYEE</th>
         </tr>
-      </table>
-      <EmployeeProfileCard />
+      </table> -->
+      <div class="schedule">
+        <!-- <EmployeeProfileCard /> -->
+        <h1>HEHE</h1>
+        <div class="employeeCard">
+          <EmployeeProfileCard />
+        </div>
+      </div>
     </div>
-  </body>
+  </div>
 </template>
 
 <style>
-main {
+.main {
   height: 100vh;
   display: flex;
+  flex-direction: column;
 }
-table {
+.body {
+  display: flex;
+  flex-direction: column;
+  background-color: green;
+  height: 100%;
+}
+#table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
   width: 70%;
+  flex-direction: column;
+}
+.schedule {
+  display:flex;
+  background-color: gold;
+  height: 100%;
+  flex-direction:row;
+  justify-content:space-between;
+  flex-wrap: nowrap;
+}
+.employeeCard {
+  background-color: pink;
+
 }
 
 th,

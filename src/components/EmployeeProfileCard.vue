@@ -80,13 +80,10 @@ export default {
 
 <style>
 .container {
-  width: 20%;
   display: flex;
-  flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin-left: 75%; 
-  padding-top: 22px;
+  /* margin-top: 20em; */
 }
 
 #employee-profile-cards {
