@@ -1,5 +1,7 @@
 <script>
 import { useStore } from 'vuex'
+import { computed } from 'vue'
+import { ref } from 'vue'
 
 export default {
   setup() {
@@ -10,6 +12,8 @@ export default {
     const userPhone = store.state.userPhone
 
     return { userEmail, userName, userPhone }
+
+    
   }
 }
 </script>
@@ -20,10 +24,12 @@ export default {
       <img class="card-profile-img" src="@/assets/appts-img.png" />
       <br />
       <div class="my-details">
-        <h3 id="customer_name">{{ userName }}</h3>
+        <h3 id="customer_name">Name: {{ userName }}</h3>
         <h3 id="customer_email">Email: {{ userEmail }}</h3>
-        <h3 id="customer_phone">Contact Number: {{ userPhone }}</h3>
+        <h3 id="customer_phone">Contact Number: {{ userPhone }}</h3> 
+        
       </div>
+          
     </div>
   </div>
 </template>
@@ -40,5 +46,9 @@ export default {
   border-radius: 50%;
   margin-top: 50px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#customer_name, #customer_email, #customer_phone {
+  color:black;
 }
 </style>

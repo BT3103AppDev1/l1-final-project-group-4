@@ -3,8 +3,22 @@ import app from '../firebase.js'
 import { getFirestore } from 'firebase/firestore'
 import { doc, collection, getDocs, deleteDoc } from 'firebase/firestore'
 import { useStore } from 'vuex'
+import AddDogPopUp from '@/components/AddDogPopUp.vue'
 
 export default {
+  components: {
+    AddDogPopUp
+  },
+  data() {
+    return {
+      show: false,
+    };
+  },
+  methods: {
+    showAddDogPopUp() {
+      this.show= true;
+    },
+  },
   setup() {
     const db = getFirestore(app)
     const store = useStore()
@@ -67,7 +81,7 @@ export default {
         let deleteButton = document.createElement('button')
         deleteButton.id = String(dogId)
         deleteButton.className = 'bwt-small'
-        deleteButton.innerHTML = 'Delete'
+        deleteButton.innerHTML = 'x'
         div1.appendChild(deleteButton)
         deleteButton.onclick = function () {
           deleteDog(String(dogId), String(dogName))
@@ -87,17 +101,20 @@ export default {
       }
       display()
     }
+
     return { userEmail }
   }
 }
 </script>
+
 
 <template>
   <div class="container">
     <div id="dog-profile-cards">
       <table id="table" class="auto-index"></table>
     </div>
-    <button class="bwt">Edit dog information</button>
+    <button class="bwt" @click="showAddDogPopUp"> Add Dog </button>
+    <AddDogPopUp v-model="show"></AddDogPopUp>
   </div>
 </template>
 
@@ -112,71 +129,50 @@ export default {
 #dog-profile-cards {
   width: 90%;
   margin: auto;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  border: 1px solid red;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100%, 100%));
+  grid-gap: 20px; /* adjust this value for spacing between cards */
 }
 
 #dog-info {
-  height: 93%;
-  border: 1px solid green;
+  width: 100%; 
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  background-color: rgb(215, 229, 243);
+  border-radius: 20px;
+  
 }
 
-#card-profile-img {
-  height: 180px;
-  padding-left: 30px;
-  padding-top: 15px;
-  border: 1px solid red;
-}
 #dog-details {
-  display: flex;
-  flex-direction: column;
-  padding-top: 20px;
-  padding-left: 20px;
-  border: 1px solid red;
+  flex-grow: 4;
+
+}
+#card-profile-img {
+  flex-grow: 3;
 }
 
 h3 {
-  margin-bottom: 10px; /* Customize this value to adjust the spacing */
-  color: white;
+  margin-bottom: 10px; 
+  color:#2c5b94;
   font-weight: bold;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-table {
-  table-layout: fixed;
-  overflow-x: auto;
-}
-
-tr {
-  display: block;
-  float: left;
-}
-
-th,
-td {
-  display: block;
-  border: 1px solid black;
-  width: 350px;
-  overflow: hidden;
+#dog-name {
+  padding-top: 10px;
 }
 
 .bwt {
   background-color: rgb(215, 229, 243);
   color: #2c5b94;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* change font */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
   font-size: 1.2em;
   font-weight: bold;
   padding: 10px;
   border-radius: 10px;
   border: none;
-  display: block;
-  margin-left: 50px;
-  margin-top: 20px;
+  margin-left: 30px;
+  margin-top: 15px;
   margin-bottom: 40px;
   width: 90%;
   box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.4);
@@ -188,5 +184,19 @@ td {
 }
 
 .bwt-small {
+  position: absolute;
+  right: -10px;
+  top:-5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border:none;
+  background-color: red;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  font-size: 23px;
+  text-align: center;
+  cursor: pointer;
 }
 </style>
