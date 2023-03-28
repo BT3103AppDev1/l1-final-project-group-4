@@ -1,9 +1,9 @@
 <script>
-import TheAdminHeader from '@/components/TheAdminHeader.vue'
-import { ref } from 'vue'
-import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
-import EmployeeProfileCard from '../../components/EmployeeProfileCard.vue'
+import TheAdminHeader from '@/components/TheAdminHeader.vue';
+import { ref } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+import EmployeeProfileCard from '../../components/EmployeeProfileCard.vue';
 
 export default {
   components: {
@@ -11,32 +11,30 @@ export default {
     EmployeeProfileCard
   },
   setup() {
-    const errorMsg = ref(null)
-    const store = useStore()
-    const router = useRouter()
+    const errorMsg = ref(null);
+    const store = useStore();
+    const router = useRouter();
     const handleSubmit = async () => {
       try {
-        await store.dispatch('logOut')
-        router.push('/')
+        await store.dispatch('logOut');
+        router.push('/');
       } catch (err) {
-        errorMsg.value = err.message
+        errorMsg.value = err.message;
       }
-    }
-    return { handleSubmit, TheAdminHeader, EmployeeProfileCard }
+    };
+    return { handleSubmit, TheAdminHeader, EmployeeProfileCard };
   }
-
-}
+};
 </script>
 
 <template>
-
   <div class="main">
     <TheAdminHeader />
     <div class="body">
       <h1>This is Scheduler Admin Page</h1>
-      
+
       <div class="schedule">
-        <div class = "appointmentCard">
+        <div class="appointmentCard">
           <!-- fill in the appointmentCard -->
         </div>
         <div class="employeeCard">
@@ -57,14 +55,13 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
-
 }
 .schedule {
-  display:flex;
-  flex-direction:row;
-  height: 100%; 
+  display: flex;
+  flex-direction: row;
+  height: 100%;
 }
-.appointmentCard{
+.appointmentCard {
   display: flex;
   width: 60%;
   background-color: black;
@@ -76,6 +73,5 @@ export default {
   padding-right: 20px;
   width: 40%;
   align-self: flex-start;
- }
-
+}
 </style>

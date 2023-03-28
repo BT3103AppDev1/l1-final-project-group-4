@@ -218,110 +218,114 @@ export default {
 </script>
 
 <template>
-  <TheHeader />
-
   <div class="main">
-    <form class="form-container">
-      <div class="sched-appt">Schedule your appointment now!</div>
+    <TheHeader />
 
-      <div class="select-pet">Select Pet</div>
-      <div class="dropdown toggle">
-        <input id="t1" type="checkbox" checked v-model="isPetMenuOpen" />
-        <label for="t1" id="dropdownlabel1" v-text="selectedOptionPet"></label>
+    <div class="body">
+      <form class="form-container">
+        <div class="sched-appt">Schedule your appointment now!</div>
 
-        <ul id="select-pet" v-show="isPetMenuOpen"></ul>
+        <div class="select-pet">Select Pet</div>
+        <div class="dropdown toggle">
+          <input id="t1" type="checkbox" checked v-model="isPetMenuOpen" />
+          <label for="t1" id="dropdownlabel1" v-text="selectedOptionPet"></label>
+
+          <ul id="select-pet" v-show="isPetMenuOpen"></ul>
+        </div>
+
+        <br />
+
+        <div class="select-service">Select Service</div>
+        <div class="dropdown toggle" id="services">
+          <input id="t2" type="checkbox" checked v-model="isServiceMenuOpen" />
+          <label for="t2" id="dropdownlabel2" v-text="selectedOptionService"></label>
+
+          <ul v-show="isServiceMenuOpen">
+            <li>
+              <a
+                href="#"
+                @click.stop="
+                  selectedOptionService = 'Basic Grooming';
+                  isServiceMenuOpen = false;
+                "
+                >Basic Grooming</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                @click.stop="
+                  selectedOptionService = 'Full Grooming';
+                  isServiceMenuOpen = false;
+                "
+                >Full Grooming</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                @click.stop="
+                  selectedOptionService = 'Teeth Cleaning';
+                  isServiceMenuOpen = false;
+                "
+                >Teeth Cleaning</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                @click.stop="
+                  selectedOptionService = 'Spa Treatment';
+                  isServiceMenuOpen = false;
+                "
+                >Spa Treatment</a
+              >
+            </li>
+          </ul>
+        </div>
+
+        <br />
+
+        <div class="select-date">Select Date</div>
+        <div class="dropdown toggle" id="date">
+          <VueDatePicker v-model="date" :enable-time-picker="false" auto-apply></VueDatePicker>
+        </div>
+
+        <br />
+
+        <div class="select-time">Select Time</div>
+        <div class="dropdown toggle" id="time">
+          <input id="t4" type="checkbox" checked v-model="isTimeMenuOpen" @click="getSlots" />
+          <label for="t4" id="dropdownlabel4" v-text="selectedOptionTime"></label>
+
+          <ul id="select-time" v-show="isTimeMenuOpen"></ul>
+        </div>
+
+        <br />
+        <br />
+
+        <button id="submit-button" type="button" v-on:click="showPopUp">Submit</button>
+      </form>
+
+      <div class="appt-img">
+        <img id="dogs" src="@/assets/appts-img.png" />
       </div>
-
-      <br />
-
-      <div class="select-service">Select Service</div>
-      <div class="dropdown toggle" id="services">
-        <input id="t2" type="checkbox" checked v-model="isServiceMenuOpen" />
-        <label for="t2" id="dropdownlabel2" v-text="selectedOptionService"></label>
-
-        <ul v-show="isServiceMenuOpen">
-          <li>
-            <a
-              href="#"
-              @click.stop="
-                selectedOptionService = 'Basic Grooming';
-                isServiceMenuOpen = false;
-              "
-              >Basic Grooming</a
-            >
-          </li>
-          <li>
-            <a
-              href="#"
-              @click.stop="
-                selectedOptionService = 'Full Grooming';
-                isServiceMenuOpen = false;
-              "
-              >Full Grooming</a
-            >
-          </li>
-          <li>
-            <a
-              href="#"
-              @click.stop="
-                selectedOptionService = 'Teeth Cleaning';
-                isServiceMenuOpen = false;
-              "
-              >Teeth Cleaning</a
-            >
-          </li>
-          <li>
-            <a
-              href="#"
-              @click.stop="
-                selectedOptionService = 'Spa Treatment';
-                isServiceMenuOpen = false;
-              "
-              >Spa Treatment</a
-            >
-          </li>
-        </ul>
-      </div>
-
-      <br />
-
-      <div class="select-date">Select Date</div>
-      <div class="dropdown toggle" id="date">
-        <VueDatePicker v-model="date" :enable-time-picker="false" auto-apply></VueDatePicker>
-      </div>
-
-      <br />
-
-      <div class="select-time">Select Time</div>
-      <div class="dropdown toggle" id="time">
-        <input id="t4" type="checkbox" checked v-model="isTimeMenuOpen" @click="getSlots" />
-        <label for="t4" id="dropdownlabel4" v-text="selectedOptionTime"></label>
-
-        <ul id="select-time" v-show="isTimeMenuOpen"></ul>
-      </div>
-
-      <br />
-      <br />
-
-      <button id="submit-button" type="button" v-on:click="showPopUp">Submit</button>
-    </form>
-
-    <div class="appt-img">
-      <img id="dogs" src="@/assets/appts-img.png" />
     </div>
-  </div>
 
-  <AppointmentPopUp v-model="show"> </AppointmentPopUp>
+    <AppointmentPopUp v-model="show"> </AppointmentPopUp>
+  </div>
 </template>
 
 <style>
 .main {
-  min-width: 1000px;
-  min-height: 600px;
-  display: flex;
-  background-color: rgb(215, 229, 243);
   height: 100vh;
   width: 100vw;
+}
+.body {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  background-color: rgb(215, 229, 243);
   justify-content: center;
   align-items: center;
 }
@@ -348,7 +352,7 @@ export default {
   flex-direction: column;
   align-items: flex-start;
   width: 400px;
-  height: 90vh;
+  height: 70%;
 }
 
 #dropdown-menu {

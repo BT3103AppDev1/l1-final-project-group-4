@@ -1,14 +1,20 @@
 <script setup>
-import TheAdminHeader from '@/components/TheAdminHeader.vue'
-
+import TheAdminHeader from '@/components/TheAdminHeader.vue';
 </script>
 
 <template>
-    <body>
-        <TheAdminHeader />
-        <div>
-            <h1>This is Leave Admin Page</h1>
-        </div>
-    </body>
-    
+  <div class="main">
+    <TheAdminHeader />
+    <div>
+      <h1>This is Leave Admin Page</h1>
+    </div>
+  </div>
 </template>
+
+<style scoped>
+.main {
+  display: flex;
+  /* width: 100vw; */
+  /* height: 100vh; */
+}
+</style>
