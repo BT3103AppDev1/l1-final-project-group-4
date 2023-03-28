@@ -330,20 +330,26 @@ export default {
 
         <ul id="select-time" v-show="isTimeMenuOpen"></ul>
       </div>
-    </div>
+      <br />
+      <br />
 
-    <AppointmentPopUp v-model="show"> </AppointmentPopUp>
+      <button id="submit-button" type="button" v-on:click="showPopUp">Submit</button>
+    </form>
+
+    <div class="appt-img">
+      <img id="dogs" src="@/assets/appts-img.png" />
+    </div>
   </div>
+
+  <AppointmentPopUp v-model="show"> </AppointmentPopUp>
 </template>
 
 <style>
 .main {
   height: 100vh;
   width: 100vw;
-}
-.body {
-  height: 100%;
-  width: 100%;
+  min-width: 1000px;
+  min-height: 600px;
   display: flex;
   background-color: rgb(215, 229, 243);
   justify-content: center;
@@ -372,7 +378,7 @@ export default {
   flex-direction: column;
   align-items: flex-start;
   width: 400px;
-  height: 70%;
+  height: 90vh;
 }
 
 #dropdown-menu {
