@@ -26,7 +26,7 @@ export default {
 
     let selectedOptionPet = ref('Select Pet');
     let selectedOptionService = ref('Select Service');
-    let date = ref('Select Date');
+    let selectedDate = ref('Select Date');
     let selectedOptionTime = ref('Select Time');
     let selectedOptionTimeSlot = ref('');
 
@@ -54,6 +54,32 @@ export default {
       if (isTimeMenuOpen.value && timeMenu && !timeMenu.contains(event.target)) {
         isTimeMenuOpen.value = false;
       }
+    }
+
+    function toIsoString(date) {
+      var tzo = -date.getTimezoneOffset(),
+        dif = tzo >= 0 ? '+' : '-',
+        pad = function (num) {
+          return (num < 10 ? '0' : '') + num;
+        };
+
+      return (
+        date.getFullYear() +
+        '-' +
+        pad(date.getMonth() + 1) +
+        '-' +
+        pad(date.getDate()) +
+        'T' +
+        pad(date.getHours()) +
+        ':' +
+        pad(date.getMinutes()) +
+        ':' +
+        pad(date.getSeconds()) +
+        dif +
+        pad(Math.floor(Math.abs(tzo) / 60)) +
+        ':' +
+        pad(Math.abs(tzo) % 60)
+      );
     }
 
     // Attach click event listener to document
@@ -90,9 +116,11 @@ export default {
     getDogs();
 
     async function getSlots() {
-      if (date.value == 'Select Date') {
+      if (selectedDate.value == 'Select Date') {
         return;
       }
+
+      console.log('selected date: ', toIsoString(selectedDate.value).substring(0, 10));
 
       let ul = document.getElementById('select-time');
       ul.innerHTML = '';
@@ -153,10 +181,10 @@ export default {
         const docid = 's' + i;
         const coll = collection(
           db,
-          'appointments/' + date.value.toISOString().substring(0, 10) + '/' + docid
+          'appointments/' + toIsoString(selectedDate.value).substring(0, 10) + '/' + docid
         );
         const snapshot = await getCountFromServer(coll);
-        // console.log('count: ' + i, snapshot.data().count);
+        console.log('count: ' + i, snapshot.data().count);
         if (snapshot.data().count >= 3) {
           console.log('cant select: ' + docid);
           let a = document.getElementById(docid);
@@ -170,25 +198,25 @@ export default {
       console.log(
         selectedOptionPet.value,
         selectedOptionService.value,
-        date.value.toISOString().substring(0, 10),
+        toIsoString(selectedDate.value).substring(0, 10),
         selectedOptionTime.value,
         selectedOptionTimeSlot.value
       );
 
-      await setDoc(doc(db, 'appointments', date.value.toISOString().substring(0, 10)), {
-        date: date.value.toISOString().substring(0, 10)
+      await setDoc(doc(db, 'appointments', toIsoString(selectedDate.value).substring(0, 10)), {
+        date: toIsoString(selectedDate.value).substring(0, 10)
       });
 
       await addDoc(
         collection(
           db,
           'appointments/' +
-            date.value.toISOString().substring(0, 10) +
+            toIsoString(selectedDate.value).substring(0, 10) +
             '/' +
             selectedOptionTimeSlot.value
         ),
         {
-          appt_date: date.value.toISOString().substring(0, 10),
+          appt_date: toIsoString(selectedDate.value).substring(0, 10),
           appt_pet: selectedOptionPet.value,
           appt_time: selectedOptionTime.value,
           appt_email: userEmail,
@@ -201,7 +229,7 @@ export default {
       userEmail,
       selectedOptionPet,
       selectedOptionService,
-      date,
+      selectedDate,
       selectedOptionTime,
       isServiceMenuOpen,
       isPetMenuOpen,
@@ -218,97 +246,89 @@ export default {
 </script>
 
 <template>
+  <TheHeader />
   <div class="main">
-    <TheHeader />
+    <form class="form-container">
+      <div class="sched-appt">Schedule your appointment now!</div>
 
-    <div class="body">
-      <form class="form-container">
-        <div class="sched-appt">Schedule your appointment now!</div>
+      <div class="select-pet">Select Pet</div>
+      <div class="dropdown toggle">
+        <input id="t1" type="checkbox" checked v-model="isPetMenuOpen" />
+        <label for="t1" id="dropdownlabel1" v-text="selectedOptionPet"></label>
 
-        <div class="select-pet">Select Pet</div>
-        <div class="dropdown toggle">
-          <input id="t1" type="checkbox" checked v-model="isPetMenuOpen" />
-          <label for="t1" id="dropdownlabel1" v-text="selectedOptionPet"></label>
+        <ul id="select-pet" v-show="isPetMenuOpen"></ul>
+      </div>
 
-          <ul id="select-pet" v-show="isPetMenuOpen"></ul>
-        </div>
+      <br />
 
-        <br />
+      <div class="select-service">Select Service</div>
+      <div class="dropdown toggle" id="services">
+        <input id="t2" type="checkbox" checked v-model="isServiceMenuOpen" />
+        <label for="t2" id="dropdownlabel2" v-text="selectedOptionService"></label>
 
-        <div class="select-service">Select Service</div>
-        <div class="dropdown toggle" id="services">
-          <input id="t2" type="checkbox" checked v-model="isServiceMenuOpen" />
-          <label for="t2" id="dropdownlabel2" v-text="selectedOptionService"></label>
+        <ul v-show="isServiceMenuOpen">
+          <li>
+            <a
+              href="#"
+              @click.stop="
+                selectedOptionService = 'Basic Grooming';
+                isServiceMenuOpen = false;
+              "
+              >Basic Grooming</a
+            >
+          </li>
+          <li>
+            <a
+              href="#"
+              @click.stop="
+                selectedOptionService = 'Full Grooming';
+                isServiceMenuOpen = false;
+              "
+              >Full Grooming</a
+            >
+          </li>
+          <li>
+            <a
+              href="#"
+              @click.stop="
+                selectedOptionService = 'Teeth Cleaning';
+                isServiceMenuOpen = false;
+              "
+              >Teeth Cleaning</a
+            >
+          </li>
+          <li>
+            <a
+              href="#"
+              @click.stop="
+                selectedOptionService = 'Spa Treatment';
+                isServiceMenuOpen = false;
+              "
+              >Spa Treatment</a
+            >
+          </li>
+        </ul>
+      </div>
 
-          <ul v-show="isServiceMenuOpen">
-            <li>
-              <a
-                href="#"
-                @click.stop="
-                  selectedOptionService = 'Basic Grooming';
-                  isServiceMenuOpen = false;
-                "
-                >Basic Grooming</a
-              >
-            </li>
-            <li>
-              <a
-                href="#"
-                @click.stop="
-                  selectedOptionService = 'Full Grooming';
-                  isServiceMenuOpen = false;
-                "
-                >Full Grooming</a
-              >
-            </li>
-            <li>
-              <a
-                href="#"
-                @click.stop="
-                  selectedOptionService = 'Teeth Cleaning';
-                  isServiceMenuOpen = false;
-                "
-                >Teeth Cleaning</a
-              >
-            </li>
-            <li>
-              <a
-                href="#"
-                @click.stop="
-                  selectedOptionService = 'Spa Treatment';
-                  isServiceMenuOpen = false;
-                "
-                >Spa Treatment</a
-              >
-            </li>
-          </ul>
-        </div>
+      <br />
 
-        <br />
+      <div class="select-date">Select Date</div>
+      <div class="dropdown toggle" id="date">
+        <VueDatePicker
+          v-model="selectedDate"
+          :enable-time-picker="false"
+          auto-apply
+        ></VueDatePicker>
+      </div>
 
-        <div class="select-date">Select Date</div>
-        <div class="dropdown toggle" id="date">
-          <VueDatePicker v-model="date" :enable-time-picker="false" auto-apply></VueDatePicker>
-        </div>
+      <br />
 
-        <br />
+      <div class="select-time">Select Time</div>
+      <div class="dropdown toggle" id="time">
+        <input id="t4" type="checkbox" checked v-model="isTimeMenuOpen" @click="getSlots" />
+        <label for="t4" id="dropdownlabel4" v-text="selectedOptionTime"></label>
 
-        <div class="select-time">Select Time</div>
-        <div class="dropdown toggle" id="time">
-          <input id="t4" type="checkbox" checked v-model="isTimeMenuOpen" @click="getSlots" />
-          <label for="t4" id="dropdownlabel4" v-text="selectedOptionTime"></label>
-
-          <ul id="select-time" v-show="isTimeMenuOpen"></ul>
-        </div>
-
-        <br />
-        <br />
-
-        <button id="submit-button" type="button" v-on:click="showPopUp">Submit</button>
-      </form>
-
-      <div class="appt-img">
-        <img id="dogs" src="@/assets/appts-img.png" />
+        <ul id="select-time" v-show="isTimeMenuOpen"></ul>
       </div>
     </div>
 
