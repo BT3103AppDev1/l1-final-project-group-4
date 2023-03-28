@@ -120,62 +120,23 @@ export default {
         return;
       }
 
-      console.log('selected date: ', toIsoString(selectedDate.value).substring(0, 10));
+      // console.log('selected date: ', toIsoString(selectedDate.value).substring(0, 10));
 
       let ul = document.getElementById('select-time');
       ul.innerHTML = '';
 
+      const map = new Map([
+        ['s1', '9:00AM - 11:00AM'],
+        ['s2', '11:00AM - 1:00PM'],
+        ['s3', '2:00PM - 4:00PM'],
+        ['s4', '4:00PM - 6:00PM']
+      ]);
+
       let li1 = document.createElement('li');
-      ul.appendChild(li1);
-      let a1 = document.createElement('a');
-      a1.id = 's1';
-      a1.href = '#';
-      a1.onclick = function () {
-        selectedOptionTime.value = '9:00AM - 11:00AM';
-        selectedOptionTimeSlot.value = 's1';
-        isTimeMenuOpen.value = false;
-      };
-      a1.innerHTML = '9:00AM - 11:00AM';
-      li1.appendChild(a1);
-
       let li2 = document.createElement('li');
-      ul.appendChild(li2);
-      let a2 = document.createElement('a');
-      a2.id = 's2';
-      a2.href = '#';
-      a2.onclick = function () {
-        selectedOptionTime.value = '11:00AM - 1:00PM';
-        selectedOptionTimeSlot.value = 's2';
-        isTimeMenuOpen.value = false;
-      };
-      a2.innerHTML = '11:00AM - 1:00PM';
-      li2.appendChild(a2);
-
       let li3 = document.createElement('li');
-      ul.appendChild(li3);
-      let a3 = document.createElement('a');
-      a3.id = 's3';
-      a3.href = '#';
-      a3.onclick = function () {
-        selectedOptionTime.value = '2:00PM - 4:00PM';
-        selectedOptionTimeSlot.value = 's3';
-        isTimeMenuOpen.value = false;
-      };
-      a3.innerHTML = '2:00PM - 4:00PM';
-      li3.appendChild(a3);
-
       let li4 = document.createElement('li');
-      ul.appendChild(li4);
-      let a4 = document.createElement('a');
-      a4.id = 's4';
-      a4.href = '#';
-      a4.onclick = function () {
-        selectedOptionTime.value = '4:00PM - 6:00PM';
-        selectedOptionTimeSlot.value = 's4';
-        isTimeMenuOpen.value = false;
-      };
-      a4.innerHTML = '4:00PM - 6:00PM';
-      li4.appendChild(a4);
+      const lis = [li1, li2, li3, li4];
 
       for (let i = 1; i <= 4; i++) {
         const docid = 's' + i;
@@ -185,11 +146,26 @@ export default {
         );
         const snapshot = await getCountFromServer(coll);
         console.log('count: ' + i, snapshot.data().count);
+
+        let a = document.createElement('a');
+        a.id = docid;
+        a.href = '#';
+        a.onclick = function () {
+          selectedOptionTime.value = map.get(docid);
+          selectedOptionTimeSlot.value = docid;
+          isTimeMenuOpen.value = false;
+        };
+        a.innerHTML = map.get(docid);
+        lis[i - 1].appendChild(a);
+
         if (snapshot.data().count >= 3) {
           console.log('cant select: ' + docid);
-          let a = document.getElementById(docid);
           a.className = 'disabled';
         }
+      }
+
+      for (let i = 0; i < lis.length; i++) {
+        ul.appendChild(lis[i]);
       }
     }
 
@@ -318,6 +294,7 @@ export default {
           v-model="selectedDate"
           :enable-time-picker="false"
           auto-apply
+          @update:model-value="getSlots"
         ></VueDatePicker>
       </div>
 
@@ -325,7 +302,7 @@ export default {
 
       <div class="select-time">Select Time</div>
       <div class="dropdown toggle" id="time">
-        <input id="t4" type="checkbox" checked v-model="isTimeMenuOpen" @click="getSlots" />
+        <input id="t4" type="checkbox" checked v-model="isTimeMenuOpen" />
         <label for="t4" id="dropdownlabel4" v-text="selectedOptionTime"></label>
 
         <ul id="select-time" v-show="isTimeMenuOpen"></ul>
