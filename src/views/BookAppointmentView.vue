@@ -247,7 +247,6 @@ export default {
 
 <template>
   <TheHeader />
-
   <div class="main">
     <form class="form-container">
       <div class="sched-appt">Schedule your appointment now!</div>
@@ -331,29 +330,22 @@ export default {
 
         <ul id="select-time" v-show="isTimeMenuOpen"></ul>
       </div>
-
-      <br />
-      <br />
-
-      <button id="submit-button" type="button" v-on:click="showPopUp">Submit</button>
-    </form>
-
-    <div class="appt-img">
-      <img id="dogs" src="@/assets/appts-img.png" />
     </div>
-  </div>
 
-  <AppointmentPopUp v-model="show"> </AppointmentPopUp>
+    <AppointmentPopUp v-model="show"> </AppointmentPopUp>
+  </div>
 </template>
 
 <style>
 .main {
-  min-width: 1000px;
-  min-height: 600px;
-  display: flex;
-  background-color: rgb(215, 229, 243);
   height: 100vh;
   width: 100vw;
+}
+.body {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  background-color: rgb(215, 229, 243);
   justify-content: center;
   align-items: center;
 }
@@ -380,7 +372,7 @@ export default {
   flex-direction: column;
   align-items: flex-start;
   width: 400px;
-  height: 90vh;
+  height: 70%;
 }
 
 #dropdown-menu {

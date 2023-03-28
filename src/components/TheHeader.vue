@@ -1,26 +1,26 @@
 <script>
-import { computed, ref } from 'vue'
-import { useStore } from 'vuex'
+import { computed, ref } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
   setup() {
-    const store = useStore()
-    var drawerVisible = ref(false)
+    const store = useStore();
+    var drawerVisible = ref(false);
 
     return {
       user: computed(() => store.state.user),
       authIsReady: computed(() => store.state.authIsReady),
       drawerVisible
-    }
+    };
   }
-}
+};
 </script>
 
 <template>
   <div class="container" v-if="authIsReady">
     <div class="logo-nav-container">
       <img alt="Elsa" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-      <nav>
+      <nav class="TheHeader">
         <router-link class="headerButton" to="/">
           <text class="navButton">HOME</text>
         </router-link>
@@ -31,10 +31,6 @@ export default {
 
         <router-link class="headerButton" to="/services">
           <text class="navButton">SERVICES</text>
-        </router-link>
-        <!-- delete this once login page works to admin side -->
-        <router-link class="headerButton" to="/admin/scheduler">
-          <text class="navButton">SCHEDULER</text>
         </router-link>
 
         <!-- HEADER IF NOT LOGGED IN -->
@@ -53,54 +49,58 @@ export default {
         </router-link>
       </nav>
 
-
-      <img alt="Menu" class="drawer" src="@/assets/drawer.png" width="75" height="75" @click="drawerVisible = true"/>
+      <img
+        alt="Menu"
+        class="drawer"
+        src="@/assets/drawer.png"
+        width="75"
+        height="75"
+        @click="drawerVisible = true"
+      />
       <div
         class="right-drawer"
         :style="{
-          width: drawerVisible? '20vw' : '0',
-          paddingLeft: drawerVisible? '10px' : '0',
+          width: drawerVisible ? '20vw' : '0',
+          paddingLeft: drawerVisible ? '10px' : '0'
         }"
-        >
-          <router-link class="headerButtonDrawer" to="/">
-            <text class="navButtonDrawer">HOME</text>
-          </router-link>
+      >
+        <router-link class="headerButtonDrawer" to="/">
+          <text class="navButtonDrawer">HOME</text>
+        </router-link>
 
-          <router-link class="headerButtonDrawer" to="/about">
-            <text class="navButtonDrawer">ABOUT US</text>
-          </router-link>
+        <router-link class="headerButtonDrawer" to="/about">
+          <text class="navButtonDrawer">ABOUT US</text>
+        </router-link>
 
-          <router-link class="headerButtonDrawer" to="/services">
-            <text class="navButtonDrawer">SERVICES</text>
-          </router-link>
+        <router-link class="headerButtonDrawer" to="/services">
+          <text class="navButtonDrawer">SERVICES</text>
+        </router-link>
 
-          <!-- HEADER IF NOT LOGGED IN -->
-          <router-link class="headerButtonDrawer" to="/login" v-if="!user">
-            <text class="navButtonDrawer">LOGIN</text>
-          </router-link>
+        <!-- HEADER IF NOT LOGGED IN -->
+        <router-link class="headerButtonDrawer" to="/login" v-if="!user">
+          <text class="navButtonDrawer">LOGIN</text>
+        </router-link>
 
-          <!-- HEADER IF LOGGED IN -->
-          <router-link class="headerButtonDrawer" to="/bookappointment" v-if="user">
-            <text class="navButtonDrawer">BOOK APPOINTMENT</text>
-          </router-link>
+        <!-- HEADER IF LOGGED IN -->
+        <router-link class="headerButtonDrawer" to="/bookappointment" v-if="user">
+          <text class="navButtonDrawer">BOOK APPOINTMENT</text>
+        </router-link>
 
-          <!-- HEADER IF LOGGED IN -->
-          <router-link class="headerButtonDrawer" to="/profile" v-if="user">
-            <text class="navButtonDrawer">PROFILE</text>
-          </router-link>
+        <!-- HEADER IF LOGGED IN -->
+        <router-link class="headerButtonDrawer" to="/profile" v-if="user">
+          <text class="navButtonDrawer">PROFILE</text>
+        </router-link>
 
-        <div style="text-align:right; margin:5px">
-        </div>
+        <div style="text-align: right; margin: 5px"></div>
       </div>
       <div
         class="drawer-mask"
         :style="{
           width: drawerVisible ? '100vw' : '0',
-          opacity: drawerVisible ? '0.6' : '0',
+          opacity: drawerVisible ? '0.6' : '0'
         }"
         @click="drawerVisible = false"
-        >
-      </div>
+      ></div>
     </div>
   </div>
 </template>
@@ -130,7 +130,7 @@ export default {
   justify-content: space-between;
 }
 
-nav {
+nav.TheHeader {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -145,12 +145,12 @@ a {
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-nav a:hover {
+nav.TheHeader a:hover {
   background-color: #2c5b94;
   transition: 0.2s;
 }
 
-nav a.router-link-exact-active:hover {
+nav.TheHeader a.router-link-exact-active:hover {
   background-color: #193a6a;
 }
 
@@ -205,7 +205,7 @@ nav a.router-link-exact-active:hover {
   transition: all 0.2s; /* for the animation */
   flex-direction: column;
   align-items: center;
-  background-color:rgb(215, 229, 243);
+  background-color: rgb(215, 229, 243);
 }
 .drawer-mask {
   position: absolute;
@@ -217,13 +217,13 @@ nav a.router-link-exact-active:hover {
   opacity: 0.3;
   z-index: 199;
 }
-@media (min-width: 1125px) {
+@media (min-width: 1287px) {
   .drawer {
     display: none;
   }
 }
-@media (max-width: 1124px) {
-  nav {
+@media (max-width: 1286px) {
+  nav.TheHeader {
     display: none;
   }
 }
