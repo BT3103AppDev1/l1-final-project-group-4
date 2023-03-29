@@ -49,77 +49,72 @@ export default {
 </script>
 
 <template>
-  <TheHeader />
   <div class="main">
-    <div class="flexbox">
-      <div class="profile-toggle">
-        <div>
+    <TheHeader /> 
+    <div class="profile-body">
+  
+        <div class="profile-toggle">
+          <div>
           <ProfileCard />
-          <br />
+          <br>
           <router-link style="text-decoration: none; color: inherit" to="/groomingprogress">
             <button class="btn" id="progress-page">Dog Progress</button>
           </router-link>
-          <br />
+          <br>
           <button class="btn" id="log-out" @click="handleSubmit()">Log Out</button>
+          
         </div>
-      </div>
+        </div>
 
-      <div class="profile-info">
-        <div class="profile-info-box">
-          <div class="dog-info">
+        <div class="profile-info">
+          <div class="profile-info-box">
             <DogProfileCard />
           </div>
         </div>
-      </div>
+
     </div>
   </div>
 </template>
 
 <style scoped>
+
+
+
 .main {
-  min-width: 1000px;
-  min-height: 600px;
-  background-color: rgb(215, 229, 243);
+  display: flex;
   height: 100vh;
-  width: 100vw;
-  justify-content: center;
-  align-items: center;
+  
 }
 
-.flexbox {
-  display: flex;
-  flex-direction: row;
+.profile-body {
+  background-color: rgb(215, 229, 243);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 100%;
+  height: 100%; 
+  display:flex;
+  justify-content: center;
 }
 
 .profile-toggle {
-  flex: 1;
+  flex: 2;
   display: flex;
   justify-content: center;
 }
 
 .profile-info {
-  flex: 4;
+  flex: 3;
   display: flex;
-  justify-content: center;
   padding-top: 40px;
-  height: 100vh;
 }
-
 .profile-info-box {
-  display: flex;
-  flex-direction: column;
-  height: 80%;
   width: 95%;
+  height: 95%;
   background-color: #2c5b94;
   border-radius: 20px;
+  overflow-y: auto;
 }
-
-.dog-info {
-  display: flex;
-  flex-direction: row;
-  padding-top: 22px;
-}
-
 .btn {
   background-color: #2c5b94;
   color: white;
@@ -135,9 +130,5 @@ export default {
   justify-content: center;
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.4);
   transition: opacity 0.2s ease-in-out;
-}
-
-.btn:hover {
-  opacity: 0.9;
 }
 </style>

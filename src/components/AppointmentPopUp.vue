@@ -1,13 +1,12 @@
 <template>
-    <div class="popup-wrapper" v-show="modelValue">
-        <div class="popup" v-show="modelValue">
-            <div class = "popup-inner">
-                <slot></slot>
-                <h3> Your appointment has been confirmed! </h3>
-                <button class = "close-popup" @click="$emit('update:modelValue', false)"> OK </button>
-            </div>
-        </div>
+  <div class="popup-wrapper" v-show="modelValue">
+    <div class="popup" v-show="modelValue">
+      <div class="popup-inner">
+        <slot></slot>
+        <button class="close-popup" @click="$emit('update:modelValue', false)">OK</button>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -15,15 +14,13 @@ export default {
   props: {
     modelValue: {
       type: Boolean,
-      default: false,
-    },
-  },
+      default: false
+    }
+  }
 };
 </script>
 
 <style scoped>
-
-
 .popup-wrapper {
   position: fixed;
   top: 50%;
@@ -40,8 +37,7 @@ export default {
   transform: translate(-50%, -50%);
 }
 .popup-inner {
-    width: 330px;
-    
+  width: 330px;
 }
 
 .close-popup {
