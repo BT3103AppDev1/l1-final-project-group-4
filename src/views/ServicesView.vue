@@ -1,12 +1,11 @@
 <script>
 import TheHeader from '@/components/TheHeader.vue';
-import { RouterLink } from 'vue-router';
+// import { RouterLink } from 'vue-router';
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 
 export default {
   components: {
-    RouterLink,
     TheHeader
   },
   setup() {

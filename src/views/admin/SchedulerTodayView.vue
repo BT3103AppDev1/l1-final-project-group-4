@@ -5,37 +5,36 @@ import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import EmployeeProfileCard from '../../components/EmployeeProfileCard.vue';
 import SchedulerSubHeader from '../../components/SchedulerSubHeader.vue';
-
-
-export default {
-  components: {
-    TheAdminHeader,
-    EmployeeProfileCard,
-    SchedulerSubHeader
-},
-  setup() {
-    const errorMsg = ref(null);
-    const store = useStore();
-    const router = useRouter();
-    const handleSubmit = async () => {
-      try {
-        await store.dispatch('logOut');
-        router.push('/');
-      } catch (err) {
-        errorMsg.value = err.message;
-      }
+    export default {
+        components: {
+        TheAdminHeader,
+        EmployeeProfileCard,
+        SchedulerSubHeader
+        },
+        setup() {
+            const errorMsg = ref(null);
+            const store = useStore();
+            const router = useRouter();
+            const handleSubmit = async () => {
+                try {
+                await store.dispatch('logOut');
+                router.push('/');
+                } catch (err) {
+                errorMsg.value = err.message;
+                }
+            };
+        return { handleSubmit, TheAdminHeader, EmployeeProfileCard };
+        }
     };
-    return { handleSubmit, TheAdminHeader, EmployeeProfileCard };
-  }
-};
+
 </script>
 
-<template>
+<template> 
   <div class="main">
     <TheAdminHeader />
     <div class="body">
       <SchedulerSubHeader />
-      <h1>This is Scheduler Admin Page</h1>
+      <h1>This is Scheduler Today Admin Page</h1>
       <div class="schedule">
         <div class="appointmentCard">
           <!-- fill in the appointmentCard -->
@@ -47,6 +46,7 @@ export default {
     </div>
   </div>
 </template>
+
 
 <style scoped>
 .main {
@@ -78,3 +78,5 @@ export default {
   align-self: flex-start;
 }
 </style>
+
+
