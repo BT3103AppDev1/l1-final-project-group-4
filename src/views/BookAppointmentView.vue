@@ -29,6 +29,7 @@ export default {
     let selectedDate = ref('Select Date');
     let selectedOptionTime = ref('Select Time');
     let selectedOptionTimeSlot = ref('');
+    let popUpMsg = ref('Your appointment has been confirmed!');
 
     let isServiceMenuOpen = ref(false);
     let isPetMenuOpen = ref(false);
@@ -169,7 +170,22 @@ export default {
       }
     }
 
-    async function showPopUp() {
+    async function handleSubmit() {
+      if (selectedOptionPet.value == 'Select Pet') {
+        popUpMsg.value = 'Please select pet';
+        show.value = true;
+        return;
+      } else if (selectedOptionService.value == 'Select Service') {
+        popUpMsg.value = 'Please select service';
+        show.value = true;
+        return;
+      } else if (selectedOptionTime.value == 'Select Time') {
+        popUpMsg.value = 'Please select time';
+        show.value = true;
+        return;
+      }
+
+      popUpMsg.value = 'Your appointment has been confirmed!';
       show.value = true;
       console.log(
         selectedOptionPet.value,
@@ -211,41 +227,39 @@ export default {
       isPetMenuOpen,
       isTimeMenuOpen,
       show,
+      popUpMsg,
       getSlots,
       handleClickOutsideService,
       handleClickOutsidePet,
       handleClickOutsideTime,
-      showPopUp
+      handleSubmit
     };
   }
 };
 </script>
 
 <template>
-
   <div class="main">
-    <TheHeader /> 
-    <div id = "book-appt-body">
+    <TheHeader />
+    <div id="book-appt-body">
+      <div class="appt-details">
+        <form class="form-container">
+          <p class="sched-appt">Schedule your appointment now!</p>
+          <div class="dropdown toggle form-group">
+            <p class="select-pet">Select Pet</p>
+            <input id="t1" type="checkbox" v-model="isPetMenuOpen" required />
+            <label for="t1" id="dropdownlabel1" v-text="selectedOptionPet"></label>
+            <ul id="select-pet" v-show="isPetMenuOpen"></ul>
+          </div>
 
-      <div class = "appt-details">
-        <form class="form-container">   
-          <div class = "sched-appt"> Schedule your appointment now! </div>
-      
-          <div class="select-pet">Select Pet</div>
-            <div class="dropdown toggle">
-              <input id="t1" type="checkbox" checked v-model="isPetMenuOpen" />
-              <label for="t1" id="dropdownlabel1" v-text="selectedOptionPet"></label>
-              <ul id="select-pet" v-show="isPetMenuOpen"></ul>
-            </div>
+          <br />
 
-          <br>
+          <div class="dropdown toggle form-group" id="services">
+            <p class="select-service">Select Service</p>
+            <input id="t2" type="checkbox" v-model="isServiceMenuOpen" required />
+            <label for="t2" id="dropdownlabel2" v-text="selectedOptionService"></label>
 
-          <div class="select-service">Select Service</div>
-            <div class="dropdown toggle" id="services">
-              <input id="t2" type="checkbox" checked v-model="isServiceMenuOpen" />
-              <label for="t2" id="dropdownlabel2" v-text="selectedOptionService"></label>
-
-              <ul v-show="isServiceMenuOpen">
+            <ul v-show="isServiceMenuOpen">
               <li>
                 <a
                   href="#"
@@ -289,50 +303,48 @@ export default {
             </ul>
           </div>
 
-          <br>
+          <br />
 
-          <div class="select-date">Select Date</div>
-            <div class="dropdown toggle" id="date">
-              <VueDatePicker
-                v-model="selectedDate"
-                :enable-time-picker="false"
-                auto-apply
-                @update:model-value="getSlots"
-              ></VueDatePicker>
+          <div class="dropdown toggle form-group" id="date">
+            <p class="select-date">Select Date</p>
+            <VueDatePicker
+              v-model="selectedDate"
+              :enable-time-picker="false"
+              auto-apply
+              @update:model-value="getSlots"
+            ></VueDatePicker>
           </div>
 
-          <br>
+          <br />
 
-          <div class="select-time">Select Time</div>
-            <div class="dropdown toggle" id="time">
-              <input id="t4" type="checkbox" checked v-model="isTimeMenuOpen" />
-              <label for="t4" id="dropdownlabel4" v-text="selectedOptionTime"></label>
+          <div class="dropdown toggle form-group" id="time">
+            <p class="select-time">Select Time</p>
+            <input id="t4" type="checkbox" v-model="isTimeMenuOpen" required />
+            <label for="t4" id="dropdownlabel4" v-text="selectedOptionTime"></label>
 
-              <ul id="select-time" v-show="isTimeMenuOpen"></ul>
+            <ul id="select-time" v-show="isTimeMenuOpen"></ul>
           </div>
 
-          <br>
-      
-          <button id = "submit-button" type = "button" v-on:click = showPopUp>Submit</button>
-  
+          <br />
+
+          <button id="submit-button" type="button" @click="handleSubmit">Submit</button>
         </form>
-
       </div>
 
-      <div class = "appt-picture"> 
-          <img id = "dogs" src = "@/assets/appts-img.png">
+      <div class="appt-picture">
+        <img id="dogs" src="@/assets/appts-img.png" />
       </div>
-      
-      <AppointmentPopUp v-model="show"> 
+
+      <AppointmentPopUp v-model="show">
+        <h3 id="popup-msg">{{ popUpMsg }}</h3>
       </AppointmentPopUp>
     </div>
   </div>
 </template>
 
 <style>
-
-html, body {
-
+html,
+body {
   margin: 0;
   overflow: hidden; /* Prevent scrolling */
   background-color: rgb(215, 229, 243);
@@ -351,7 +363,7 @@ html, body {
   background-size: cover;
   width: 100%;
   height: 100%;
-  display:flex;
+  display: flex;
   justify-content: center;
   align-content: center;
 }
@@ -370,7 +382,7 @@ html, body {
 }
 .sched-appt {
   font-weight: bold;
-  font-size: 40px;;
+  font-size: 40px;
   padding-bottom: 0.5em;
   padding-top: 0.5em;
 }
@@ -488,5 +500,9 @@ html, body {
 .disabled {
   pointer-events: none;
   background-color: grey !important;
+}
+
+#popup-msg {
+  text-align: center;
 }
 </style>
