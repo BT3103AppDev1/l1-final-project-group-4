@@ -101,7 +101,15 @@ export default {
       display();
     }
 
-    return { userEmail, display };
+    async function refresh() {
+      let tb = document.getElementById('table');
+      while (tb.rows.length > 0) {
+        tb.deleteRow(0);
+      }
+      display();
+    }
+
+    return { userEmail, display, refresh };
   }
 };
 </script>
@@ -110,9 +118,9 @@ export default {
   <div class="container">
     <div id="dog-profile-cards">
       <table id="table" class="auto-index"></table>
+      <button class="bwt" @click="showAddDogPopUp">Add Dog</button>
+      <AddDogPopUp v-model="show" @update:modelValue="refresh"></AddDogPopUp>
     </div>
-    <button class="bwt" @click="showAddDogPopUp">Add Dog</button>
-    <AddDogPopUp v-model="show" @update:modelValue="display"></AddDogPopUp>
   </div>
 </template>
 
@@ -126,6 +134,7 @@ export default {
 
 #dog-profile-cards {
   width: 90%;
+  height: 70%;
   margin: auto;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100%, 100%));
@@ -143,11 +152,16 @@ export default {
 #dog-details {
   flex-grow: 4;
 }
+
 #card-profile-img {
   flex-grow: 3;
+  width: 70px;
+  height: 200px;
 }
 
-h3 {
+#dog-sex,
+#dog-dob,
+#dog-breed {
   margin-bottom: 10px;
   color: #2c5b94;
   font-weight: bold;
@@ -156,6 +170,10 @@ h3 {
 
 #dog-name {
   padding-top: 10px;
+  margin-bottom: 10px;
+  color: #2c5b94;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .bwt {
@@ -167,10 +185,8 @@ h3 {
   padding: 10px;
   border-radius: 10px;
   border: none;
-  margin-left: 30px;
-  margin-top: 15px;
-  margin-bottom: 40px;
-  width: 90%;
+  margin-bottom: 20px;
+  width: 100%;
   box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.4);
   transition: opacity 0.2s ease-in-out;
 }

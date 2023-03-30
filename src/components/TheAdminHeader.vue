@@ -23,7 +23,8 @@ export default {
       user: computed(() => store.state.user),
       authIsReady: computed(() => store.state.authIsReady),
       drawerVisible,
-      handleSubmit
+      handleSubmit,
+     
     };
   }
 };
@@ -120,9 +121,12 @@ nav.adminHeader {
   flex-direction: row;
   align-items: center;
 }
+
 nav.adminHeader a.router-link-exact-active h3 {
   border-bottom: 0.2em solid #64cad8;
 }
+
+
 #buttons {
   display: flex;
   flex-direction: row;

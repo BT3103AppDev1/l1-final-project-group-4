@@ -1,12 +1,11 @@
 <script>
 import TheHeader from '@/components/TheHeader.vue';
-import { RouterLink } from 'vue-router';
+// import { RouterLink } from 'vue-router';
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 
 export default {
   components: {
-    RouterLink,
     TheHeader
   },
   setup() {
@@ -45,7 +44,9 @@ export default {
             <router-link to="/bookappointment" v-if="authIsReady" id="getService">
               <h3>Get Service &#x2794;</h3>
             </router-link>
-            <router-link to="/login" v-if="!authIsReady"><h3>Get Service &#x2794;</h3></router-link>
+            <router-link to="/login" v-if="!authIsReady" id="getService"
+              ><h3>Get Service &#x2794;</h3></router-link
+            >
           </div>
           <!-- CARD 2 -->
           <div class="card">
@@ -76,7 +77,9 @@ export default {
             <router-link to="/bookappointment" v-if="authIsReady" id="getService">
               <h3>Get Service &#x2794;</h3>
             </router-link>
-            <router-link to="/login" v-if="!authIsReady"><h3>Get Service &#x2794;</h3></router-link>
+            <router-link to="/login" v-if="!authIsReady" id="getService"
+              ><h3>Get Service &#x2794;</h3></router-link
+            >
           </div>
         </div>
         <div id="row">
@@ -96,7 +99,9 @@ export default {
             <router-link to="/bookappointment" v-if="authIsReady" id="getService">
               <h3>Get Service &#x2794;</h3>
             </router-link>
-            <router-link to="/login" v-if="!authIsReady"><h3>Get Service &#x2794;</h3></router-link>
+            <router-link to="/login" v-if="!authIsReady" id="getService"
+              ><h3>Get Service &#x2794;</h3></router-link
+            >
           </div>
           <div class="card">
             <div id="card-header">
@@ -117,7 +122,9 @@ export default {
             <router-link to="/bookappointment" v-if="authIsReady" id="getService">
               <h3>Get Service &#x2794;</h3>
             </router-link>
-            <router-link to="/login" v-if="!authIsReady"><h3>Get Service &#x2794;</h3></router-link>
+            <router-link to="/login" v-if="!authIsReady" id="getService"
+              ><h3>Get Service &#x2794;</h3></router-link
+            >
           </div>
         </div>
       </div>
