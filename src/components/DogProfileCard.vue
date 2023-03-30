@@ -118,9 +118,9 @@ export default {
   <div class="container">
     <div id="dog-profile-cards">
       <table id="table" class="auto-index"></table>
+      <button class="bwt" @click="showAddDogPopUp">Add Dog</button>
+      <AddDogPopUp v-model="show" @update:modelValue="refresh"></AddDogPopUp>
     </div>
-    <button class="bwt" @click="showAddDogPopUp">Add Dog</button>
-    <AddDogPopUp v-model="show" @update:modelValue="refresh"></AddDogPopUp>
   </div>
 </template>
 
@@ -134,6 +134,7 @@ export default {
 
 #dog-profile-cards {
   width: 90%;
+  height: 70%;
   margin: auto;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100%, 100%));
@@ -151,6 +152,7 @@ export default {
 #dog-details {
   flex-grow: 4;
 }
+
 #card-profile-img {
   flex-grow: 3;
   width: 70px;
@@ -183,10 +185,8 @@ export default {
   padding: 10px;
   border-radius: 10px;
   border: none;
-  margin-left: 30px;
-  margin-top: 15px;
-  margin-bottom: 40px;
-  width: 90%;
+  margin-bottom: 20px;
+  width: 100%;
   box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.4);
   transition: opacity 0.2s ease-in-out;
 }

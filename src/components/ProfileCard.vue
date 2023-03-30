@@ -17,7 +17,7 @@ export default {
 <template>
   <div class="card">
     <div class="card-body">
-      <img class="card-profile-img" src="@/assets/appts-img.png" />
+      <img class="card-profile-img" src="@/assets/avatar2.png" />
       <br />
       <div class="my-details">
         <h3 id="customer_name">Name: {{ userName }}</h3>
