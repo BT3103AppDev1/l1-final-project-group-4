@@ -1,21 +1,17 @@
 <script>
-import { useStore } from 'vuex'
-import { computed } from 'vue'
-import { ref } from 'vue'
+import { useStore } from 'vuex';
 
 export default {
   setup() {
-    const store = useStore()
+    const store = useStore();
 
-    const userEmail = store.state.userEmail
-    const userName = store.state.userName
-    const userPhone = store.state.userPhone
+    const userEmail = store.state.userEmail;
+    const userName = store.state.userName;
+    const userPhone = store.state.userPhone;
 
-    return { userEmail, userName, userPhone }
-
-    
+    return { userEmail, userName, userPhone };
   }
-}
+};
 </script>
 
 <template>
@@ -26,10 +22,8 @@ export default {
       <div class="my-details">
         <h3 id="customer_name">Name: {{ userName }}</h3>
         <h3 id="customer_email">Email: {{ userEmail }}</h3>
-        <h3 id="customer_phone">Contact Number: {{ userPhone }}</h3> 
-        
+        <h3 id="customer_phone">Contact Number: {{ userPhone }}</h3>
       </div>
-          
     </div>
   </div>
 </template>
@@ -48,7 +42,11 @@ export default {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-#customer_name, #customer_email, #customer_phone {
-  color:black;
+#customer_name,
+#customer_email,
+#customer_phone {
+  color: black;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 </style>

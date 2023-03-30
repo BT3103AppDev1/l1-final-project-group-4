@@ -145,9 +145,13 @@ export default {
 }
 #card-profile-img {
   flex-grow: 3;
+  width: 70px;
+  height: 200px;
 }
 
-h3 {
+#dog-sex,
+#dog-dob,
+#dog-breed {
   margin-bottom: 10px;
   color: #2c5b94;
   font-weight: bold;
@@ -156,6 +160,10 @@ h3 {
 
 #dog-name {
   padding-top: 10px;
+  margin-bottom: 10px;
+  color: #2c5b94;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .bwt {
