@@ -195,6 +195,12 @@ export default {
         selectedOptionTimeSlot.value
       );
 
+      const coll = collection(db, "appointments/" + toIsoString(selectedDate.value).substring(0, 10) + "/" + selectedOptionTimeSlot.value);
+      const snapshot = await getCountFromServer(coll);
+      let counter = snapshot.data().count + 1;
+
+      let id = toIsoString(selectedDate.value).substring(0, 10).replaceAll("-", "") + selectedOptionTimeSlot.value.toUpperCase() + counter
+
       await setDoc(doc(db, 'appointments', toIsoString(selectedDate.value).substring(0, 10)), {
         date: toIsoString(selectedDate.value).substring(0, 10)
       });
@@ -208,11 +214,14 @@ export default {
             selectedOptionTimeSlot.value
         ),
         {
+          appt_id: id,
           appt_date: toIsoString(selectedDate.value).substring(0, 10),
           appt_pet: selectedOptionPet.value,
           appt_time: selectedOptionTime.value,
           appt_email: userEmail,
-          appt_name: userName
+          appt_name: userName,
+          appt_service: selectedOptionService.value,
+          appt_groomer: null
         }
       );
     }
