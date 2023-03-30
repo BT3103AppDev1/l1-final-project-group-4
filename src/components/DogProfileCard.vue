@@ -101,7 +101,15 @@ export default {
       display();
     }
 
-    return { userEmail, display };
+    async function refresh() {
+      let tb = document.getElementById('table');
+      while (tb.rows.length > 0) {
+        tb.deleteRow(0);
+      }
+      display();
+    }
+
+    return { userEmail, display, refresh };
   }
 };
 </script>
@@ -112,7 +120,7 @@ export default {
       <table id="table" class="auto-index"></table>
     </div>
     <button class="bwt" @click="showAddDogPopUp">Add Dog</button>
-    <AddDogPopUp v-model="show" @update:modelValue="display"></AddDogPopUp>
+    <AddDogPopUp v-model="show" @update:modelValue="refresh"></AddDogPopUp>
   </div>
 </template>
 
