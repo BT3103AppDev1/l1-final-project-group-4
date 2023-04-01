@@ -64,7 +64,7 @@ export default {
 }
 
 .subheader {
-  height: 8vh;
+  height: 10%;
   align-items: baseline;
 }
 .schedule {
@@ -77,6 +77,8 @@ export default {
   width: 100%;
   height: 100%;
   overflow: scroll;
+  padding-left: 3vw;
+  max-height: 84vh;
 }
 
 .employeeCard {
