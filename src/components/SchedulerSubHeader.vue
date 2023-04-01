@@ -20,7 +20,7 @@ export default {
 nav {
     width: 100vw;
     display: flex;
-    height: 100%;
+    height: 8vh;
 }
 
 .buttons {
