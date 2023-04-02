@@ -6,7 +6,6 @@ import { useRouter } from 'vue-router';
 import EmployeeProfileCard from '../../components/EmployeeProfileCard.vue';
 import SchedulerSubHeader from '../../components/SchedulerSubHeader.vue';
 
-
 export default {
   components: {
     TheAdminHeader,
@@ -35,7 +34,6 @@ export default {
     <TheAdminHeader />
     <div class="body">
       <SchedulerSubHeader />
-      <h1>This is Scheduler Admin Page</h1>
       <div class="schedule">
         <div class="appointmentCard">
           <!-- fill in the appointmentCard -->

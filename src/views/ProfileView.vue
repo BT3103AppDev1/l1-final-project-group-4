@@ -78,8 +78,6 @@ export default {
 
 <style scoped>
 
-
-
 .main {
   display: flex;
   height: 100vh;
