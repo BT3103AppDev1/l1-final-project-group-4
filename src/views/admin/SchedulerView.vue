@@ -7,6 +7,7 @@ import EmployeeProfileCard from '../../components/EmployeeProfileCard.vue';
 import SchedulerSubHeader from '../../components/SchedulerSubHeader.vue';
 import AppointmentTable from '../../components/AppointmentTable.vue';
 
+
 export default {
   components: {
     TheAdminHeader,
