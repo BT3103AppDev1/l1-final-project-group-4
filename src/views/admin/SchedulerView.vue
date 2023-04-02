@@ -5,12 +5,15 @@ import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import EmployeeProfileCard from '../../components/EmployeeProfileCard.vue';
 import SchedulerSubHeader from '../../components/SchedulerSubHeader.vue';
+import AppointmentTable from '../../components/AppointmentTable.vue';
+
 
 export default {
   components: {
     TheAdminHeader,
     EmployeeProfileCard,
-    SchedulerSubHeader
+    SchedulerSubHeader,
+    AppointmentTable
 },
   setup() {
     const errorMsg = ref(null);
@@ -33,10 +36,12 @@ export default {
   <div class="main">
     <TheAdminHeader />
     <div class="body">
-      <SchedulerSubHeader />
+      <div class="subheader">
+        <SchedulerSubHeader />
+      </div>
       <div class="schedule">
         <div class="appointmentCard">
-          <!-- fill in the appointmentCard -->
+          <AppointmentTable />
         </div>
         <div class="employeeCard">
           <EmployeeProfileCard />
@@ -52,10 +57,16 @@ export default {
   display: flex;
   flex-direction: column;
 }
+
 .body {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+.subheader {
+  height: 10%;
+  align-items: baseline;
 }
 .schedule {
   display: flex;
@@ -64,15 +75,17 @@ export default {
 }
 .appointmentCard {
   display: flex;
-  width: 60%;
-  background-color: black;
+  width: 100%;
   height: 100%;
+  overflow: scroll;
+  padding-left: 3vw;
+  max-height: 84vh;
 }
 
 .employeeCard {
   display: flex;
   padding-right: 20px;
-  width: 40%;
+  width: 2 0%;
   align-self: flex-start;
 }
 </style>

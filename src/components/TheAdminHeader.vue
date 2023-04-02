@@ -33,20 +33,20 @@ export default {
 <template>
   <div class="container" v-if="authIsReady">
     <div id="admin">
-      <h3>ADMINISTRATOR</h3>
+      <h3 id="headerWords">ADMINISTRATOR</h3>
     </div>
-    <nav class="AdminHeader">
+    <nav class="adminHeader">
       <div id="buttons">
         <router-link class="headerButton" to="/admin/scheduler">
-          <h3>SCHEDULER</h3>
+          <h3 id="headerWords">SCHEDULER</h3>
         </router-link>
 
         <router-link class="headerButton" to="/admin/manpower">
-          <h3>MANPOWER</h3>
+          <h3 id="headerWords">MANPOWER</h3>
         </router-link>
 
         <router-link class="headerButton" to="/admin/leave">
-          <h3>LEAVES</h3>
+          <h3 id="headerWords">LEAVES</h3>
         </router-link>
       </div>
     </nav>
@@ -68,15 +68,15 @@ export default {
       }"
     >
       <router-link class="headerButtonDrawer" to="/admin/scheduler">
-        <h3>SCHEDULER</h3>
+        <h3 id="headerWords">SCHEDULER</h3>
       </router-link>
 
       <router-link class="headerButtonDrawer" to="/admin/manpower">
-        <h3>MANPOWER</h3>
+        <h3 id="headerWords">MANPOWER</h3>
       </router-link>
 
       <router-link class="headerButtonDrawer" to="/admin/leave">
-        <h3>LEAVES</h3>
+        <h3 id="headerWords">LEAVES</h3>
       </router-link>
 
       <div id="logoutDrawer">
@@ -110,17 +110,19 @@ export default {
 #admin {
   display: flex;
 }
-h3 {
+#headerWords {
   color: white;
+  font-weight: bold;
 }
-nav.AdminHeader {
+nav.adminHeader {
   display: flex;
   font-family: 'Nunito', sans-serif;
   color: white;
   flex-direction: row;
   align-items: center;
 }
-nav.AdminHeader a.router-link-active h3 {
+
+nav.adminHeader a.router-link-exact-active h3 {
   border-bottom: 0.2em solid #64cad8;
 }
 
@@ -209,7 +211,7 @@ nav.AdminHeader a.router-link-active h3 {
   }
 }
 @media (max-width: 1024px) {
-  nav {
+  nav.adminHeader {
     display: none;
   }
   #logout {

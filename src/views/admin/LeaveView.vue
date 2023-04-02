@@ -1,20 +1,79 @@
-<script setup>
+<script>
 import TheAdminHeader from '@/components/TheAdminHeader.vue';
+import LeaveApplication from '../../components/leaves/LeaveApplication.vue';
+import { ref } from 'vue';
+
+export default {
+  components: {
+    TheAdminHeader,
+    LeaveApplication
+  },
+  setup() {
+    const currPageIsApplications = ref(true);
+    const currPageIsManage = ref(false);
+
+    const toggleToApplication = () => {
+      currPageIsApplications.value = true;
+      currPageIsManage.value = false;
+    };
+    const toggleToManage = () => {
+      currPageIsApplications.value = false;
+      currPageIsManage.value = true;
+    };
+
+    return { toggleToApplication, toggleToManage, currPageIsApplications, currPageIsManage };
+  }
+};
 </script>
 
 <template>
   <div class="main">
     <TheAdminHeader />
-    <div>
-      <h1>This is Leave Admin Page</h1>
+    <div class="top-row">
+      <div class="toggle-buttons">
+        <h3 id="toggle-button" @click="toggleToApplication">Applications</h3>
+        <h3 id="toggle-button" @click="toggleToManage">Manage</h3>
+      </div>
+      <div class="currPage">
+        <h3 id="currPageTitle" v-if="currPageIsApplications">APPLICATIONS</h3>
+        <h3 id="currPageTitle" v-if="currPageIsManage">MANAGE</h3>
+      </div>
     </div>
+    <LeaveApplication v-if="currPageIsApplications" />
   </div>
 </template>
 
 <style scoped>
 .main {
   display: flex;
-  /* width: 100vw; */
-  /* height: 100vh; */
+  width: 100vw;
+  height: 100vh;
+  flex-direction: column;
+}
+.top-row {
+  display: flex;
+  justify-content: space-between;
+}
+.toggle-buttons {
+  display: flex;
+  flex-direction: row;
+  /* padding-left: 3%; */
+  /* background-color: green; */
+  justify-content: flex-start;
+}
+#toggle-button {
+  margin: 1em;
+  color: #2c5b94;
+}
+.currPage {
+  display: flex;
+  margin: 1em;
+}
+#currPageTitle {
+  color: #2c5b94;
+  font-weight: bold;
+}
+#apply {
+  margin: 1em;
 }
 </style>

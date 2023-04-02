@@ -18,10 +18,9 @@ export default {
 
 <style scoped>
 nav {
-   
     width: 100vw;
     display: flex;
-    height: 10vh;
+    height: 8vh;
 }
 
 .buttons {
