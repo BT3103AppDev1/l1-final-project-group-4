@@ -1,7 +1,7 @@
 <script>
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
-import { computed, ref, onMounted } from 'vue';
+import { computed, ref, onMounted, toRefs } from 'vue';
 import { collection, getDocs, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { getFirestore } from 'firebase/firestore';
 import app from '../../firebase.js';
@@ -17,14 +17,15 @@ export default {
     Dropdown,
     PopUp
   },
-  setup() {
+  props: ['employees'],
+  setup(props) {
     const db = getFirestore(app);
     // for date selection
     const date = ref();
     // for employee name selection
     const selectedOptionEmployee = ref('Name');
     const isEmployeeMenuOpen = ref(false);
-    const employees = ref([]);
+    let { employees } = toRefs(props);
     // for leave allowance display
     const prevLeaveBalance = ref(0);
     const requestedNumLeaves = ref(0);
@@ -105,7 +106,7 @@ export default {
             }
             if (conflictLeaves.value.length > 0) throw new Error('Conflict');
 
-            let difference = date.value[1] - date.value[0];
+            let difference = endDate - startDate;
             requestedNumLeaves.value = Math.ceil(difference / (1000 * 3600 * 24)) + 1;
             console.log(requestedNumLeaves.value);
             remainingLeaveBalance.value = prevLeaveBalance.value - requestedNumLeaves.value;
@@ -172,7 +173,9 @@ export default {
           prevLeaveBalance: newLeaveBalance
         }
       );
-      //   console.log(infoRef.id);
+      // rest input fields
+      date.value = [];
+      selectedOptionEmployee.value = 'Name';
     };
 
     // For demo purposes assign range from the current date
@@ -180,18 +183,6 @@ export default {
       const startDate = new Date();
       const endDate = new Date();
       date.value = [startDate, endDate];
-
-      async function getEmployees() {
-        const querySnapshot = await getDocs(collection(db, 'employees'));
-        querySnapshot.forEach((doc) => {
-          console.log(doc.id, ' => ', doc.data().name);
-          let documentData = doc.data();
-          let employeeName = documentData.name;
-          employees.value.push({ name: employeeName });
-          //   console.log(employees);
-        });
-      }
-      getEmployees();
     });
     return {
       date,
@@ -201,7 +192,6 @@ export default {
       isEmployeeMenuOpen,
       handleClickOutsideEmployee,
       getLeaves,
-      employees,
       prevLeaveBalance,
       remainingLeaveBalance: computed(() => prevLeaveBalance.value - requestedNumLeaves.value),
       haveConflictLeaves,
