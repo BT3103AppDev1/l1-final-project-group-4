@@ -17,6 +17,18 @@ export default {
     AppointmentPopUp,
     VueDatePicker
   },
+
+  computed: {
+    minDate() {
+      const now = new Date();
+      now.setDate(now.getDate() + 1);
+      const year = now.getFullYear();
+      const month = (now.getMonth() + 1).toString().padStart(2, '0');
+      const day = now.getDate().toString().padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+  },
+
   setup() {
     const db = getFirestore(app);
     const store = useStore();
@@ -324,7 +336,7 @@ export default {
               v-model="selectedDate"
               :enable-time-picker="false"
               auto-apply
-              @update:model-value="getSlots"
+              @update:model-value="getSlots" :min-date="minDate"
             ></VueDatePicker>
           </div>
 
