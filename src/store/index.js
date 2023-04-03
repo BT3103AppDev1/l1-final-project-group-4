@@ -21,7 +21,9 @@ const store = createStore({
     userEmail: null,
     userName: null,
     userPhone: null,
-    isAdmin: false
+    isAdmin: false,
+    isEmployee: false,
+    isOwner: false,
   },
   plugins: [createPersistedState()],
 
@@ -50,6 +52,12 @@ const store = createStore({
     },
     setIsAdmin(state, payload) {
       state.isAdmin = payload
+    },
+    setIsEmployee(state, payload) {
+      state.isEmployee = payload
+    },
+    setIsOwner(state, payload) {
+      state.isOwner = payload
     }
   },
   actions: {
@@ -65,9 +73,13 @@ const store = createStore({
         let name = documentData.customer_name
         let phone = documentData.customer_phone
         let isAdmin = documentData.isAdmin
+        let isEmployee = documentData.isEmployee
+        let isOwner = documentData.isOwner
         context.commit('setUserName', name)
         context.commit('setUserPhone', phone)
         context.commit('setIsAdmin', isAdmin)
+        context.commit('setIsEmployee', isEmployee)
+        context.commit('setIsOwner', isOwner)
       } else {
         throw new Error('login failed')
       }

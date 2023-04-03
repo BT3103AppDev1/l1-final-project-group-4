@@ -37,7 +37,11 @@ export default {
 
         if (docSnap.exists()) {
           if (docSnap.data().isAdmin == true) {
-            router.push('/admin/scheduler');
+            if (docSnap.data().isOwner == true) {
+              router.push('/admin/scheduler');
+            } else if (docSnap.data().isEmployee == true) {
+              router.push('/employee/schedulerEmployee');
+            }
           } else {
             router.push('/');
           }

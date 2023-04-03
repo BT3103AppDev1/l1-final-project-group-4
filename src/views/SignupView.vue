@@ -1,39 +1,39 @@
 <script>
-import { ref } from 'vue'
-import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
-import app from '../firebase.js'
-import { getFirestore } from 'firebase/firestore'
-import { doc, setDoc } from 'firebase/firestore'
-const db = getFirestore(app)
+import { ref } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+import app from '../firebase.js';
+import { getFirestore } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
+const db = getFirestore(app);
 
 export default {
   setup() {
-    const name = ref('')
-    const phone = ref('')
-    const email = ref('')
-    const password = ref('')
-    const confirmPassword = ref('')
-    const errorMsg = ref(null)
+    const name = ref('');
+    const phone = ref('');
+    const email = ref('');
+    const password = ref('');
+    const confirmPassword = ref('');
+    const errorMsg = ref(null);
 
-    const store = useStore()
-    const router = useRouter()
+    const store = useStore();
+    const router = useRouter();
 
     const goBack = () => {
-      router.push('/')
-    }
+      router.push('/');
+    };
 
     const goLogin = () => {
-      router.push('/login')
-    }
+      router.push('/login');
+    };
 
     const checkPassword = () => {
       if (password.value == confirmPassword.value) {
-        handleSubmit()
+        handleSubmit();
       } else {
-        errorMsg.value = "Passwords don't match"
+        errorMsg.value = "Passwords don't match";
       }
-    }
+    };
 
     const handleSubmit = async () => {
       try {
@@ -42,39 +42,41 @@ export default {
           password: password.value,
           displayName: name.value,
           phoneNumber: phone.value
-        })
+        });
         await setDoc(doc(db, 'customers', email.value.toLowerCase()), {
           customer_name: name.value,
           customer_email: email.value.toLowerCase(),
           customer_phone: phone.value,
-          isAdmin: false
-        })
-        router.push('/')
+          isAdmin: false,
+          isEmployee: false,
+          isOwner: false
+        });
+        router.push('/');
       } catch (error) {
-        console.log(error.code)
+        console.log(error.code);
 
         switch (error.code) {
           case 'auth/invalid-email':
-            errorMsg.value = 'Invalid Email'
-            break
+            errorMsg.value = 'Invalid Email';
+            break;
           case 'auth/email-already-in-use':
-            errorMsg.value = 'Email is already in use'
-            break
+            errorMsg.value = 'Email is already in use';
+            break;
           case 'auth/weak-password':
-            errorMsg.value = 'Please choose a stronger password'
-            break
+            errorMsg.value = 'Please choose a stronger password';
+            break;
           default:
-            errorMsg.value = 'Error Occured. Please try again later'
-            break
+            errorMsg.value = 'Error Occured. Please try again later';
+            break;
         }
       } finally {
-        name.value = ''
-        phone.value = ''
-        email.value = ''
-        password.value = ''
-        confirmPassword.value = ''
+        name.value = '';
+        phone.value = '';
+        email.value = '';
+        password.value = '';
+        confirmPassword.value = '';
       }
-    }
+    };
 
     return {
       goBack,
@@ -87,9 +89,9 @@ export default {
       password,
       confirmPassword,
       errorMsg
-    }
+    };
   }
-}
+};
 </script>
 
 <template>

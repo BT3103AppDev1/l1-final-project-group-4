@@ -1,6 +1,6 @@
 <script>
 import { toRefs, ref } from 'vue';
-import { doc, deleteDoc } from 'firebase/firestore';
+import { doc, deleteDoc, updateDoc, increment } from 'firebase/firestore';
 import { getFirestore } from 'firebase/firestore';
 import app from '../../firebase.js';
 
@@ -15,6 +15,13 @@ export default {
       await deleteDoc(doc(db, 'schedule', 'leaves', info.value.name, info.value.date));
       console.log('Deleted');
       deleted.value = true;
+
+      const docRef = doc(db, 'schedule', 'leaves', info.value.name, 'info');
+
+      // Atomically increment the leave balance by 1.
+      await updateDoc(docRef, {
+        prevLeaveBalance: increment(1)
+      });
     };
 
     return { deleteLeave, deleted };
@@ -51,7 +58,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* background-color: aquamarine; */
+  background-color: rgb(215, 229, 243);
   flex-direction: row;
   border: solid;
   border-radius: 1em;
@@ -59,6 +66,7 @@ export default {
 .nameContainer {
   display: flex;
   /* background-color: green; */
+  width: 50%;
 }
 .name {
   display: flex;
