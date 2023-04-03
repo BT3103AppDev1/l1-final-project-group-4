@@ -1,5 +1,5 @@
 <script>
-import TheAdminHeader from '@/components/TheAdminHeader.vue';
+import TheEmployeeHeader from '@/components/TheEmployeeHeader.vue';
 import { ref } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
@@ -7,7 +7,7 @@ import ManpowerProfileCard from '../../components/ManpowerProfileCard.vue';
 
 export default {
   components: {
-    TheAdminHeader,
+    TheEmployeeHeader,
     ManpowerProfileCard
   },
   setup() {
@@ -22,14 +22,14 @@ export default {
         errorMsg.value = err.message;
       }
     };
-    return { handleSubmit, TheAdminHeader, ManpowerProfileCard };
+    return { handleSubmit };
   }
 };
 </script>
 
 <template>
   <div class="main">
-    <TheAdminHeader />
+    <TheEmployeeHeader />
     <div class="body">
       <div class="profile-info">
         <div class="profile-info-box">
