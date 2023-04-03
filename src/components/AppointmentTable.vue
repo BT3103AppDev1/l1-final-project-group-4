@@ -1,7 +1,7 @@
 <script>
 import app from '../firebase.js'
 import { getFirestore } from 'firebase/firestore'
-import { collection, getDocs } from 'firebase/firestore'
+import { collection, getDocs, getDoc, doc, setDoc} from 'firebase/firestore'
 
 
 export default {
@@ -11,7 +11,7 @@ export default {
 
     async function display() {
       let index = 1  
-      const querySnapshot = await getDocs(collection(db, 'appointments'))
+      const querySnapshot = await getDocs(collection(db, 'new-appointments'))
       const datearray = ["s1", "s2", "s3", "s4"]
     
       const employeeSnapshot = await getDocs(collection(db, 'employees'))
@@ -29,11 +29,11 @@ export default {
         
         // console.log(docDates.id)
         for (let i = 0; i < datearray.length; i++) {
-            const querySnapshot1 = await getDocs(collection(db, 'appointments/' + docDates.id + "/" + datearray[i]))
+            const querySnapshot1 = await getDocs(collection(db, 'new-appointments/' + docDates.id + "/" + datearray[i]))
         // querySnapshot1.forEach(())
-            querySnapshot1.forEach(doc => { 
+            querySnapshot1.forEach(async docc => { 
 
-                let documentData = doc.data()
+                let documentData = docc.data()
                 // console.log(documentData)
 
                 let apptdate = (documentData.appt_date)
@@ -44,41 +44,69 @@ export default {
                 let appttime = (documentData.appt_time)
 
                 let bookingid = (documentData.appt_id)
-                let groomer = (documentData.appt_groomer)
+
+                let bookingRef = doc(db, "bookingtogroomer", bookingid);
+                let bookingSnap = await getDoc(bookingRef);
+
+                let bookingData = bookingSnap.data();
+
+                let groomer = bookingData.groomer;
+
+                // let groomer = (documentData.appt_groomer)
 
                 const values = [index, bookingid, email, customer, pet, service, apptdate, appttime, groomer]
 
                 let table = document.getElementById('appointment-table')
                 let tr = document.createElement('tr')
                 table.appendChild(tr)
-                for (let i = 0; i < 9; i++) {
+                for (let i = 0; i < 10; i++) {
                     let td = document.createElement('td')
                     if (values[i] != null) {
-                        td.innerHTML = values[i]
+                        if (i < 8) {
+                          td.innerHTML = values[i]
+                        }
                     }
                     
                     if (i == 8) {
                         var dropdown = document.createElement("select"); // Create a new dropdown element
                         dropdown.id = "myDropdown";
+                        let j = 0;
                         for (var employee of employeeArray) {
                             var option = document.createElement("option"); 
                             if (employee != "Select") { 
-                                option.value = [employee, bookingid];
+                                option.value = employee;
                             } else {
-                                option.value = [null, bookingid]
+                                option.value = null
                             }
                             option.text = employee;
                             dropdown.add(option);
+                            if (employee === groomer) {
+                              dropdown.selectedIndex = j;
+                            }
+                            j += 1;
                         }
                         td.appendChild(dropdown);
                     }
-                    tr.appendChild(td)
-                }
-                index += 1
-                
-                        
                     
-            })
+
+                    if (i == 9) {
+                      var submitButton = document.createElement("button");
+                      submitButton.innerText = 'Save';
+                      submitButton.addEventListener('click', function() {
+                        const selectedValue = dropdown.value
+                        console.log("Selecting groomer: ", selectedValue)
+                        setDoc(doc(db, "bookingtogroomer", bookingid), {
+                          groomer: selectedValue
+                        });
+                      })
+                      td.appendChild(submitButton)
+                    }
+                    tr.appendChild(td)
+                index += 1
+                }
+                
+                      
+              })
             
         }
       
@@ -92,7 +120,6 @@ export default {
 </script>
 
 <template>
-    
     <table id="appointment-table" class="auto-index">
         <tr>
             <th>S.NO</th>
@@ -104,6 +131,7 @@ export default {
             <th>DATE</th>
             <th>TIME</th>
             <th>EMPLOYEE</th>
+            <th>SELECT</th>
         </tr>
     </table><br><br>
    
@@ -137,8 +165,8 @@ th:nth-child(2) {
 
 /* the third */
 th:nth-child(3) {
-  width: 25em;
-  max-width: 25em;
+  width: 20em;
+  max-width: 20em;
 }
 
 th:nth-child(4) {

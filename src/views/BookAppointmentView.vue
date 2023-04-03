@@ -143,7 +143,7 @@ export default {
         const docid = 's' + i;
         const coll = collection(
           db,
-          'appointments/' + toIsoString(selectedDate.value).substring(0, 10) + '/' + docid
+          'new-appointments/' + toIsoString(selectedDate.value).substring(0, 10) + '/' + docid
         );
         const snapshot = await getCountFromServer(coll);
         console.log('count: ' + i, snapshot.data().count);
@@ -195,20 +195,24 @@ export default {
         selectedOptionTimeSlot.value
       );
 
-      const coll = collection(db, "appointments/" + toIsoString(selectedDate.value).substring(0, 10) + "/" + selectedOptionTimeSlot.value);
+      const coll = collection(db, "new-appointments/" + toIsoString(selectedDate.value).substring(0, 10) + "/" + selectedOptionTimeSlot.value);
       const snapshot = await getCountFromServer(coll);
       let counter = snapshot.data().count + 1;
 
       let id = toIsoString(selectedDate.value).substring(0, 10).replaceAll("-", "") + selectedOptionTimeSlot.value.toUpperCase() + counter
 
-      await setDoc(doc(db, 'appointments', toIsoString(selectedDate.value).substring(0, 10)), {
+      await setDoc(doc(db, 'bookingtogroomer', id), {
+        groomer: null
+      });
+
+      await setDoc(doc(db, 'new-appointments', toIsoString(selectedDate.value).substring(0, 10)), {
         date: toIsoString(selectedDate.value).substring(0, 10)
       });
 
       await addDoc(
         collection(
           db,
-          'appointments/' +
+          'new-appointments/' +
             toIsoString(selectedDate.value).substring(0, 10) +
             '/' +
             selectedOptionTimeSlot.value
@@ -221,7 +225,7 @@ export default {
           appt_email: userEmail,
           appt_name: userName,
           appt_service: selectedOptionService.value,
-          appt_groomer: null
+          // appt_groomer: null
         }
       );
     }

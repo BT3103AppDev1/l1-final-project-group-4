@@ -80,6 +80,7 @@ export default {
   overflow: scroll;
   padding-left: 3vw;
   max-height: 84vh;
+  align-items: flex-start;
 }
 
 .employeeCard {
