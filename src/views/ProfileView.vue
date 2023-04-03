@@ -75,15 +75,12 @@ export default {
 
 <style scoped>
 .main {
-  display: flex;
   height: 100vh;
+  display: flex;
 }
 
 .profile-body {
   background-color: rgb(215, 229, 243);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
   width: 100%;
   height: 100%;
   display: flex;
@@ -99,11 +96,12 @@ export default {
 .profile-info {
   flex: 3;
   display: flex;
-  padding-top: 40px;
+  align-items: flex-start;
+  margin-top: 30px;
 }
 .profile-info-box {
   width: 90%;
-  height: 90%;
+  height: 80%;
   background-color: #2c5b94;
   border-radius: 20px;
   overflow-y: auto;
