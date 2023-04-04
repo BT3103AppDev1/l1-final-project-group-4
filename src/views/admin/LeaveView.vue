@@ -36,7 +36,8 @@ export default {
           console.log(doc.id, ' => ', doc.data().name);
           let documentData = doc.data();
           let employeeName = documentData.name;
-          employees.value.push({ name: employeeName });
+          let employmentStatus = documentData.fullTime;
+          employees.value.push({ name: employeeName, fullTime: employmentStatus });
           //   console.log(employees);
         });
       }
