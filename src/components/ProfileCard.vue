@@ -1,5 +1,9 @@
 <script>
 import { useStore } from 'vuex';
+import app from '../firebase.js';
+import { getStorage, ref, getDownloadURL } from 'firebase/storage';
+
+const storage = getStorage(app);
 
 export default {
   setup() {
@@ -9,6 +13,11 @@ export default {
     const userName = store.state.userName;
     const userPhone = store.state.userPhone;
 
+    getDownloadURL(ref(storage, userEmail)).then((url) => {
+      const img = document.getElementById('profilepic');
+      img.setAttribute('src', url);
+    });
+
     return { userEmail, userName, userPhone };
   }
 };
@@ -17,7 +26,7 @@ export default {
 <template>
   <div class="card">
     <div class="card-body">
-      <img class="card-profile-img" src="@/assets/avatar2.png" />
+      <img class="card-profile-img" id="profilepic" src="@/assets/default-avatar-profile.jpeg" />
       <br />
       <div class="my-details">
         <h3 id="customer_name">Name: {{ userName }}</h3>

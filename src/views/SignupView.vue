@@ -4,8 +4,11 @@ import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import app from '../firebase.js';
 import { getFirestore } from 'firebase/firestore';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { getStorage, ref as storageRef, uploadBytes } from 'firebase/storage';
+
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 export default {
   setup() {
@@ -51,6 +54,34 @@ export default {
           isEmployee: false,
           isOwner: false
         });
+        var file = document.getElementById('profilepic').files[0];
+        // console.log(file);
+        await uploadBytes(storageRef(storage, email.value.toLowerCase()), file);
+
+        await store.dispatch('logIn', {
+          email: email.value,
+          password: password.value
+        });
+        console.log('doc ref is customers/' + email.value);
+        const docRef = doc(db, 'customers', email.value);
+        console.log();
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          if (docSnap.data().isAdmin == true) {
+            if (docSnap.data().isOwner == true) {
+              router.push('/admin/scheduler');
+            } else if (docSnap.data().isEmployee == true) {
+              router.push('/employee/schedulerEmployee');
+            }
+          } else {
+            router.push('/');
+          }
+        } else {
+          // doc.data() will be undefined in this case
+          console.log('No such document!');
+        }
+
         router.push('/');
       } catch (error) {
         console.log(error.code);
@@ -108,10 +139,11 @@ export default {
       <div class="sub-container">
         <h1>Create your Account</h1>
         <input class="input" type="text" placeholder="Name" v-model="name" required />
-        <input class="input" type="phone" placeholder="Phone Number" v-model="phone" required />
         <input class="input" type="email" placeholder="Email" v-model="email" required />
         <input type="password" placeholder="Password" v-model="password" required />
         <input type="password" placeholder="Confirm Password" v-model="confirmPassword" required />
+        <input class="input" type="phone" placeholder="Phone Number" v-model="phone" required />
+        <input type="file" id="profilepic" required />
       </div>
       <div class="sub-container">
         <button type="submit" class="submit" @click="checkPassword()">Register</button>
@@ -212,6 +244,13 @@ input[type='phone'] {
   background-image: url('../assets/user.png');
   background-size: 2.5em;
   background-position: 12px 4px;
+  background-repeat: no-repeat;
+}
+
+input[type='file'] {
+  background-image: url('../assets/user.png');
+  background-size: 2.3em;
+  background-position: 15px 4px;
   background-repeat: no-repeat;
 }
 

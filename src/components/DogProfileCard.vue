@@ -4,6 +4,9 @@ import { getFirestore } from 'firebase/firestore';
 import { doc, collection, getDocs, deleteDoc } from 'firebase/firestore';
 import { useStore } from 'vuex';
 import AddDogPopUp from '@/components/AddDogPopUp.vue';
+import { getStorage, ref, getDownloadURL, deleteObject } from 'firebase/storage';
+
+const storage = getStorage(app);
 
 export default {
   components: {
@@ -28,7 +31,7 @@ export default {
       const docRef = doc(db, 'customers', userEmail);
       const querySnapshot = await getDocs(collection(docRef, 'dogs'));
 
-      querySnapshot.forEach((doc) => {
+      querySnapshot.forEach(async function readDoc(doc) {
         // doc.data() is never undefined for query doc snapshots
         // console.log(doc.id, ' => ', doc.data())
         let documentData = doc.data();
@@ -49,8 +52,10 @@ export default {
         td.appendChild(div1);
 
         let img = document.createElement('img');
-        img.id = 'card-profile-img';
-        img.src = 'src/assets/dog1.png'; // change this
+        await getDownloadURL(ref(storage, userEmail + '-' + dogName)).then((url) => {
+          img.setAttribute('src', url);
+        });
+        img.id = 'dog-img';
         div1.appendChild(img);
 
         let div2 = document.createElement('div');
@@ -93,6 +98,10 @@ export default {
       alert('You are going to delete ' + dogName);
       const docRef = doc(db, 'customers/' + userEmail + '/dogs', dogId);
       await deleteDoc(docRef);
+      const imgRef = ref(storage, userEmail + '-' + dogName);
+      // Delete the file
+      await deleteObject(imgRef);
+
       console.log('Document successfully deleted!', dogName);
       let tb = document.getElementById('table');
       while (tb.rows.length > 0) {
@@ -153,10 +162,11 @@ export default {
   flex-grow: 4;
 }
 
-#card-profile-img {
-  flex-grow: 3;
-  width: 70px;
-  height: 200px;
+#dog-img {
+  height: 150px;
+  border-radius: 50%;
+  margin: 10px;
+  margin-right: 20px;
 }
 
 #dog-sex,
