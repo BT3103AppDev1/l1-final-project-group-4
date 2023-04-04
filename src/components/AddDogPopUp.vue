@@ -1,10 +1,15 @@
 <template>
   <div class="popup" v-show="modelValue">
     <h3>Input your dog's details here:</h3>
+    <br />
     <form @submit.prevent="submitForm" class="dog-form">
       <div class="form-group">
         <label for="dogName" id="dogName">Name:</label>
         <input id="dogName" type="text" v-model="dogName" required />
+      </div>
+      <div class="form-group">
+        <label for="sex" id="sex">Sex:</label>
+        <input id="sex" type="text" v-model="sex" required />
       </div>
       <div class="form-group">
         <label for="dob">Date of Birth:</label>
@@ -14,6 +19,11 @@
         <label for="breed" id="dogBreed">Breed:</label>
         <input id="breed" type="text" v-model="breed" required />
       </div>
+      <div class="form-group">
+        <label for="dogpic">Upload Picture:</label>
+        <input id="dogpic" type="file" required />
+      </div>
+
       <button class="close-popup">OK</button>
     </form>
   </div>
@@ -24,6 +34,9 @@ import app from '../firebase.js';
 import { getFirestore } from 'firebase/firestore';
 import { addDoc, collection } from 'firebase/firestore';
 import { useStore } from 'vuex';
+import { getStorage, ref, uploadBytes } from 'firebase/storage';
+
+const storage = getStorage(app);
 
 export default {
   props: {
@@ -35,8 +48,10 @@ export default {
   data() {
     return {
       dogName: '',
+      sex: '',
       dob: '',
-      breed: ''
+      breed: '',
+      dogpic: null
     };
   },
   setup() {
@@ -44,20 +59,28 @@ export default {
     return { userEmail: store.state.userEmail };
   },
   methods: {
-    async createDoggo(name, breed, dob) {
+    async createDoggo(name, sex, breed, dob) {
       const db = getFirestore(app);
       const email = this.userEmail;
 
       const docRef = await addDoc(collection(db, 'customers', email, 'dogs'), {
         dog_name: name,
+        dog_sex: sex,
         dog_breed: breed,
-        dog_dob: dob,
-        dog_sex: 'F'
+        dog_dob: dob
       });
+
+      var file = document.getElementById('dogpic').files[0];
+      // console.log(file);
+      await uploadBytes(ref(storage, email + '-' + name), file);
+
       console.log('Document written with ID: ', docRef.id);
     },
-    submitForm() {
-      this.createDoggo(this.dogName, this.breed, this.dob);
+    async submitForm() {
+      await this.createDoggo(this.dogName, this.sex, this.breed, this.dob);
+      this.$emit('update:modelValue', false); // this just closes the popup after submitting the form
+    },
+    closeForm() {
       this.$emit('update:modelValue', false); // this just closes the popup after submitting the form
     }
   }
@@ -112,5 +135,22 @@ input {
 
 button {
   align-self: flex-end;
+}
+
+.bwt-close {
+  position: absolute;
+  right: -10px;
+  top: -5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background-color: red;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  font-size: 23px;
+  text-align: center;
+  cursor: pointer;
 }
 </style>

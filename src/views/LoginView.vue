@@ -89,7 +89,6 @@ export default {
       />
       <div class="sub-container">
         <h1>Login to your account</h1>
-
         <input class="input" type="email" placeholder="Email" v-model="email" required />
         <input type="password" placeholder="Password" v-model="password" required />
       </div>

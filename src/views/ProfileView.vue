@@ -5,9 +5,6 @@ import DogProfileCard from '@/components/DogProfileCard.vue';
 import { ref } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-import app from '../firebase.js';
-import { getFirestore } from 'firebase/firestore';
-import { collection, addDoc } from 'firebase/firestore';
 
 export default {
   components: {
@@ -19,21 +16,6 @@ export default {
     const errorMsg = ref(null);
     const store = useStore();
     const router = useRouter();
-    const db = getFirestore(app);
-
-    const email = store.state.userEmail;
-
-    const createDoggo = async () => {
-      console.log('runs');
-      console.log(email);
-      const docRef = await addDoc(collection(db, 'customers', email, 'dogs'), {
-        dog_name: 'Jodi',
-        dog_breed: 'Chihuahua',
-        dog_dob: Date.now(),
-        dog_sex: 'F'
-      });
-      console.log('Document written with ID: ', docRef.id);
-    };
 
     const handleSubmit = async () => {
       try {
@@ -43,7 +25,7 @@ export default {
         errorMsg.value = err.message;
       }
     };
-    return { handleSubmit, createDoggo };
+    return { handleSubmit };
   }
 };
 </script>
@@ -51,7 +33,7 @@ export default {
 <template>
   <div class="main">
     <TheHeader />
-    <div class="profile-body">
+    <div class="body">
       <div class="profile-toggle">
         <div>
           <ProfileCard />
@@ -77,6 +59,15 @@ export default {
 .main {
   height: 100vh;
   display: flex;
+}
+
+.body {
+  display: flex;
+  background-color: rgb(215, 229, 243);
+  width: 100%;
+  height: 100%;
+  flex-direction: row;
+  /* min-width: 1125px; */
 }
 
 .profile-body {
