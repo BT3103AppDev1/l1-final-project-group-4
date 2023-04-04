@@ -39,8 +39,8 @@ export default {
         </router-link>
 
         <!-- HEADER IF LOGGED IN -->
-        <router-link class="headerButton" to="/bookappointment" v-if="user">
-          <text class="navButton">BOOK APPOINTMENT</text>
+        <router-link class="headerButton" to="/myappointments" v-if="user">
+          <text class="navButton">MY APPOINTMENTS</text>
         </router-link>
 
         <!-- HEADER IF LOGGED IN -->
@@ -82,8 +82,8 @@ export default {
         </router-link>
 
         <!-- HEADER IF LOGGED IN -->
-        <router-link class="headerButtonDrawer" to="/bookappointment" v-if="user">
-          <text class="navButtonDrawer">BOOK APPOINTMENT</text>
+        <router-link class="headerButtonDrawer" to="/myappointments" v-if="user">
+          <text class="navButtonDrawer">MY APPOINTMENTS</text>
         </router-link>
 
         <!-- HEADER IF LOGGED IN -->
