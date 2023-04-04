@@ -1,6 +1,7 @@
 <template>
   <div class="popup" v-show="modelValue">
     <h3>Input your dog's details here:</h3>
+    <button class="bwt-close" @click="closeForm">x</button>
     <br />
     <form @submit.prevent="submitForm" class="dog-form">
       <div class="form-group">
