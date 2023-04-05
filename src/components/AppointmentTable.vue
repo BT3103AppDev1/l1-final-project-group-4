@@ -9,10 +9,36 @@ export default {
   setup() {
     const db = getFirestore(app)
 
+    async function canSwapGroomer(querySnapshot1, selectedValue) {
+        let array = []
+        let slots = querySnapshot1.docs
+
+        for await(let slot of slots) {
+          console.log(slot.id)
+          let docccData = slot.data()
+          
+          const doccccSnap = await getDoc(doc(db, "bookingtogroomer", docccData.appt_id))
+        
+          console.log("Pushing groomer to array", doccccSnap.data().groomer)
+          array.push(doccccSnap.data().groomer)
+        }
+       
+        console.log(array)
+        for await(let g of array) {
+          console.log(array)
+          console.log("Comparing ", g, " and ", selectedValue)
+          if (new String(g).valueOf() === new String(selectedValue).valueOf()) {
+            return false;
+          }
+        }
+        return true;
+      }
+    
+
     async function display() {
       let index = 1  
       const querySnapshot = await getDocs(collection(db, 'new-appointments'))
-      const datearray = ["s1", "s2", "s3", "s4"]
+      const slotArray = ["s1", "s2", "s3", "s4"]
     
       const employeeSnapshot = await getDocs(collection(db, 'employees'))
       let employeeArray = ["Select"]
@@ -28,8 +54,8 @@ export default {
         // doc.data() is never undefined for query doc snapshots
         
         // console.log(docDates.id)
-        for (let i = 0; i < datearray.length; i++) {
-            const querySnapshot1 = await getDocs(collection(db, 'new-appointments/' + docDates.id + "/" + datearray[i]))
+        for (let j = 0; j < slotArray.length; j++) {
+            const querySnapshot1 = await getDocs(collection(db, 'new-appointments/' + docDates.id + "/" + slotArray[j]))
         // querySnapshot1.forEach(())
             querySnapshot1.forEach(async docc => { 
 
@@ -68,9 +94,10 @@ export default {
                     }
                     
                     if (i == 8) {
+                        var selected = -1;
                         var dropdown = document.createElement("select"); // Create a new dropdown element
                         dropdown.id = "myDropdown";
-                        let j = 0;
+                        let k = 0;
                         for (var employee of employeeArray) {
                             var option = document.createElement("option"); 
                             if (employee != "Select") { 
@@ -81,9 +108,10 @@ export default {
                             option.text = employee;
                             dropdown.add(option);
                             if (employee === groomer) {
-                              dropdown.selectedIndex = j;
+                              dropdown.selectedIndex = k;
+                              selected = k
                             }
-                            j += 1;
+                            k += 1;
                         }
                         td.appendChild(dropdown);
                     }
@@ -92,12 +120,19 @@ export default {
                     if (i == 9) {
                       var submitButton = document.createElement("button");
                       submitButton.innerText = 'Save';
-                      submitButton.addEventListener('click', function() {
+                      submitButton.addEventListener('click', async function() {
                         const selectedValue = dropdown.value
                         console.log("Selecting groomer: ", selectedValue)
-                        setDoc(doc(db, "bookingtogroomer", bookingid), {
-                          groomer: selectedValue
-                        });
+                        if (await canSwapGroomer(querySnapshot1, selectedValue)) {
+                          console.log("Changed Groomer")
+                          await setDoc(doc(db, "bookingtogroomer", bookingid), {
+                            groomer: selectedValue
+                          });
+                          
+                        } else {
+                          dropdown.selectedIndex = selected
+                          alert("Failed to change groomer. Groomer is already occupied at that moment or you have already selected that groomer")
+                        }
                       })
                       td.appendChild(submitButton)
                     }
