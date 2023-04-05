@@ -9,8 +9,8 @@ export default {
   setup() {
     const db = getFirestore(app)
 
-    async function canSwapGroomer(querySnapshot1, selectedValue) {
-        let array = []
+    async function canSwapGroomer(selectedValue, date, slot) {
+        const querySnapshot1 = await getDocs(collection(db, 'new-appointments/' + date + "/" + slot))
         let slots = querySnapshot1.docs
 
         for await(let slot of slots) {
@@ -18,21 +18,25 @@ export default {
           let docccData = slot.data()
           
           const doccccSnap = await getDoc(doc(db, "bookingtogroomer", docccData.appt_id))
-        
-          console.log("Pushing groomer to array", doccccSnap.data().groomer)
-          array.push(doccccSnap.data().groomer)
-        }
-       
-        console.log(array)
-        for await(let g of array) {
-          console.log(array)
-          console.log("Comparing ", g, " and ", selectedValue)
-          if (new String(g).valueOf() === new String(selectedValue).valueOf()) {
+          console.log("Comparing ", doccccSnap.data().groomer, " and ", selectedValue)
+          if (doccccSnap.data().groomer === new String(selectedValue).valueOf() & doccccSnap.id != slot.id) {
             return false;
           }
         }
+        console.log('schedule/leaves/' + selectedValue  + '/' + date)
+        const querySnapshot2 = await getDoc(doc(db, 'schedule/leaves/' + selectedValue + '/' + date))
+        // if owner can approve leave
+        if (querySnapshot2.exists()) {
+          // uncomment if dont need to approve leave
+          // return false;
+          console.log("Document data:", querySnapshot2.data());
+          return !querySnapshot2.data().approved;
+        }
         return true;
-      }
+    }
+       
+
+      
     
 
     async function display() {
@@ -94,7 +98,7 @@ export default {
                     }
                     
                     if (i == 8) {
-                        var selected = -1;
+                        
                         var dropdown = document.createElement("select"); // Create a new dropdown element
                         dropdown.id = "myDropdown";
                         let k = 0;
@@ -109,7 +113,6 @@ export default {
                             dropdown.add(option);
                             if (employee === groomer) {
                               dropdown.selectedIndex = k;
-                              selected = k
                             }
                             k += 1;
                         }
@@ -123,22 +126,34 @@ export default {
                       submitButton.addEventListener('click', async function() {
                         const selectedValue = dropdown.value
                         console.log("Selecting groomer: ", selectedValue)
-                        if (await canSwapGroomer(querySnapshot1, selectedValue)) {
+                        if (await canSwapGroomer(selectedValue, docDates.id, slotArray[j])) {
                           console.log("Changed Groomer")
                           await setDoc(doc(db, "bookingtogroomer", bookingid), {
                             groomer: selectedValue
                           });
-                          
                         } else {
-                          dropdown.selectedIndex = selected
-                          alert("Failed to change groomer. Groomer is already occupied at that moment or you have already selected that groomer")
+                          console.log("cannot change")
+                          const l = await getDoc(doc(db, 'bookingtogroomer', bookingid));
+                          let p = 0;
+                          for (var employee of employeeArray) {
+                            if (employee === l.data().groomer) {
+                              dropdown.selectedIndex = p;
+                              
+                              break;
+                            }
+                            p += 1;
+                          }
+                          if (employeeArray[p] != selectedValue) {
+                            alert("Failed to change groomer. Groomer is already occupied at that moment or you have already selected that groomer");
+                          }
                         }
                       })
                       td.appendChild(submitButton)
                     }
                     tr.appendChild(td)
-                index += 1
+                    
                 }
+                index += 1
                 
                       
               })
