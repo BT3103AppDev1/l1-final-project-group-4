@@ -52,7 +52,7 @@ export default {
         td.appendChild(div1);
 
         let img = document.createElement('img');
-        await getDownloadURL(ref(storage, userEmail + '-' + dogName)).then((url) => {
+        await getDownloadURL(ref(storage, userEmail + '-' + dogName + '.png')).then((url) => {
           img.setAttribute('src', url);
         });
         img.id = 'dog-img';
