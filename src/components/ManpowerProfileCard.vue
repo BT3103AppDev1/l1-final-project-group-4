@@ -3,6 +3,9 @@ import app from '../firebase.js';
 import { getFirestore } from 'firebase/firestore';
 import { doc, collection, getDocs, deleteDoc } from 'firebase/firestore';
 import AddManpowerPopUp from '@/components/AddManpowerPopUp.vue';
+import { getStorage, ref, getDownloadURL, deleteObject } from 'firebase/storage';
+
+const storage = getStorage(app);
 
 export default {
   components: {
@@ -24,7 +27,7 @@ export default {
     async function display() {
       const querySnapshot = await getDocs(collection(db, 'employees'));
 
-      querySnapshot.forEach((doc) => {
+      querySnapshot.forEach(async function readDoc(doc) {
         // doc.data() is never undefined for query doc snapshots
         console.log(doc.id, ' => ', doc.data());
         let documentData = doc.data();
@@ -42,8 +45,10 @@ export default {
         td.appendChild(div1);
 
         let img = document.createElement('img');
-        img.id = 'manpower-profile-img';
-        img.src = 'src/assets/avatar2.png'; //change this
+        await getDownloadURL(ref(storage, 'employee-' + employeeName + '.png')).then((url) => {
+          img.setAttribute('src', url);
+        });
+        img.id = 'employee-img';
         div1.appendChild(img);
 
         let div2 = document.createElement('div');
@@ -53,7 +58,7 @@ export default {
         let header1 = document.createElement('h3');
         header1.id = 'manpower-name';
         div2.appendChild(header1);
-        header1.innerHTML = 'Name: ' + employeeName;
+        header1.innerHTML = employeeName;
 
         let header2 = document.createElement('h3');
         header2.id = 'manpower-fulltime';
@@ -66,24 +71,34 @@ export default {
         deleteButton.dataset.employeeId = doc.id; // add the document ID as a data attribute
         div1.appendChild(deleteButton);
         deleteButton.onclick = function () {
-          deleteEmployee(doc.id); // pass the document ID as parameter to the delete function
-        }
+          deleteEmployee(doc.id, employeeName); // pass the document ID as parameter to the delete function
+        };
       });
     }
     display();
-   
-   
-    async function deleteEmployee(employeeId) {
-      alert('You are going to delete employee with ID ' + employeeId);
+
+    async function deleteEmployee(employeeId, employeeName) {
+      alert('You are going to delete employee: ' + employeeName);
       const docRef = doc(db, 'employees', employeeId); // use the document ID to create the document reference
       await deleteDoc(docRef);
+      const imgRef = ref(storage, 'employee-' + employeeName + '.png');
+      // Delete the file
+      await deleteObject(imgRef);
       console.log('Document successfully deleted!', employeeId);
 
       // remove the row from the HTML table
       let row = document.querySelector(`[data-employee-id="${employeeId}"]`).closest('tr');
       row.remove();
     }
-    return { display };
+
+    async function refresh() {
+      let tb = document.getElementById('manpower-table');
+      while (tb.rows.length > 0) {
+        tb.deleteRow(0);
+      }
+      display();
+    }
+    return { display, refresh };
   }
 };
 </script>
@@ -91,7 +106,7 @@ export default {
 <template>
   <div class="container">
     <button class="bwt" @click="showAddManpowerPopUp">Add Employee</button>
-    <AddManpowerPopUp v-model="show" @update:modelValue="display"></AddManpowerPopUp>
+    <AddManpowerPopUp v-model="show" @update:modelValue="refresh"></AddManpowerPopUp>
   </div>
   <div id="manpower-profile-cards">
     <table id="manpower-table" class="auto-index"></table>
@@ -119,25 +134,28 @@ export default {
   flex-direction: row;
   background-color: rgb(215, 229, 243);
   border-radius: 20px;
+  color: #2c5b94;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #manpower-details {
-  flex-grow: 4;
+  flex-grow: 1;
 }
 
 #manpower-profile-img {
   flex-grow: 3;
 }
 
-h3 {
-  margin-bottom: 10px;
-  color: #2c5b94;
-  font-weight: bold;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+#employee-img {
+  height: 150px;
+  border-radius: 50%;
+  margin: 10px;
+  margin-right: 20px;
 }
 
 #manpower-name {
   padding-top: 10px;
+  font-weight: bold;
 }
 
 .bwt {
@@ -154,7 +172,6 @@ h3 {
   box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.4);
   transition: opacity 0.2s ease-in-out;
 }
-
 
 .bwt:hover {
   opacity: 0.9;
@@ -176,5 +193,4 @@ h3 {
   text-align: center;
   cursor: pointer;
 }
-
 </style>

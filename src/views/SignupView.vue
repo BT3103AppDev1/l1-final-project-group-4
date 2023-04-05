@@ -56,7 +56,7 @@ export default {
         });
         var file = document.getElementById('profilepic').files[0];
         // console.log(file);
-        await uploadBytes(storageRef(storage, email.value.toLowerCase()), file);
+        await uploadBytes(storageRef(storage, email.value.toLowerCase() + '.png'), file);
 
         await store.dispatch('logIn', {
           email: email.value,

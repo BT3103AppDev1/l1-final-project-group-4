@@ -13,7 +13,7 @@ export default {
     const userName = store.state.userName;
     const userPhone = store.state.userPhone;
 
-    getDownloadURL(ref(storage, userEmail)).then((url) => {
+    getDownloadURL(ref(storage, userEmail + '.png')).then((url) => {
       const img = document.getElementById('profilepic');
       img.setAttribute('src', url);
     });

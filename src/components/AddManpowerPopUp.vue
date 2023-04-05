@@ -1,6 +1,7 @@
 <template>
   <div class="popup" v-show="modelValue">
     <h3>Input employee details here:</h3>
+    <button class="bwt-close" @click="closeForm">x</button>
     <form @submit.prevent="submitForm" class="employee-form">
       <div class="form-group">
         <label for="name" id="name">Name:</label>
@@ -9,6 +10,10 @@
       <div class="form-group">
         <label for="fullTime">Full-Time:</label>
         <input id="fullTime" type="text" v-model="fullTime" required />
+      </div>
+      <div class="form-group">
+        <label for="employeepic">Upload Picture:</label>
+        <input id="employeepic" type="file" required />
       </div>
       <button class="close-popup">OK</button>
     </form>
@@ -19,6 +24,9 @@
 import app from '../firebase.js';
 import { getFirestore } from 'firebase/firestore';
 import { addDoc, collection } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes } from 'firebase/storage';
+
+const storage = getStorage(app);
 
 export default {
   props: {
@@ -41,11 +49,19 @@ export default {
         name: name,
         fullTime: fullTime
       });
+
+      var file = document.getElementById('employeepic').files[0];
+      // console.log(file);
+      await uploadBytes(ref(storage, 'employee-' + name + '.png'), file);
+
       console.log('Document written with ID: ', docRef.id);
     },
     submitForm() {
       this.createEmployee(this.name, this.fullTime);
       this.$emit('update:modelValue', false); //  closes the popup after submitting the form
+    },
+    closeForm() {
+      this.$emit('update:modelValue', false); // this just closes the popup after submitting the form
     }
   }
 };
@@ -99,5 +115,22 @@ input {
 
 button {
   align-self: flex-end;
+}
+
+.bwt-close {
+  position: absolute;
+  right: -10px;
+  top: -5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background-color: red;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  font-size: 23px;
+  text-align: center;
+  cursor: pointer;
 }
 </style>
