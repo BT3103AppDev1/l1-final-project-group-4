@@ -15,8 +15,6 @@ export default {
     VueDatePicker
   },
   setup() {
-    const db = getFirestore(app);
-    const store = useStore();
     let selectedDate = ref('Select Date');
 
     function toIsoString(date) {
@@ -62,7 +60,6 @@ export default {
       formattedDate,
       onDateSelected
     }
-
   }
 }
 
@@ -83,6 +80,7 @@ export default {
         ></VueDatePicker>
       </div>
       <div id="my-appts">
+        
         <AppointmentDetails :newDate="formattedDate" />
       </div>
     </div>
@@ -124,6 +122,7 @@ export default {
   width: 90%;
   height: 80%;
   background-color: #2c5b94;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
   border-radius: 20px;
   overflow-y: auto;
   display: flex;
@@ -137,7 +136,7 @@ export default {
 }
 
 #select-date {
-  font-size: 23px;
+  font-size: 27px;
   font-weight: bold;
   width: 10em;
 }
