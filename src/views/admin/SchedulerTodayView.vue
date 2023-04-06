@@ -5,11 +5,14 @@ import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import EmployeeProfileCard from '../../components/EmployeeProfileCard.vue';
 import SchedulerSubHeader from '../../components/SchedulerSubHeader.vue';
+import AppointmentTodayTable from '../../components/AppointmentTodayTable.vue';
+
     export default {
         components: {
         TheAdminHeader,
         EmployeeProfileCard,
-        SchedulerSubHeader
+        SchedulerSubHeader,
+        AppointmentTodayTable
         },
         setup() {
             const errorMsg = ref(null);
@@ -34,10 +37,9 @@ import SchedulerSubHeader from '../../components/SchedulerSubHeader.vue';
     <TheAdminHeader />
     <div class="body">
       <SchedulerSubHeader />
-      <h1>This is Scheduler Today Admin Page</h1>
       <div class="schedule">
         <div class="appointmentCard">
-          <!-- fill in the appointmentCard -->
+          <AppointmentTodayTable />
         </div>
         <div class="employeeCard">
           <EmployeeProfileCard />

@@ -1,41 +1,13 @@
 <script>
 import app from '../firebase.js'
 import { getFirestore } from 'firebase/firestore'
-import { collection, getDocs, getDoc, doc, setDoc, deleteDoc, addDoc } from 'firebase/firestore'
+import { collection, getDocs, getDoc, doc, deleteDoc, updateDoc } from 'firebase/firestore'
 import { onBeforeUnmount } from 'vue';
-
 
 
 export default {
 
-  beforeUnmount() {
-    window.removeEventListener('beforeunload', this.resetComponent);
-  },
-
-  methods: {
-    resetComponent() {
-      // reset the component by removing all rows from the table
-      const table = this.$refs.myTable;
-      while (table.rows.length > 0) {
-        table.deleteRow(0);
-      }
-    }
-  },
-
   setup() {
-
-    window.addEventListener('beforeunload', function() {
-      console.log("resetted")
-      resetComponent();
-    });
-
-    function resetComponent() {
-      // reset the component by removing all rows from the table
-      const table = document.getElementById('appointment-table');
-      while (table.rows.length > 0) {
-        table.deleteRow(0);
-      }
-    }
 
     const db = getFirestore(app)
     function getToday() {
@@ -51,26 +23,11 @@ export default {
       if (mm<10) {
           mm='0'+mm;
       } 
-      today = mm+'-'+dd+'-'+yyyy;
+      today = yyyy+'-'+mm+'-'+dd;
       return today;
     }
-    
-    async function addApptToday() {
-      console.log("adding")
-      await addDoc(collection(db, "today-appointments/" + getToday(), "S1"), {
-        appt_date: getToday(),
-        appt_email: "admin@gmail.com",
-        appt_id: getToday() + "S11" ,
-        appt_name: "me",
-        appt_pet: "test",
-        appt_service: "Full Grooming",
-        appt_time: "11:00AM - 1:00PM"
-      });
-    }
 
-    addApptToday();
-
-    async function canSwapGroomer(selectedValue, date, slot) {
+    async function canSwapGroomer(selectedValue, date, slot, bookingid) {
         const querySnapshot1 = await getDocs(collection(db, 'new-appointments/' + date + "/" + slot))
         let slots = querySnapshot1.docs
 
@@ -78,9 +35,10 @@ export default {
           console.log(slot.id)
           let docccData = slot.data()
           
-          const doccccSnap = await getDoc(doc(db, "bookingtogroomer", docccData.appt_id))
-          console.log("Comparing ", doccccSnap.data().groomer, " and ", selectedValue)
-          if (doccccSnap.data().groomer === new String(selectedValue).valueOf() & doccccSnap.id != slot.id) {
+          // const doccccSnap = await getDoc(doc(db, "bookingtogroomer", docccData.appt_id))
+          console.log("Comparing ", docccData.appt_groomer, " and ", selectedValue)
+          if (docccData.appt_groomer === new String(selectedValue).valueOf() & docccData.appt_id != bookingid) {
+            console.log("false")
             return false;
           }
         }
@@ -111,6 +69,11 @@ export default {
         employeeArray.push(employeeName)
       })
       querySnapshot.forEach(async (docDates) => {
+        // console.log(docDates.id, getToday())
+        if (docDates.id === getToday()) {
+          console.log("Dont show todays appointment dates")
+          return;
+        }
         // doc.data() is never undefined for query doc snapshots
         // move dates to today-appointments
         
@@ -132,105 +95,130 @@ export default {
 
                 let bookingid = (documentData.appt_id)
 
-                let bookingRef = doc(db, "bookingtogroomer", bookingid);
-                let bookingSnap = await getDoc(bookingRef);
+                // let bookingRef = doc(db, "bookingtogroomer", bookingid);
+                // let bookingSnap = await getDoc(bookingRef);
 
-                let bookingData = bookingSnap.data();
+                // let bookingData = bookingSnap.data();
 
-                let groomer = bookingData.groomer;
+                // let groomer = bookingData.groomer;
+                let groomer = documentData.appt_groomer;
 
                 // let groomer = (documentData.appt_groomer)
-
+                // not working
                 const values = [index, bookingid, email, customer, pet, service, apptdate, appttime, groomer]
-                if (docDates.id === getToday()) {
-                  await addDoc(collection(db, "today-appointments/" + docDates.id + "/" + slotArray[j]), {
-                    appt_date: apptdate,
-                    appt_email: email,
-                    appt_id: bookingid,
-                    appt_name: customer,
-                    appt_pet: pet,
-                    appt_service: service,
-                    appt_time: appttime
-                  });
-                  // TODO: NEED TO DELETE FROM NEW-APPOINTMENT
-                  await deleteDoc(doc(db, "new-appointments", docDates.id));
-                } else {
-                  let table = document.getElementById('appointment-table')
-                  let tr = document.createElement('tr')
-                  table.appendChild(tr)
-                  for (let i = 0; i < 10; i++) {
-                      let td = document.createElement('td')
-                      if (values[i] != null) {
-                          if (i < 8) {
-                            td.innerHTML = values[i]
-                          }
-                      }
-                      
-                      if (i == 8) {
-                          
-                          var dropdown = document.createElement("select"); // Create a new dropdown element
-                          dropdown.id = "myDropdown";
-                          let k = 0;
-                          for (var employee of employeeArray) {
-                              var option = document.createElement("option"); 
-                              if (employee != "Select") { 
-                                  option.value = employee;
-                              } else {
-                                  option.value = null
-                              }
-                              option.text = employee;
-                              dropdown.add(option);
-                              if (employee === groomer) {
-                                dropdown.selectedIndex = k;
-                              }
-                              k += 1;
-                          }
-                          td.appendChild(dropdown);
-                      }
-                      
-
-                      if (i == 9) {
-                        var submitButton = document.createElement("button");
-                        submitButton.innerText = 'Save';
-                        submitButton.addEventListener('click', async function() {
-                          const selectedValue = dropdown.value
-                          console.log("Selecting groomer: ", selectedValue)
-                          if (await canSwapGroomer(selectedValue, docDates.id, slotArray[j])) {
-                            console.log("Changed Groomer")
-                            await setDoc(doc(db, "bookingtogroomer", bookingid), {
-                              groomer: selectedValue
-                            });
+                // if (docDates.id === getToday() ) {
+                //   await addDoc(collection(db, "today-appointments/" + docDates.id + "/" + slotArray[j]), {
+                //     appt_date: apptdate,
+                //     appt_email: email,
+                //     appt_id: bookingid,
+                //     appt_name: customer,
+                //     appt_pet: pet,
+                //     appt_service: service,
+                //     appt_time: appttime,
+                //     appt_status: "Not Started"
+                //   });
+                //   // TODO: NEED TO DELETE FROM NEW-APPOINTMENT
+                //   await deleteDoc(doc(db, "new-appointments", docDates.id));
+                // } else {
+                let table = document.getElementById('appointment-table')
+                let tr = document.createElement('tr')
+                table.appendChild(tr)
+                for (let i = 0; i < 11; i++) {
+                    let td = document.createElement('td')
+                    if (values[i] != null) {
+                        if (i < 8) {
+                          td.innerHTML = values[i]
+                        }
+                    }
+                    
+                    if (i == 8) {
+        
+                        var dropdown = document.createElement("select"); // Create a new dropdown element
+                        dropdown.id = "myDropdown";
+                        let k = 0;
+                        
+                        
+                        for (var employee of employeeArray) {
+                          console.log("Groomer: ", groomer)
+                          console.log("Employee: ", employee)
+                          var option = document.createElement("option"); 
+                          if (employee != "Select") { 
+                              option.value = employee;
                           } else {
-                            console.log("cannot change")
-                            const l = await getDoc(doc(db, 'bookingtogroomer', bookingid));
-                            let p = 0;
-                            for (var employee of employeeArray) {
-                              if (employee === l.data().groomer) {
+                              option.value = null
+                          }
+                          option.text = employee;
+                          dropdown.add(option);
+                          if (employee === groomer) {
+                            dropdown.selectedIndex = k;
+                          }
+                          k += 1;
+                        }
+                        td.appendChild(dropdown);
+                    }
+                    
+
+                    if (i == 9) {
+                      var submitButton = document.createElement("button");
+                      submitButton.innerText = 'Save';
+                      submitButton.addEventListener('click', async function() {
+                        const selectedValue = dropdown.value
+                        console.log("Selecting groomer: ", selectedValue)
+                        if (await canSwapGroomer(selectedValue, docDates.id, slotArray[j], bookingid)) {
+                          console.log("Changed Groomer")
+                          await updateDoc(doc(db, 'new-appointments/' + docDates.id + "/" + slotArray[j], docc.id), {
+                            appt_groomer: selectedValue
+                          });
+                        } else {
+                          console.log("cannot change")
+                          const l = await getDoc(doc(db, 'new-appointments/' + docDates.id + "/" + slotArray[j], docc.id));
+                          let p = 0;
+                          for (var employee of employeeArray) {
+                            if (employee === "Select") {
+                             
+                              if (l.data().appt_groomer === "null") {
                                 dropdown.selectedIndex = p;
-                                
                                 break;
                               }
-                              p += 1;
                             }
-                            if (employeeArray[p] != selectedValue) {
-                              alert("Failed to change groomer. Groomer is already occupied at that moment or you have already selected that groomer");
+                          
+                            if (employee === l.data().appt_groomer) {
+                              dropdown.selectedIndex = p;
+                              
+                              break;
                             }
+                            p += 1;
                           }
-                        })
-                        td.appendChild(submitButton)
-                      }
-                      tr.appendChild(td)
-                      
-                  }
-                  index += 1
+                          if (employeeArray[p] != selectedValue) {
+                            alert("Failed to change groomer. Groomer is already occupied at that moment or is on leave that day");
+                          }
+                        }
+                      })
+                      td.appendChild(submitButton)
+                    } 
+                    if (i == 10) {
+                      var deleteButton = document.createElement("button");
+                      deleteButton.innerText = 'Delete';
+                      deleteButton.addEventListener('click', async function() {
+                        console.log('new-appointments/' + docDates.id + "/" + slotArray[j] + "/" + docc.id)
+                        await deleteDoc(doc(db, 'new-appointments/' + docDates.id + "/" + slotArray[j], docc.id));
+                        location.reload();
+                      });
+                    
+                      td.appendChild(deleteButton)
+                    }
+                    tr.appendChild(td)
                 }
-                      
+                index += 1
               })
+                          
             
         }
       
         })
     }
+    
+
     display()
     onBeforeUnmount(() => {
       let table = document.getElementById('appointment-table')
@@ -255,7 +243,8 @@ export default {
             <th>DATE</th>
             <th>TIME</th>
             <th>EMPLOYEE</th>
-            <th>SELECT</th>
+            <th>SAVE</th>
+            <th>DELETE</th>
         </tr>
     </table><br><br>
    

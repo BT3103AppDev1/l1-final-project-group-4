@@ -58,25 +58,25 @@ const router = createRouter({
       path: '/admin/scheduler',
       name: 'scheduler',
       component: () => import('../views/admin/SchedulerView.vue'),
-      meta: { requiresAuth: true, requiresAdmin: true, isOwner: true}
+      meta: { requiresAuth: true, requiresAdmin: true}
     },
     {
       path: '/admin/scheduler/today',
       name: 'schedulertoday',
       component: () => import('../views/admin/SchedulerTodayView.vue'),
-      meta: { requiresAuth: true, requiresAdmin: true, isOwner: true }
+      meta: { requiresAuth: true, requiresAdmin: true}
     },
     {
       path: '/admin/manpower',
       name: 'manpower',
       component: () => import('../views/admin/ManpowerView.vue'),
-      meta: { requiresAuth: true, requiresAdmin: true, isOwner: true }
+      meta: { requiresAuth: true, requiresAdmin: true}
     },
     {
       path: '/admin/leave',
       name: 'leave',
       component: () => import('../views/admin/LeaveView.vue'),
-      meta: { requiresAuth: true, requiresAdmin: true, isOwner: true }
+      meta: { requiresAuth: true, requiresAdmin: true }
     },
     {
       path: '/employee/schedulerEmployee',
