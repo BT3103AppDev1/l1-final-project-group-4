@@ -237,7 +237,8 @@ export default {
           appt_email: userEmail,
           appt_name: userName,
           appt_service: selectedOptionService.value,
-          // appt_groomer: null
+          appt_groomer: null,
+          appt_status: "Not Completed"
         }
       );
     }
