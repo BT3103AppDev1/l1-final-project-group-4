@@ -164,6 +164,7 @@ export default {
 
 #dog-img {
   height: 150px;
+  width: 150px;
   border-radius: 50%;
   margin: 10px;
   margin-right: 20px;
