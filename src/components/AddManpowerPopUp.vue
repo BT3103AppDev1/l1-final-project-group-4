@@ -56,8 +56,8 @@ export default {
 
       console.log('Document written with ID: ', docRef.id);
     },
-    submitForm() {
-      this.createEmployee(this.name, this.fullTime);
+    async submitForm() {
+      await this.createEmployee(this.name, this.fullTime);
       this.$emit('update:modelValue', false); //  closes the popup after submitting the form
     },
     closeForm() {
