@@ -101,6 +101,7 @@ export default {
 
 #employee-profile-img {
   height: 150px;
+  width: 150px;
   border-radius: 50%;
   margin: 10px;
 }

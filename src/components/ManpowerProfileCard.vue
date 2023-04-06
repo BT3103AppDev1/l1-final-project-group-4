@@ -148,6 +148,7 @@ export default {
 
 #employee-img {
   height: 150px;
+  width: 150px;
   border-radius: 50%;
   margin: 10px;
   margin-right: 20px;
@@ -193,5 +194,4 @@ export default {
   text-align: center;
   cursor: pointer;
 }
-
 </style>
