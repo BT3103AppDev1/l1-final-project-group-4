@@ -1,15 +1,13 @@
 <script>
 import app from '../firebase.js'
 import { getFirestore } from 'firebase/firestore'
-import { collection, getDocs, getDoc, doc, setDoc, deleteDoc, addDoc, updateDoc } from 'firebase/firestore'
+import { collection, getDocs, getDoc, doc, deleteDoc, updateDoc } from 'firebase/firestore'
 import { onBeforeUnmount } from 'vue';
-import { getCurrentInstance } from 'vue';
+
 
 export default {
 
   setup() {
-
-
 
     const db = getFirestore(app)
     function getToday() {
