@@ -5,12 +5,11 @@ import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import EmployeeProfileCard from '../../components/EmployeeProfileCard.vue';
 import SchedulerSubHeader from '../../components/SchedulerSubHeader.vue';
-import AppointmentTodayTable from '../../components/AppointmentTodayTable.vue';
+import AppointmentTodayTable from '../../components/AppointmentTodayTableOwner.vue';
 
     export default {
         components: {
         TheAdminHeader,
-        EmployeeProfileCard,
         SchedulerSubHeader,
         AppointmentTodayTable
         },
@@ -41,9 +40,7 @@ import AppointmentTodayTable from '../../components/AppointmentTodayTable.vue';
         <div class="appointmentCard">
           <AppointmentTodayTable />
         </div>
-        <div class="employeeCard">
-          <EmployeeProfileCard />
-        </div>
+        
       </div>
     </div>
   </div>
@@ -56,10 +53,16 @@ import AppointmentTodayTable from '../../components/AppointmentTodayTable.vue';
   display: flex;
   flex-direction: column;
 }
+
 .body {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+.subheader {
+  height: 10%;
+  align-items: baseline;
 }
 .schedule {
   display: flex;
@@ -68,15 +71,18 @@ import AppointmentTodayTable from '../../components/AppointmentTodayTable.vue';
 }
 .appointmentCard {
   display: flex;
-  width: 60%;
-  background-color: black;
+  width: 100%;
   height: 100%;
+  overflow: scroll;
+  padding: 0 3vw;
+  max-height: 84vh;
+  align-items: flex-start;
 }
 
 .employeeCard {
   display: flex;
   padding-right: 20px;
-  width: 40%;
+  width: 2 0%;
   align-self: flex-start;
 }
 </style>

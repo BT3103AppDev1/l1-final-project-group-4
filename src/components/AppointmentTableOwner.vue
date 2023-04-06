@@ -1,7 +1,7 @@
 <script>
 import app from '../firebase.js'
 import { getFirestore } from 'firebase/firestore'
-import { collection, getDocs, getDoc, doc, deleteDoc, updateDoc } from 'firebase/firestore'
+import { collection, getDocs, getDoc, doc, deleteDoc, updateDoc, addDoc } from 'firebase/firestore'
 import { onBeforeUnmount } from 'vue';
 
 
@@ -26,6 +26,24 @@ export default {
       today = yyyy+'-'+mm+'-'+dd;
       return today;
     }
+
+    async function addApptToday() {
+      console.log("add")
+      await addDoc(collection(db, "new-appointments/" + getToday() + "/s1"), {
+          appt_id: '20230406S11',
+          appt_date: getToday(),
+          appt_pet: "Elsa",
+          appt_time: "9am",
+          appt_email: "admin@gmail.com",
+          appt_name: "test",
+          appt_service: "Full Grooming",
+          appt_groomer: "mrsBeans",
+          appt_status: "Not Completed"
+      })
+      
+    }
+
+    // addApptToday()
 
     async function canSwapGroomer(selectedValue, date, slot, bookingid) {
         const querySnapshot1 = await getDocs(collection(db, 'new-appointments/' + date + "/" + slot))
@@ -201,6 +219,7 @@ export default {
                       deleteButton.innerText = 'Delete';
                       deleteButton.addEventListener('click', async function() {
                         console.log('new-appointments/' + docDates.id + "/" + slotArray[j] + "/" + docc.id)
+                        // add a pop up
                         await deleteDoc(doc(db, 'new-appointments/' + docDates.id + "/" + slotArray[j], docc.id));
                         location.reload();
                       });
@@ -251,7 +270,6 @@ export default {
 </template>
 
 <style scoped>
-
 table {
     border-collapse: collapse;
 }
@@ -278,13 +296,13 @@ th:nth-child(2) {
 
 /* the third */
 th:nth-child(3) {
-  width: 20em;
-  max-width: 20em;
+  width: 18em;
+  max-width: 18em;
 }
 
 th:nth-child(4) {
-  width: 20em;
-  max-width: 20em;
+  width: 15em;
+  max-width: 15em;
 }
 
 th:nth-child(5) {
@@ -308,9 +326,19 @@ th:nth-child(8) {
 }
 
 th:nth-child(9) {
-  width: 14em;
-  max-width: 14em;
+  width: 10em;
+  max-width: 10em;
 }
+th:nth-child(10) {
+  width: 5em;
+  max-width: 5em;
+}
+
+th:nth-child(11) {
+  width: 5em;
+  max-width: 5em;
+}
+
 
 
 </style>
