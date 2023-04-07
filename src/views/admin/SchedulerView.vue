@@ -1,18 +1,18 @@
 <script>
 import TheAdminHeader from '@/components/TheAdminHeader.vue';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import EmployeeProfileCard from '../../components/EmployeeProfileCard.vue';
 import SchedulerSubHeader from '../../components/SchedulerSubHeader.vue';
-import AppointmentTable from '../../components/AppointmentTableOwner.vue';
+import AppointmentTableOwner from '../../components/AppointmentTableOwner.vue';
 
 
 export default {
   components: {
     TheAdminHeader,
     SchedulerSubHeader,
-    AppointmentTable
+    AppointmentTableOwner
 },
   setup() {
     const errorMsg = ref(null);
@@ -26,7 +26,12 @@ export default {
         errorMsg.value = err.message;
       }
     };
-    return { handleSubmit, TheAdminHeader, EmployeeProfileCard };
+    return { handleSubmit, TheAdminHeader, EmployeeProfileCard ,
+      user: computed(() => store.state.user),
+      authIsReady: computed(() => store.state.authIsReady),
+      employee: computed(() => store.state.isEmployee),
+    }
+    
   }
 };
 </script>
@@ -40,7 +45,7 @@ export default {
       </div>
       <div class="schedule">
         <div class="appointmentCard">
-          <AppointmentTable />
+          <AppointmentTableOwner />
         </div>
       </div>
     </div>
