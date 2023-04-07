@@ -4,6 +4,13 @@ import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
 export default {
+
+  methods: {
+    isActive(path) {
+      return this.$route.path.startsWith(path)
+    }
+  }, 
+
   setup() {
     const router = useRouter();
     const store = useStore();
@@ -37,15 +44,15 @@ export default {
     </div>
     <nav class="adminHeader">
       <div id="buttons">
-        <router-link class="headerButton" to="/admin/scheduler">
+        <router-link class="headerButton" to="/admin/scheduler" v-bind:class="{ active: isActive('/admin/scheduler') }">
           <h3 id="headerWords">SCHEDULER</h3>
         </router-link>
 
-        <router-link class="headerButton" to="/admin/manpower">
+        <router-link class="headerButton" to="/admin/manpower" v-bind:class="{ active: isActive('/admin/manpower') }">
           <h3 id="headerWords">MANPOWER</h3>
         </router-link>
 
-        <router-link class="headerButton" to="/admin/leave">
+        <router-link class="headerButton" to="/admin/leave" v-bind:class="{ active: isActive('/admin/leave') }">
           <h3 id="headerWords">LEAVES</h3>
         </router-link>
       </div>
@@ -122,7 +129,7 @@ nav.adminHeader {
   align-items: center;
 }
 
-nav.adminHeader a.router-link-exact-active h3 {
+nav.adminHeader .active {
   border-bottom: 0.2em solid #64cad8;
 }
 
