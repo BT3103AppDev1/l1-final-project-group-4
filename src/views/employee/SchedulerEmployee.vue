@@ -3,16 +3,14 @@ import TheEmployeeHeader from '@/components/TheEmployeeHeader.vue';
 import { ref } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-import EmployeeProfileCard from '../../components/EmployeeProfileCard.vue';
 import SchedulerSubHeader from '../../components/SchedulerSubHeader.vue';
-import AppointmentTable from '../../components/AppointmentTable.vue';
+import AppointmentTableEmployee from '../../components/AppointmentTableEmployee.vue';
 
 export default {
   components: {
     TheEmployeeHeader,
-    EmployeeProfileCard,
     SchedulerSubHeader,
-    AppointmentTable
+    AppointmentTableEmployee
   },
   setup() {
     const errorMsg = ref(null);
@@ -40,10 +38,7 @@ export default {
       </div>
       <div class="schedule">
         <div class="appointmentCard">
-          <AppointmentTable />
-        </div>
-        <div class="employeeCard">
-          <EmployeeProfileCard />
+          <AppointmentTableEmployee />
         </div>
       </div>
     </div>
@@ -77,14 +72,9 @@ export default {
   width: 100%;
   height: 100%;
   overflow: scroll;
-  padding-left: 3vw;
+  padding: 0 3vw;
   max-height: 84vh;
+  align-items: flex-start;
 }
 
-.employeeCard {
-  display: flex;
-  padding-right: 20px;
-  width: 2 0%;
-  align-self: flex-start;
-}
 </style>

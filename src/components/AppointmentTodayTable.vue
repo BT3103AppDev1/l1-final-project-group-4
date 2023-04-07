@@ -128,9 +128,9 @@ export default {
 
 <style scoped>
 
-
 table {
     border-collapse: collapse;
+    width: 100%
 }
 
 th {
@@ -140,6 +140,7 @@ th {
 
 tr{
     border-bottom: 1px black solid;
+    width: 100%;
 }
 
 th:nth-child(1) {
@@ -155,43 +156,49 @@ th:nth-child(2) {
 
 /* the third */
 th:nth-child(3) {
-  width: 18em;
-  max-width: 18em;
+  width: 24em;
+  max-width: 24em;
 }
 
 th:nth-child(4) {
-  width: 12em;
-  max-width: 12em;
+  width: 19em;
+  max-width: 19em;
 }
 
 th:nth-child(5) {
+  width: 10em;
+  max-width: 10em;
+}
+
+th:nth-child(6) {
+  width: 13em;
+  max-width: 13em;
+}
+
+th:nth-child(7) {
   width: 8em;
   max-width: 8em;
 }
 
-th:nth-child(6) {
+th:nth-child(8) {
   width: 10em;
   max-width: 10em;
-}
-
-th:nth-child(7) {
-  width: 6em;
-  max-width: 6em;
-}
-
-th:nth-child(8) {
-  width: 9em;
-  max-width: 9em;
 }
 
 th:nth-child(9) {
-  width: 10em;
-  max-width: 10em;
+  width: 12em;
+  max-width: 12em;
 }
 th:nth-child(10) {
-  width: 10em;
-  max-width: 10em;
+  width: 5em;
+  max-width: 5em;
 }
+
+th:nth-child(11) {
+  width: 5em;
+  max-width: 5em;
+}
+
 
 
 </style>
