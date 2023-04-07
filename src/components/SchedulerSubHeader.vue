@@ -1,15 +1,31 @@
 <script>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+
 export default {
-  
+    setup() {
+        const store = useStore();
+
+        return {
+            employee: computed(() => store.state.isEmployee),
+        };
+  }
+    
 }
 </script>
 <template>
     <nav>
         <div class="buttons">
-            <router-link to="/admin/scheduler">
+            <router-link to="/admin/scheduler" v-if="!employee">
                 <h3>UPCOMING</h3>
             </router-link>
-            <router-link to="/admin/scheduler/today">
+            <router-link to="/employee/schedulerEmployee" v-if="employee">
+                <h3>UPCOMING</h3>
+            </router-link>
+            <router-link to="/admin/scheduler/today" v-if="!employee">
+                <h3>TODAY</h3>
+            </router-link>
+            <router-link to="/employee/schedulerEmployee/today" v-if="employee">
                 <h3>TODAY</h3>
             </router-link>
         </div>

@@ -4,6 +4,12 @@ import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
 export default {
+  methods: {
+    isActive(path) {
+      return this.$route.path.startsWith(path)
+    }
+  }, 
+
   setup() {
     const router = useRouter();
     const store = useStore();
@@ -36,15 +42,15 @@ export default {
     </div>
     <nav class="adminHeader">
       <div id="buttons">
-        <router-link class="headerButton" to="/employee/schedulerEmployee">
+        <router-link class="headerButton" to="/employee/schedulerEmployee" v-bind:class="{ active: isActive('/employee/schedulerEmployee') }">
           <h3 id="headerWords">SCHEDULER</h3>
         </router-link>
 
-        <router-link class="headerButton" to="/employee/manpowerEmployee">
+        <router-link class="headerButton" to="/employee/manpowerEmployee" v-bind:class="{ active: isActive('/employee/manpowerEmployee') }">
           <h3 id="headerWords">MANPOWER</h3>
         </router-link>
 
-        <router-link class="headerButton" to="/employee/leaveEmployee">
+        <router-link class="headerButton" to="/employee/leaveEmployee" v-bind:class="{ active: isActive('/employee/leaveEmployee') }">
           <h3 id="headerWords">LEAVES</h3>
         </router-link>
       </div>
@@ -121,7 +127,7 @@ nav.adminHeader {
   align-items: center;
 }
 
-nav.adminHeader a.router-link-exact-active h3 {
+nav.adminHeader .active {
   border-bottom: 0.2em solid #64cad8;
 }
 
