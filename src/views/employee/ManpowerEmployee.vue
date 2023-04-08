@@ -3,26 +3,17 @@ import TheEmployeeHeader from '@/components/TheEmployeeHeader.vue';
 import { ref } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-import ManpowerProfileCard from '../../components/ManpowerProfileCard.vue';
+import ManpowerInfo from '../../components/ManpowerInfo.vue';
 
 export default {
   components: {
     TheEmployeeHeader,
-    ManpowerProfileCard
+    ManpowerInfo
   },
   setup() {
     const errorMsg = ref(null);
     const store = useStore();
     const router = useRouter();
-    const handleSubmit = async () => {
-      try {
-        await store.dispatch('logOut');
-        router.push('/');
-      } catch (err) {
-        errorMsg.value = err.message;
-      }
-    };
-    return { handleSubmit };
   }
 };
 </script>
@@ -31,16 +22,14 @@ export default {
   <div class="main">
     <TheEmployeeHeader />
     <div class="body">
-      <div class="profile-info">
-        <div class="profile-info-box">
-          <ManpowerProfileCard />
-        </div>
-      </div>
+      <!-- <div class="profile-info-box"> -->
+      <ManpowerInfo />
+      <!-- </div> -->
     </div>
   </div>
 </template>
 
-<style>
+<style scoped>
 .main {
   height: 100vh;
   display: flex;
@@ -48,7 +37,6 @@ export default {
   overflow: hidden;
 }
 .body {
-  background-size: cover;
   width: 100%;
   height: 100%;
   display: flex;
@@ -60,11 +48,6 @@ export default {
   height: 80vh;
   background-color: #193a6a;
   border-radius: 20px;
-  overflow: scroll;
   margin: auto;
-}
-.profile-info {
-  display: flex;
-  flex: 4;
 }
 </style>

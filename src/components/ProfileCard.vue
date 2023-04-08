@@ -26,7 +26,7 @@ export default {
 <template>
   <div class="card">
     <div class="card-body">
-      <img class="card-profile-img" id="profilepic" src="@/assets/default-avatar-profile.jpeg" />
+      <img class="card-profile-img" id="profilepic" src="@/assets/default-avatar-profile.png" />
       <br />
       <div class="my-details">
         <h3 id="customer_name">Name: {{ userName }}</h3>
