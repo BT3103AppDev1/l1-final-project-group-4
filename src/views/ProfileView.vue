@@ -5,12 +5,24 @@ import DogProfileCard from '@/components/DogProfileCard.vue';
 import { ref } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
+import ChangePasswordPopUp from '../components/ChangePasswordPopUp.vue';
 
 export default {
   components: {
     TheHeader,
     ProfileCard,
-    DogProfileCard
+    DogProfileCard,
+    ChangePasswordPopUp
+  },
+  data() {
+    return {
+      show: false
+    };
+  },
+  methods: {
+    showPasswordPopup() {
+      this.show = true;
+    }
   },
   setup() {
     const errorMsg = ref(null);
@@ -42,7 +54,10 @@ export default {
             <button class="btn" id="progress-page">Dog Progress</button>
           </router-link>
           <br />
+          <button class="btn" id="change-pw" @click="showPasswordPopup()">Change Password</button>
+          <br />
           <button class="btn" id="log-out" @click="handleSubmit()">Log Out</button>
+          <ChangePasswordPopUp v-model="show" />
         </div>
       </div>
 
