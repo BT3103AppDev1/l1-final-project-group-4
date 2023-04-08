@@ -3,7 +3,7 @@
     <div class="popup" v-show="modelValue">
       <div class="popup-inner">
         <slot></slot>
-        <button class="close-popup" @click="$emit('update:modelValue', false)">OK</button>
+        <button class="close-popup" @click="closePopup">OK</button>
       </div>
     </div>
   </div>
@@ -15,6 +15,15 @@ export default {
     modelValue: {
       type: Boolean,
       default: false
+    }
+  },
+  methods: {
+    closePopup() {
+      // Emit the update event to close the popup
+      this.$emit('update:modelValue', false);
+
+      // Navigate to "/bookappointments" route
+      this.$router.push('/myappointments');
     }
   }
 };
