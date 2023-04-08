@@ -5,6 +5,7 @@ import { ref as vueRef } from 'vue';
 import { collection, getDocs } from 'firebase/firestore';
 import { getStorage, ref, getDownloadURL } from 'firebase/storage';
 import ChangePasswordPopUp from '../components/ChangePasswordPopUp.vue';
+import { useStore } from 'vuex';
 
 const storage = getStorage(app);
 
@@ -24,6 +25,7 @@ export default {
   },
   setup() {
     const db = getFirestore(app);
+    const store = useStore();
     const name = vueRef('');
     const employmentStatus = vueRef('');
 
@@ -35,7 +37,7 @@ export default {
         console.log(doc.id, ' => ', doc.data());
         let documentData = doc.data();
         let employeeName = documentData.name;
-        if (employeeName == 'peter') {
+        if (employeeName == store.state.userName) {
           name.value = employeeName;
           employmentStatus.value = documentData.fullTime;
 
@@ -76,6 +78,7 @@ export default {
   margin: auto;
   flex-direction: row;
   justify-content: space-between;
+  display: flex;
 }
 .col1 {
   width: 40%;
@@ -83,6 +86,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  /* background-color: green; */
 }
 .col2 {
   width: 60%;
@@ -90,7 +94,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: pink;
+  /* background-color: pink; */
 }
 #manpower-profile-cards {
   display: flex;
