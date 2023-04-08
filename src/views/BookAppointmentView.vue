@@ -5,9 +5,16 @@ import AppointmentPopUp from '@/components/AppointmentPopUp.vue';
 import { ref } from 'vue';
 import app from '../firebase.js';
 import { getFirestore } from 'firebase/firestore';
-import { doc, collection, getDocs, setDoc, addDoc, getCountFromServer } from 'firebase/firestore';
+import {
+  doc,
+  collection,
+  getDoc,
+  getDocs,
+  setDoc,
+  addDoc,
+  getCountFromServer
+} from 'firebase/firestore';
 import { useStore } from 'vuex';
-
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 
@@ -107,8 +114,6 @@ export default {
       const querySnapshot = await getDocs(collection(docRef, 'dogs'));
 
       querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        // console.log(doc.id, ' => ', doc.data());
         let documentData = doc.data();
         let dogName = documentData.dog_name;
 
@@ -129,12 +134,37 @@ export default {
     getDogs();
 
     async function getSlots() {
-      if (selectedDate.value == 'Select Date') {
+      if (selectedDate.value == 'Select Date' || selectedDate.value == null) {
         return;
       }
 
-      // console.log('selected date: ', toIsoString(selectedDate.value).substring(0, 10));
+      async function countAvailableEmployees() {
+        var counter = 0;
+        const querySnapshot = await getDocs(collection(db, 'employees'));
+        for (const d of querySnapshot.docs) {
+          let documentData = d.data();
+          let employeeName = documentData.name;
 
+          const docRef = doc(
+            db,
+            'schedule/leaves/' + employeeName,
+            toIsoString(selectedDate.value).substring(0, 10)
+          );
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            console.log(employeeName + ' On leave:', docSnap.data());
+          } else {
+            console.log(employeeName + ' No leave');
+            counter++;
+          }
+        }
+        return counter;
+      }
+
+      getAvailableSlots(await countAvailableEmployees());
+    }
+
+    async function getAvailableSlots(employeeCount) {
       let ul = document.getElementById('select-time');
       ul.innerHTML = '';
 
@@ -171,7 +201,7 @@ export default {
         a.innerHTML = map.get(docid);
         lis[i - 1].appendChild(a);
 
-        if (snapshot.data().count >= 3) {
+        if (snapshot.data().count >= employeeCount) {
           console.log('cant select: ' + docid);
           a.className = 'disabled';
         }
@@ -207,11 +237,20 @@ export default {
         selectedOptionTimeSlot.value
       );
 
-      const coll = collection(db, "new-appointments/" + toIsoString(selectedDate.value).substring(0, 10) + "/" + selectedOptionTimeSlot.value);
+      const coll = collection(
+        db,
+        'new-appointments/' +
+          toIsoString(selectedDate.value).substring(0, 10) +
+          '/' +
+          selectedOptionTimeSlot.value
+      );
       const snapshot = await getCountFromServer(coll);
       let counter = snapshot.data().count + 1;
 
-      let id = toIsoString(selectedDate.value).substring(0, 10).replaceAll("-", "") + selectedOptionTimeSlot.value.toUpperCase() + counter
+      let id =
+        toIsoString(selectedDate.value).substring(0, 10).replaceAll('-', '') +
+        selectedOptionTimeSlot.value.toUpperCase() +
+        counter;
 
       await setDoc(doc(db, 'bookingtogroomer', id), {
         groomer: null
@@ -238,7 +277,7 @@ export default {
           appt_name: userName,
           appt_service: selectedOptionService.value,
           appt_groomer: null,
-          appt_status: "Not Completed"
+          appt_status: 'Not Completed'
         }
       );
     }
@@ -337,7 +376,8 @@ export default {
               v-model="selectedDate"
               :enable-time-picker="false"
               auto-apply
-              @update:model-value="getSlots" :min-date="minDate"
+              @update:model-value="getSlots"
+              :min-date="minDate"
             ></VueDatePicker>
           </div>
 
