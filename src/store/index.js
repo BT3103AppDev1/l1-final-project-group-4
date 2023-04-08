@@ -97,6 +97,16 @@ const store = createStore({
         throw new Error('Could not complete login');
       }
     },
+    async signUpForEmployee(context, { email, password }) {
+      const response = await createUserWithEmailAndPassword(auth, email, password);
+      // console.log(response)
+      if (response) {
+        console.log(email, " account successfully created")
+      } else {
+        console.log("signup for employee failed")
+        throw new Error('Could not complete login');
+      }
+    },
     async logOut(context) {
       console.log('Logging out');
       await signOut(auth);
