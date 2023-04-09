@@ -30,12 +30,22 @@ export default {
     const prevLeaveBalance = ref(0);
     const requestedNumLeaves = ref(0);
     const remainingLeaveBalance = ref(0);
+    // conflict management
     const haveConflictLeaves = ref(false);
     const conflictLeaves = ref([]);
+    const appts = ref([]);
+    const conflictAppts = ref([]);
+    const haveConflictAppts = ref(false);
     // popup Message
     const popUpMsg = ref('');
     const show = ref(false);
 
+    // to format initial dates
+    const resetDates = () => {
+      const startDate = new Date();
+      const endDate = new Date();
+      date.value = [startDate, endDate];
+    };
     // to format display of selected dates
     const format = (dates) => {
       if (dates[1] == null) return;
@@ -55,9 +65,9 @@ export default {
     };
 
     const formatSingleDate = (date) => {
-      const day = date.getDate();
-      const month = date.getMonth() + 1;
-      const year = date.getFullYear();
+      const day = new Date(date).getDate();
+      const month = new Date(date).getMonth() + 1;
+      const year = new Date(date).getFullYear();
 
       return `${day}/${month}/${year}`;
     };
@@ -79,47 +89,107 @@ export default {
     };
     document.addEventListener('click', handleClickOutsideEmployee);
 
+    const getAppts = async () => {
+      console.log('getAppts Called');
+      const querySnapshot = await getDocs(collection(db, 'new-appointments'));
+      const slotArray = ['s1', 's2', 's3', 's4'];
+      const promises = querySnapshot.docs.map(async (docDates) => {
+        for (let j = 0; j < slotArray.length; j++) {
+          const querySnapshot1 = await getDocs(
+            collection(db, 'new-appointments/' + docDates.id + '/' + slotArray[j])
+          );
+          await Promise.all(
+            querySnapshot1.docs.map(async (docc) => {
+              let documentData = docc.data();
+              let apptDate = documentData.appt_date;
+
+              let groomer = documentData.appt_groomer;
+              if (selectedOptionEmployee.value.name === groomer) {
+                appts.value.push(apptDate);
+                console.log(apptDate, ' pushed');
+              }
+            })
+          );
+        }
+      });
+      await Promise.all(promises);
+    };
+
     // get leave data
     const getLeaves = async () => {
       // reset input fields
       conflictLeaves.value = [];
       haveConflictLeaves.value = false;
+      conflictAppts.value = [];
+      appts.value = [];
+      haveConflictAppts.value = false;
+      await getAppts();
 
       if (selectedOptionEmployee.value == 'Name') {
         return;
       }
+
       const querySnapshot = await getDocs(
         collection(db, 'schedule', 'leaves', selectedOptionEmployee.value.name)
       );
+      let startDate = new Date(date.value[0].toDateString());
+      let endDate = new Date(date.value[1].toDateString());
       querySnapshot.forEach((doc) => {
         if (doc.id == 'info') {
           prevLeaveBalance.value = doc.data().prevLeaveBalance;
         } else {
-          try {
-            console.log(doc.id);
-            let currDate = new Date(new Date(doc.id).toDateString());
-            let startDate = new Date(date.value[0].toDateString());
-            let endDate = new Date(date.value[1].toDateString());
-            // if employee applies for leaves that already exist
-            if (currDate >= startDate && currDate <= endDate) {
-              conflictLeaves.value.push(formatSingleDate(currDate));
-            }
-            if (conflictLeaves.value.length > 0) throw new Error('Conflict');
-
-            let difference = endDate - startDate;
-            requestedNumLeaves.value = Math.ceil(difference / (1000 * 3600 * 24)) + 1;
-            console.log(requestedNumLeaves.value);
-            remainingLeaveBalance.value = prevLeaveBalance.value - requestedNumLeaves.value;
-          } catch {
-            // reset filled inputs
-            haveConflictLeaves.value = true;
-            selectedOptionEmployee.value = 'Name';
-            conflictLeaves.value.forEach((element) => {
-              console.log('Leave already applied on ', element);
-            });
+          // console.log(doc.id);
+          let currDate = new Date(new Date(doc.id).toDateString());
+          // if employee applies for leaves that already exist
+          if (currDate >= startDate && currDate <= endDate) {
+            conflictLeaves.value.push(formatSingleDate(currDate));
           }
         }
       });
+
+      // if employee applying for leave on day with appt
+      var getDaysArray = function (s, e) {
+        for (var a = [], d = new Date(s); d <= new Date(e); d.setDate(d.getDate() + 1)) {
+          a.push(new Date(d));
+        }
+        return a;
+      };
+      var daylist = getDaysArray(date.value[0], date.value[1]);
+      daylist.map((v) => v.toISOString().slice(0, 10)).join('');
+
+      for (const day of daylist) {
+        let dayFormatted = formatSingleDateForFirebase(day);
+        for (var i = 0; i < appts.value.length; i++) {
+          var app = appts.value[i];
+          if (app === dayFormatted) {
+            conflictAppts.value.push(formatSingleDate(dayFormatted));
+          }
+        }
+      }
+      console.log('conflict appts are ', conflictAppts.value);
+      console.log('conflict leaves are ', conflictLeaves.value);
+      if (conflictLeaves.value.length > 0) {
+        haveConflictLeaves.value = true;
+      }
+      if (conflictAppts.value.length > 0) {
+        haveConflictAppts.value = true;
+      }
+
+      let difference = endDate - startDate;
+      requestedNumLeaves.value = Math.ceil(difference / (1000 * 3600 * 24)) + 1;
+      console.log('Num of leaves requested: ', requestedNumLeaves.value);
+      remainingLeaveBalance.value = prevLeaveBalance.value - requestedNumLeaves.value;
+
+      if (haveConflictAppts.value || haveConflictLeaves.value) {
+        // reset filled inputs
+        console.log('CONFLICTS CAUGHT');
+        conflictLeaves.value.forEach((element) => {
+          console.log('Leave already applied on ', element);
+        });
+        conflictAppts.value.forEach((element) => {
+          console.log('Existing appointment ', element);
+        });
+      }
     };
 
     const handleSubmit = async () => {
@@ -130,10 +200,17 @@ export default {
       } else if (haveConflictLeaves.value == true) {
         popUpMsg.value = 'Please select dates that you have not already applied leave for';
         show.value = true;
+        resetDates();
+        return;
+      } else if (haveConflictAppts.value == true) {
+        popUpMsg.value = 'Please deconflict any appointments first';
+        show.value = true;
+        resetDates();
         return;
       } else if (requestedNumLeaves.value > prevLeaveBalance.value) {
         popUpMsg.value = 'You cannot exceed your annual leave quota';
         show.value = true;
+        resetDates();
         return;
       }
       popUpMsg.value = 'Your Leave Application has been confirmed';
@@ -196,6 +273,8 @@ export default {
       remainingLeaveBalance: computed(() => prevLeaveBalance.value - requestedNumLeaves.value),
       haveConflictLeaves,
       conflictLeaves,
+      haveConflictAppts,
+      conflictAppts,
       show,
       popUpMsg,
       handleSubmit
@@ -262,6 +341,13 @@ export default {
         <p v-if="haveConflictLeaves" id="warning">
           You have already applied for leave on: {{ conflictLeaves }}
         </p>
+        <p v-if="haveConflictAppts" id="warning">
+          You have existing appointments on: {{ conflictAppts }}
+        </p>
+        <p v-if="haveConflictAppts" id="warning">
+          Please deconflict these appointments before applying
+        </p>
+        <br />
         <button @click="handleSubmit" id="apply">Apply</button>
         <PopUp v-model="show">
           <h3 id="popup-msg">{{ popUpMsg }}</h3>
