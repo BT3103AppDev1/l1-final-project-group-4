@@ -1,66 +1,26 @@
 <script>
 import TheHeader from '@/components/TheHeader.vue';
 import AppointmentDetails from '@/components/AppointmentDetails.vue';
-import { ref, computed } from 'vue';
-import app from '../firebase.js';
-import { getFirestore } from 'firebase/firestore';
-import { useStore } from 'vuex';
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css';
+
+
 
 export default {
   components: {
     TheHeader,
     AppointmentDetails, 
-    VueDatePicker
+  
   },
   setup() {
-    let selectedDate = ref('Select Date');
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const date = `${year}-${month}-${day}`;
 
-    function toIsoString(date) {
-      var tzo = -date.getTimezoneOffset(),
-        dif = tzo >= 0 ? '+' : '-',
-        pad = function (num) {
-          return (num < 10 ? '0' : '') + num;
-        };
+ 
 
-      return (
-        date.getFullYear() +
-        '-' +
-        pad(date.getMonth() + 1) +
-        '-' +
-        pad(date.getDate()) +
-        'T' +
-        pad(date.getHours()) +
-        ':' +
-        pad(date.getMinutes()) +
-        ':' +
-        pad(date.getSeconds()) +
-        dif +
-        pad(Math.floor(Math.abs(tzo) / 60)) +
-        ':' +
-        pad(Math.abs(tzo) % 60)
-      );
+    return { date }
     }
-
-    const formattedDate = computed(() => {
-      if (selectedDate.value instanceof Date) {
-        return toIsoString(selectedDate.value).substring(0, 10);
-        
-      }
-      return null;
-    });
-
-    const onDateSelected = (newDate) => {
-      selectedDate.value = newDate;
-    };
-
-    return {
-      selectedDate,
-      formattedDate,
-      onDateSelected
-    }
-  }
 }
 
 </script>
@@ -70,18 +30,12 @@ export default {
   <div class="main">
     <TheHeader />
     <div id="my-appts-body">
-      <div id="date-container">
-        <p id="select-date">Select Date</p>
-        <VueDatePicker
-          v-model="selectedDate"
-          :enable-time-picker="false"
-          auto-apply
-          @update:modelValue="onDateSelected"
-        ></VueDatePicker>
+      <div id="appts-header">
+        <p style="font-size:2em; font-weight:bold; text-decoration:underline; padding-bottom: 0.5em;"> Upcoming Appointments</p>
+        
       </div>
       <div id="my-appts">
-        
-        <AppointmentDetails :newDate="formattedDate" />
+        <AppointmentDetails :newDate=date />
       </div>
     </div>
   </div>
@@ -109,15 +63,7 @@ export default {
   align-items: center; 
 }
 
-#my-appts-header {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-weight: bold;
-  text-decoration-line: underline;
-  padding-top: 0.5em;
-  padding-bottom: 0.5em;
-  display: flex;
-  justify-content: center;
-}
+
 #my-appts {
   width: 90%;
   height: 80%;
@@ -129,16 +75,7 @@ export default {
   justify-content: center;
   overflow-y: auto;
 } 
-#date-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: 2em;
-}
 
-#select-date {
-  font-size: 27px;
-  font-weight: bold;
-  width: 10em;
-}
+
 
 </style>
