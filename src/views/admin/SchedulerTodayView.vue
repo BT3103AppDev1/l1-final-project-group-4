@@ -5,7 +5,7 @@ import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import EmployeeProfileCard from '../../components/EmployeeProfileCard.vue';
 import SchedulerSubHeader from '../../components/SchedulerSubHeader.vue';
-import AppointmentTodayTable from '../../components/AppointmentTableOwner.vue';
+import AppointmentTodayTable from '../../components/AppointmentTodayTable.vue';
 
     export default {
         components: {

@@ -260,6 +260,7 @@ export default {
         date: toIsoString(selectedDate.value).substring(0, 10)
       });
 
+
       await addDoc(
         collection(
           db,
@@ -277,7 +278,9 @@ export default {
           appt_name: userName,
           appt_service: selectedOptionService.value,
           appt_groomer: null,
-          appt_status: 'Not Completed'
+          status_bath: 0,
+          status_cut: 0,
+          status_groom: 0
         }
       );
     }
