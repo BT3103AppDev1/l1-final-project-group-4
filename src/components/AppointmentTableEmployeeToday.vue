@@ -1,8 +1,9 @@
 <script>
 import app from '../firebase.js'
 import { getFirestore } from 'firebase/firestore'
-import { collection, getDocs, getDoc, doc, deleteDoc, updateDoc, addDoc } from 'firebase/firestore'
+import { collection, getDocs, doc, addDoc, updateDoc } from 'firebase/firestore'
 import { onBeforeUnmount } from 'vue';
+import { useStore } from 'vuex';
 
 
 export default {
@@ -27,29 +28,33 @@ export default {
       return today;
     }
     const today = getToday()
-    async function addApptToday() {
-      console.log("add")
-      await addDoc((db, "new-appointments/" + getToday() + "/s1"), {
-          appt_id: '20230406S11',
-          appt_date: getToday(),
-          appt_pet: "Elsa",
-          appt_time: "9am",
-          appt_email: "admin@gmail.com",
-          appt_name: "test",
-          appt_service: "Full Grooming",
-          appt_groomer: "peter",
-          appt_status: "Not Completed"
-      })
+    // async function addApptToday() {
+    //   console.log("add")
+    //   await addDoc(collection(db, "new-appointments/" + getToday() + "/s1"), {
+    //       appt_id: '20230409S11',
+    //       appt_date: getToday(),
+    //       appt_pet: "Elsa",
+    //       appt_time: "9am",
+    //       appt_email: "peter@gmail.com",
+    //       appt_name: "test",
+    //       appt_service: "Full Grooming",
+    //       appt_groomer: "peter",
+    //       appt_status: "Not Completed"
+    //   });
       
-    }
+    // }
 
     // addApptToday()
 
        
     async function display() {
+      const store = useStore();
+
+      const userName = store.state.userName;
+      console.log(userName)
       let index = 1  
       const slotArray = ["s1", "s2", "s3", "s4"]
-      const statusArray = ["Not Completed", "Bath", "Cut", "Completed"]
+      const statusArray = ["Not Completed", "Bath", "Cut", "Groom", "Completed"]
       for (let j = 0; j < slotArray.length; j++) {
         var querySnapshot = await getDocs(collection(db, 'new-appointments/' + today + "/" + slotArray[j]))
         querySnapshot.docs
@@ -70,69 +75,62 @@ export default {
 
             const values = [index, bookingid, email, customer, pet, service, apptdate, appttime, groomer, docstatus]
 
-            let table = document.getElementById('appointment-table')
-            let tr = document.createElement('tr')
-            
-            for (let i = 0; i < 12; i++) {
-                table.appendChild(tr)
-                let td = document.createElement('td')
-                if (values[i] != null) {
-                    if (i < 9) {
-                      td.innerHTML = values[i]
-                    }
-                }
-                
-                if (i == 9) {
-                  var dropdown = document.createElement("select"); // Create a new dropdown element
-                  dropdown.id = "myDropdown";
-                  let k = 0;
-                  
-                  
-                  for (var status of statusArray) {
-                    console.log("status: ", status)
-                    // console.log("Employee: ", employee)
-                    var option = document.createElement("option"); 
-                    option.value = status
-                    option.text = status;
-                    dropdown.add(option);
-                    if (docstatus === status) {
-                      dropdown.selectedIndex = k;
-                    }
-                    k += 1;
-                  }
-                  td.appendChild(dropdown);
-                }
-                
 
-                if (i == 10) {
-                  console.log(slotArray[j])
-                  var submitButton = document.createElement("button");
-                  submitButton.innerText = 'Save';
-                  submitButton.addEventListener('click', async function() {
-                    const selectedValue = dropdown.value
-                    console.log("Selecting status: ", selectedValue)
-                    console.log()
-                    await updateDoc(doc(db, 'new-appointments/' + today + "/" + slotArray[j], docc.id), {
-                      appt_status: selectedValue
-                    });
-                  })
-                  td.appendChild(submitButton)
-                } 
-                if (i == 11) {
-                  var deleteButton = document.createElement("button");
-                  deleteButton.innerText = 'Delete';
-                  deleteButton.addEventListener('click', async function() {
-                    console.log('new-appointments/' + today + "/" + slotArray[j] + "/" + docc.id)
-                    // add a pop up
-                    await deleteDoc(doc(db, 'new-appointments/' + today + "/" + slotArray[j], docc.id));
-                    location.reload();
-                  });
-                
-                  td.appendChild(deleteButton)
-                }
-                tr.appendChild(td)
+
+            let table = document.getElementById('appointment-table')
+            
+            
+            if (groomer === userName) {
+              let tr = document.createElement('tr')
+              for (let i = 0; i < 11; i++) {
+                  table.appendChild(tr)
+                  let td = document.createElement('td')
+                  if (values[i] != null) {
+                      if (i < 9) {
+                        td.innerHTML = values[i]
+                      }
+                  }
+                  
+                  if (i == 9) {
+                    var dropdown = document.createElement("select"); // Create a new dropdown element
+                    dropdown.id = "myDropdown";
+                    let k = 0;
+                    
+                    
+                    for (var status of statusArray) {
+                      console.log("status: ", status)
+                      // console.log("Employee: ", employee)
+                      var option = document.createElement("option"); 
+                      option.value = status
+                      option.text = status;
+                      dropdown.add(option);
+                      if (docstatus === status) {
+                        dropdown.selectedIndex = k;
+                      }
+                      k += 1;
+                    }
+                    td.appendChild(dropdown);
+                  }
+                  
+
+                  if (i == 10) {
+                    console.log(slotArray[j])
+                    var submitButton = document.createElement("button");
+                    submitButton.innerText = 'Save';
+                    submitButton.addEventListener('click', async function() {
+                      const selectedValue = dropdown.value
+                      console.log("Selecting status: ", selectedValue)
+                      console.log()
+                      await updateDoc(doc(db, 'new-appointments/' + today + "/" + slotArray[j], docc.id), {
+                        appt_status: selectedValue
+                      });
+                    })
+                    td.appendChild(submitButton)
+                  } 
+                  tr.appendChild(td)
+              }
+              index += 1
             }
-            index += 1
           })
                           
             
@@ -166,7 +164,6 @@ export default {
             <th>EMPLOYEE</th>
             <th>STATUS</th>
             <th>SAVE</th>
-            <th>DELETE</th>
         </tr>
     </table><br><br>
    
