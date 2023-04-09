@@ -38,7 +38,7 @@ export default {
               Professional Pet Groomers with magical hands for your pets. We provide bathing,
               cleaning, haircuts, nail trimming and medicated bath to make your dog look smart and
               healthy.
-              <br /><br /><br /><br />
+              <br /><br />
               <strong>Price:</strong> From $55 (Toy), $65 (S), $75 (M)
             </div>
             <router-link to="/bookappointment" v-if="authIsReady" id="getService">
@@ -55,9 +55,9 @@ export default {
               <h2>Full Grooming</h2>
             </div>
             <div id="card-body">
-              For our full grooming services, we have 3 different cuts available and all basic
+              For our full grooming services, we have 2 different cuts available and all basic
               grooming will be covered.
-              <br />
+              <br /><br />
               <ol>
                 <li>Puppy Cut</li>
                 <ul>
@@ -67,12 +67,7 @@ export default {
                 <ul>
                   <li><strong>From:</strong> $120 (Toy), $130 (S), $160 (M)</li>
                 </ul>
-                <li>Full Scissoring</li>
-                <ul>
-                  <li><strong>From:</strong> $130 (Toy), $160 (S), $180 (M)</li>
-                </ul>
               </ol>
-              <strong>Price:</strong> $130 (Toy), $160 (S), $180 (M)
             </div>
             <router-link to="/bookappointment" v-if="authIsReady" id="getService">
               <h3>Get Service &#x2794;</h3>
@@ -93,7 +88,7 @@ export default {
               With the use of an ultrasonic cleaning device and precise handling techniques, our pet
               techs can effectively clean both above & below the gum line and polish while your dog
               remains alert & comfortable.
-              <br /><br /><br /><br />
+              <br /><br />
               <strong>Price:</strong> From $80
             </div>
             <router-link to="/bookappointment" v-if="authIsReady" id="getService">
@@ -109,14 +104,13 @@ export default {
               <h2>Spa Treatment</h2>
             </div>
             <div id="card-body">
-              Each of the spa treatment consist of beneficial properties for your dog or cat's skin
-              & coat:
+              Each spa treatment consists of beneficial properties for your dog:
               <ol>
+                <br>
                 <li>Japan Nanotechnology Spa Treatment</li>
                 <li>Japan Ayurveda Herb Spa Treatment</li>
-                <li>Charcoal Mud Dog Spa Treatment</li>
               </ol>
-              <br />
+              <br>
               <strong>Price:</strong> From $45
             </div>
             <router-link to="/bookappointment" v-if="authIsReady" id="getService">
@@ -136,7 +130,8 @@ export default {
 .main {
   height: 100vh;
   display: flex;
-  /* min-width: 1068px; */
+  overflow: hidden;
+  
 }
 #body {
   background: url(@/assets/dog1.png) bottom left no-repeat,
@@ -179,7 +174,7 @@ export default {
   justify-content: space-between;
   margin: 0 15px;
   width: 35vw;
-  height: 350px;
+  height: 34vh;
   background: white;
   border-radius: 25px;
   border-style: solid;
