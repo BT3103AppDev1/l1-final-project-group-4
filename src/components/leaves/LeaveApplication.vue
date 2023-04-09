@@ -364,7 +364,7 @@ export default {
   height: 100%;
   /* background-color: antiquewhite; */
   text-align: center;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 .container {
@@ -375,6 +375,7 @@ export default {
   border: solid;
   border-width: 0.1em;
   border-radius: 1em;
+  margin-top: 3%;
 }
 .row {
   display: flex;
