@@ -54,7 +54,7 @@ export default {
       console.log(userName)
       let index = 1  
       const slotArray = ["s1", "s2", "s3", "s4"]
-      const statusArray = ["Not Completed", "Bath", "Cut", "Groom", "Completed"]
+      const statusArray = ["Not Started", "In Progress", "Completed"]
       for (let j = 0; j < slotArray.length; j++) {
         var querySnapshot = await getDocs(collection(db, 'new-appointments/' + today + "/" + slotArray[j]))
         querySnapshot.docs
@@ -71,18 +71,20 @@ export default {
             let appttime = (documentData.appt_time)
             let bookingid = (documentData.appt_id)
             let groomer = documentData.appt_groomer;
-            let docstatus = documentData.appt_status;
+            let statusBath = documentData.status_bath;
+            let statusGroom = documentData.status_groom;
+            let statusCut = documentData.status_cut;
 
-            const values = [index, bookingid, email, customer, pet, service, apptdate, appttime, groomer, docstatus]
+            const values = [index, bookingid, email, customer, pet, service, apptdate, appttime, groomer, statusBath, statusGroom, statusCut]
 
 
 
-            let table = document.getElementById('appointment-table')
+            let table = document.getElementById('appointment-table-today-employee')
             
             
             if (groomer === userName) {
               let tr = document.createElement('tr')
-              for (let i = 0; i < 11; i++) {
+              for (let i = 0; i < 13; i++) {
                   table.appendChild(tr)
                   let td = document.createElement('td')
                   if (values[i] != null) {
@@ -90,10 +92,9 @@ export default {
                         td.innerHTML = values[i]
                       }
                   }
-                  
                   if (i == 9) {
                     var dropdown = document.createElement("select"); // Create a new dropdown element
-                    dropdown.id = "myDropdown";
+                    dropdown.id = "myDropdown" + i;
                     let k = 0;
                     
                     
@@ -101,28 +102,73 @@ export default {
                       console.log("status: ", status)
                       // console.log("Employee: ", employee)
                       var option = document.createElement("option"); 
-                      option.value = status
+                      option.value = k;
                       option.text = status;
                       dropdown.add(option);
-                      if (docstatus === status) {
+                      if (parseInt((values[i])) === k) {
                         dropdown.selectedIndex = k;
                       }
                       k += 1;
                     }
                     td.appendChild(dropdown);
                   }
-                  
 
                   if (i == 10) {
+                    var dropdown1 = document.createElement("select"); // Create a new dropdown element
+                    dropdown.id = "myDropdown" + i;
+                    let k = 0;
+                    
+                    
+                    for (var status1 of statusArray) {
+                      console.log("status: ", status1)
+                      // console.log("Employee: ", employee)
+                      var option1 = document.createElement("option"); 
+                      option1.value = k;
+                      option1.text = status1;
+                      dropdown1.add(option1);
+                      if (parseInt((values[i])) === k) {
+                        dropdown1.selectedIndex = k;
+                      }
+                      k += 1;
+                    }
+                    td.appendChild(dropdown1);
+                  }
+
+                  if (i == 11) {
+                    var dropdown2 = document.createElement("select"); // Create a new dropdown element
+                    dropdown2.id = "myDropdown" + i;
+                    let k = 0;
+                    
+                    
+                    for (var status2 of statusArray) {
+                      console.log("status2: ", status2)
+                      // console.log("Employee: ", employee)
+                      var option2 = document.createElement("option"); 
+                      option2.value = k;
+                      option2.text = status2;
+                      dropdown2.add(option2);
+                      console.log("Selected:",values[i])
+                      console.log("k", k)
+                      if (parseInt((values[i])) === k) {
+                        console.log(values[i], k)
+                        dropdown2.selectedIndex = k;
+                      }
+                      k += 1;
+                    }
+                    td.appendChild(dropdown2);
+                  }
+                  
+
+                  if (i == 12) {
                     console.log(slotArray[j])
                     var submitButton = document.createElement("button");
                     submitButton.innerText = 'Save';
                     submitButton.addEventListener('click', async function() {
-                      const selectedValue = dropdown.value
-                      console.log("Selecting status: ", selectedValue)
-                      console.log()
+                      console.log(dropdown.value, dropdown1.value, dropdown2.value)
                       await updateDoc(doc(db, 'new-appointments/' + today + "/" + slotArray[j], docc.id), {
-                        appt_status: selectedValue
+                        status_bath: dropdown.value,
+                        status_groom: dropdown1.value,
+                        status_cut: dropdown2.value,
                       });
                     })
                     td.appendChild(submitButton)
@@ -140,7 +186,7 @@ export default {
 
     display()
     onBeforeUnmount(() => {
-      let table = document.getElementById('appointment-table')
+      let table = document.getElementById('appointment-table-today-employee')
       while (table.rows.length > 1) {
         table.deleteRow(1);
       }
@@ -151,7 +197,7 @@ export default {
 </script>
 
 <template>
-    <table id="appointment-table" class="auto-index">
+    <table id="appointment-table-today-employee" class="auto-index">
         <tr>
             <th>S.NO</th>
             <th>BOOKING ID</th>
@@ -162,7 +208,9 @@ export default {
             <th>DATE</th>
             <th>TIME</th>
             <th>EMPLOYEE</th>
-            <th>STATUS</th>
+            <th>BATH</th>
+            <th>GROOM</th>
+            <th>CUT</th>
             <th>SAVE</th>
         </tr>
     </table><br><br>

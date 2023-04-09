@@ -85,7 +85,7 @@ export default {
                
                 const values = [index, bookingid, email, customer, pet, service, apptdate, appttime, groomer]
               
-                let table = document.getElementById('appointment-table')
+                let table = document.getElementById('appointment-table-employee')
                 let tr = document.createElement('tr')
                 console.log(userName, groomer)
                 if (userName === groomer) {
@@ -108,7 +108,7 @@ export default {
     
     display()
     onBeforeUnmount(() => {
-      let table = document.getElementById('appointment-table')
+      let table = document.getElementById('appointment-table-employee')
       while (table.rows.length > 1) {
         table.deleteRow(1);
       }
@@ -119,7 +119,7 @@ export default {
 </script>
 
 <template>
-    <table id="appointment-table" class="auto-index">
+    <table id="appointment-table-employee" class="auto-index">
         <tr>
             <th>S.NO</th>
             <th>BOOKING ID</th>

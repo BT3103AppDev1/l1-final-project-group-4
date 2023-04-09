@@ -27,21 +27,21 @@ export default {
       return today;
     }
 
-    async function addApptToday() {
-      console.log("add")
-      await addDoc(collection(db, "new-appointments/" + getToday() + "/s1"), {
-          appt_id: '20230406S11',
-          appt_date: getToday(),
-          appt_pet: "Elsa",
-          appt_time: "9am",
-          appt_email: "admin@gmail.com",
-          appt_name: "test",
-          appt_service: "Full Grooming",
-          appt_groomer: "mrsBeans",
-          appt_status: "Not Completed"
-      })
+    // async function addApptToday() {
+    //   console.log("add")
+    //   await addDoc(collection(db, "new-appointments/" + getToday() + "/s1"), {
+    //       appt_id: '20230406S11',
+    //       appt_date: getToday(),
+    //       appt_pet: "Elsa",
+    //       appt_time: "9am",
+    //       appt_email: "admin@gmail.com",
+    //       appt_name: "test",
+    //       appt_service: "Full Grooming",
+    //       appt_groomer: "mrsBeans",
+    //       appt_status: "Not Completed"
+    //   })
       
-    }
+    // }
 
     // addApptToday()
 

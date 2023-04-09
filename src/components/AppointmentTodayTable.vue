@@ -31,7 +31,8 @@ export default {
        
     async function display() {
       let index = 1  
-      
+      const mapStatus = new Map([[0, "Not Started"], [1, "In Progress"], [2, "Completed"]])
+      console.log(mapStatus.get(0))
       const slotArray = ["s1", "s2", "s3", "s4"]
       // const statusArray = ['Not Completed', 'Bath', 'Cut', 'Groom']
       for (let slot of slotArray) {
@@ -56,11 +57,13 @@ export default {
 
           // let groomer = bookingData.groomer;
           let groomer = documentData.appt_groomer;
-          let stat = documentData.appt_status;
+          let statusBath = documentData.status_bath;
+          let statusGroom = documentData.status_groom;
+          let statusCut = documentData.status_cut;
 
               // let groomer = (documentData.appt_groomer)
               // not working
-          const values = [index, bookingid, email, customer, pet, service, apptdate, appttime, groomer, stat]
+          const values = [index, bookingid, email, customer, pet, service, apptdate, appttime, groomer, statusBath, statusGroom, statusCut]
               // if (docDates.id === getToday() ) {
               //   await addDoc(collection(db, "today-appointments/" + docDates.id + "/" + slotArray[j]), {
               //     appt_date: apptdate,
@@ -75,14 +78,18 @@ export default {
               //   // TODO: NEED TO DELETE FROM NEW-APPOINTMENT
               //   await deleteDoc(doc(db, "new-appointments", docDates.id));
               // } else {
-              let table = document.getElementById('appointment-table')
+              let table = document.getElementById('appointment-table-today')
               let tr = document.createElement('tr')
               table.appendChild(tr)
-              for (let i = 0; i < 10; i++) {
+              for (let i = 0; i < 12; i++) {
                   let td = document.createElement('td')
+                  console.log(values[i])
                   if (values[i] != null) {
-                      if (i <= 9) {
+                      if (i < 9) {
                         td.innerHTML = values[i]
+                      } else if (i >= 9) {
+                        console.log("Mapping", mapStatus.get(values[i]))
+                        td.innerHTML = mapStatus.get(values[i])
                       }
                   }
                   tr.appendChild(td)
@@ -98,7 +105,7 @@ export default {
 
     display()
     onBeforeUnmount(() => {
-      let table = document.getElementById('appointment-table')
+      let table = document.getElementById('appointment-table-today')
       while (table.rows.length > 1) {
         table.deleteRow(1);
       }
@@ -109,7 +116,7 @@ export default {
 </script>
 
 <template>
-    <table id="appointment-table" class="auto-index">
+    <table id="appointment-table-today" class="auto-index">
         <tr>
             <th>S.NO</th>
             <th>BOOKING ID</th>
@@ -120,7 +127,9 @@ export default {
             <th>DATE</th>
             <th>TIME</th>
             <th>EMPLOYEE</th>
-            <th>STATUS</th>
+            <th>BATH</th>
+            <th>GROOM</th>
+            <th>CUT</th>
         </tr>
     </table><br><br>
    
@@ -156,8 +165,8 @@ th:nth-child(2) {
 
 /* the third */
 th:nth-child(3) {
-  width: 24em;
-  max-width: 24em;
+  width: 20em;
+  max-width: 20em;
 }
 
 th:nth-child(4) {
@@ -190,13 +199,17 @@ th:nth-child(9) {
   max-width: 12em;
 }
 th:nth-child(10) {
-  width: 5em;
-  max-width: 5em;
+  width: 10em;
+  max-width: 10em;
 }
 
 th:nth-child(11) {
-  width: 5em;
-  max-width: 5em;
+  width: 10em;
+  max-width: 10em;
+}
+th:nth-child(12) {
+  width: 10em;
+  max-width: 10em;
 }
 
 
