@@ -1,8 +1,9 @@
 <script>
 import app from '../firebase.js';
-import { watch } from 'vue';
-import { getFirestore, doc, getDocs, getDoc, collection, query, where } from 'firebase/firestore';
+import { getFirestore, getDocs, collection, query, where, doc, deleteDoc } from 'firebase/firestore';
 import { useStore } from 'vuex';
+import { toRef } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
   props: {
@@ -12,124 +13,89 @@ export default {
     },
   },
   setup(props) {
+    const router = useRouter();
     const db = getFirestore(app);
     const store = useStore();
     const userEmail = store.state.userEmail;
-
-    watch(
-      () => props.newDate,
-      async (newValue) => {
-        console.log("New date:", newValue);
-        const apptRef = doc(db, 'appointments', newValue);
-        const apptDocSnapshot = await getDoc(apptRef); //retrieve doc
-        let timingAndDates = [];
-
-          if (!apptDocSnapshot.exists()) {
-            console.error("Appointment document doesn't exist"); 
-            return;
-          }
-        
-        try {
-          const s1Ref = collection(apptRef, "s1");
-          const q1 = query(s1Ref, where ("appt_email", "==", userEmail))
-          const q1Snapshot = await getDocs(q1)
-
-          if (q1Snapshot.empty) {
-            console.log("user doesnt have appt at s1")
-          }
-          else {
-            //console.log(`Found document with email ${userEmail}: `);
-            q1Snapshot.forEach((doc) => {
-              const docData = doc.data();
-              let time = docData.appt_time
-              let pet = docData.appt_pet
-              timingAndDates.push([time,pet])
-            })
-          }
-        } 
-        
-        catch (error) {
-          throw new Error('error in s1')
-        }
+    const todaysdate = toRef(props, 'newDate').value;
+    let noappts = true;
+    const slots = ['s1', 's2', 's3', 's4'];
+    let bookingsInfo = [];
+   
     
-        try {
-          const s2Ref = collection(apptRef, "s2");
-          const q2 = query(s2Ref, where ("appt_email", "==", userEmail))
-          const q2Snapshot = await getDocs(q2)
 
-          if (q2Snapshot.empty) {
-            console.log("user doesnt have appt at s2")
-          }
-          else {
-            //console.log(`Found document with email ${userEmail}: `);
-            q2Snapshot.forEach((doc) => {
-              const docData = doc.data();
-              let time = docData.appt_time
-              let pet = docData.appt_pet
+    async function getUpcomingAppointments(todaysdate) {
+      const apptsCollection = collection(db, 'new-appointments');
+      const querySnapshot = await getDocs(apptsCollection)
 
-              timingAndDates.push([time,pet])
-            
-            })
-          }
-        } catch (error) {
-          throw new Error ('error in s2')
+      for (const doc of querySnapshot.docs) {
+        if (doc.id >= todaysdate) {
+          
+          for (var i = 0; i < slots.length; i++) { //check each slot s1, s2, s3, s4 to see if user has an appt below
+            const slotRef = collection(doc.ref, slots[i]);//check if s1/s2/s3/s4 exists in the document i am in now
+            const slotSnapshot = await getDocs(slotRef);
+            if (!slotSnapshot.empty) {
+              const userEmailQuery = query(slotRef, where('appt_email', '==', userEmail)); //query for documents where the email atrribute == userEmail in this slot
+              const userEmailSnapshot = await getDocs(userEmailQuery);
+
+              if (!userEmailSnapshot.empty) {
+                noappts = false;
+                userEmailSnapshot.forEach((userDoc) => {
+                const docData = userDoc.data();
+                let date = docData.appt_date
+                let groomer = docData.appt_groomer
+                let pet = docData.appt_pet;
+                let service = docData.appt_service;
+                let statusbath = docData.status_bath;
+                let statuscut = docData.status_cut;
+                let statusgroom = docData.status_groom;
+                let time = docData.appt_time;
+                let slot = slots[i];
+                let docID = userDoc.id
+                bookingsInfo.push([date, groomer, pet, service, time, statusbath, statuscut, statusgroom, slot, docID])             
+                });
+              }
+            }
+          } 
         }
-
-        try {
-          const s3Ref = collection(apptRef, "s3");
-          const q3 = query(s3Ref, where ("appt_email", "==", userEmail))
-          const q3Snapshot = await getDocs(q3)
-
-          if (q3Snapshot.empty) {
-            console.log("user doesnt have appt at s3")
-          }
-          else {
-            //console.log(`Found document with email ${userEmail}: `);
-            q3Snapshot.forEach((doc) => {
-              const docData = doc.data();
-              let time = docData.appt_time
-              let pet = docData.appt_pet
-
-              timingAndDates.push([time,pet])
-            })
-          }
-        } catch (error) {
-          throw new Error ('error in s3')
-        }
-
-        try {
-          const s4Ref = collection(apptRef, "s4");
-          const q4 = query(s4Ref, where ("appt_email", "==", userEmail))
-          const q4Snapshot = await getDocs(q4)
-
-          if (q4Snapshot.empty) {
-            console.log("user doesnt have appt at s4")
-          }
-          else {
-            //console.log(`Found document with email ${userEmail}: `);
-            q4Snapshot.forEach((doc) => {
-              const docData = doc.data();
-              let time = docData.appt_time
-              let pet = docData.appt_pet
-
-              timingAndDates.push([time,pet])
-            })
-          }
-        } catch (error) {
-          throw new Error ('error in s4')
-        } 
-        //console.log(timingAndDates)
-        display(timingAndDates);
       }
-
-    );
-
-
-    async function display(timingAndDates) {
+      if (noappts == true) {
       
-      for (let i = 0; i < timingAndDates.length; i++) {
-        let time = timingAndDates[i][0];
-        let pet = timingAndDates[i][1]
+        let nothing = document.getElementById('no-appts');
+        let text = document.createElement('h2');
+        text.id = 'no-appt-text';
+        nothing.appendChild(text);
+        text.innerHTML = "No upcoming appointments, we miss you!";
+        text.style.color ='white';
+        text.style.fontWeight = 'bold';
+        text.style.fontSize = '3em';
+        text.style.display = 'flex';
+        //ok i will come back to this bc adi is adding stuff to appts
+
+      } else {
+        display(bookingsInfo)
+      }
+    }
+    getUpcomingAppointments(todaysdate)
+    console.log(noappts)
+
+
+
+    async function display(bookingsInfo) {
+      
+      for (let i = 0; i < bookingsInfo.length; i++) {
+        console.log(bookingsInfo[i])
+
+        let date = bookingsInfo[i][0]
+        let groomer = bookingsInfo[i][1]
+        let pet = bookingsInfo[i][2]
+        let service = bookingsInfo[i][3]
+        let time = bookingsInfo[i][4]
+        let statusbath = bookingsInfo[i][5]
+        let statuscut = bookingsInfo[i][6]
+        let statusgroom = bookingsInfo[i][7]
+        let slot = bookingsInfo[i][8];
+        let docID = bookingsInfo[i][9]
         
         let table = document.getElementById('appointments-table');
         let tr = document.createElement('tr');
@@ -150,14 +116,81 @@ export default {
         div2.id = 'appt-details';
         div1.appendChild(div2);
 
+        let div3 = document.createElement('div');
+        div3.id = 'button';
+        div1.appendChild(div3);
+
         let header1 = document.createElement('h3');
         header1.id = 'pet-name';
         div2.appendChild(header1);
         header1.innerHTML = 'Name: ' + pet;
+
         let header2 = document.createElement('h3');
-        header2.id = 'appt-time';
+        header2.id = 'appt-date';
         div2.appendChild(header2);
-        header2.innerHTML = 'Time: ' + time;
+        header2.innerHTML = 'Date: ' + date;
+
+        let header3 = document.createElement('h3');
+        header3.id = 'appt-time';
+        div2.appendChild(header3);
+        header3.innerHTML = 'Time: ' + time;
+
+        let header4 = document.createElement('h3');
+        header4.id = 'appt-groomer';
+        div2.appendChild(header4);
+        if (groomer != null) {
+            header4.innerHTML = 'Groomer: ' + groomer;
+        }
+
+        let header5 = document.createElement('h3');
+        header5.id = 'appt-service';
+        div2.appendChild(header5);
+        header5.innerHTML = 'Service: ' + service;
+
+        let progressButton = document.createElement('button');
+        progressButton.className = 'progress-button';
+        progressButton.innerHTML = 'View Progress';
+        div3.appendChild(progressButton);
+
+        progressButton.addEventListener('click', () => {
+          router.push({
+            name: 'groomingprogress',
+            query: {
+              statusBath: statusbath,
+              statusCut: statuscut,
+              statusGroom: statusgroom,
+            },
+          });
+        });
+
+        let closeButton = document.createElement('button');
+        closeButton.className = 'delete-appt-button';
+        closeButton.style.backgroundColor = 'red';
+        closeButton.style.borderRadius = '50%';
+        closeButton.style.width = '40px';
+        closeButton.style.height = '40px';
+        closeButton.style.border = 'none';
+        closeButton.style.color = 'white';
+        closeButton.style.fontSize = '20px';
+        closeButton.style.fontWeight = 'bold';
+        closeButton.style.position = 'absolute';
+        closeButton.style.top = '-7px';
+        closeButton.style.right = '-7px';
+        closeButton.innerHTML = 'X';
+        div1.append(closeButton)
+
+        closeButton.addEventListener('click', async() => {
+          const docRef = doc(db, 'new-appointments', date);
+          const subCollectionRef = collection(docRef, slot);
+          const docToDeleteRef = doc(subCollectionRef, docID);
+          await deleteDoc(docToDeleteRef);
+          div1.remove();
+     
+        });
+
+
+
+        
       }
     }
   }
@@ -170,6 +203,7 @@ export default {
 <template>
     <div id = "appointments-container" > 
       <div id= "appts-cards" >
+        <div id = "no-appts" > </div>
         <table id = "appointments-table"> </table>
        </div> 
     </div>
@@ -185,7 +219,6 @@ export default {
   padding-top: 22px;
 }
 
-
 #appt-info {
   width: 100%;
   display: flex;
@@ -193,6 +226,7 @@ export default {
   background-color: rgb(215, 229, 243);
   border-radius: 20px;
 }
+
 
 #appts-cards {
   width: 95%;
@@ -205,18 +239,46 @@ export default {
   padding: 1em; /* Add this line to remove the default padding of table cells */
 }
 
-
+#appt-details {
+  display:flex;
+  flex-direction: column;
+  flex-grow: 4;
+  
+}
 #card-profile-img {
   width: 200px;
   height: 200px;
+  margin-left: 3em;
+  display:flex;
+  
+}
+#button {
+  display:flex;
+  flex-grow: 1;
+  height: 20%;
+  
+}
+.progress-button {
+  background-color: #2c5b94;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 15px;
+  color: white;
+  margin-top: 5em;
+  padding: 1em;
+  border:none;
+  border-radius: 10px;
+  box-shadow: 3px 3px 3px #c3c0c0;
+
 }
 
-#pet-name, #appt-time {
+#pet-name, #appt-time, #appt-service, #appt-groomer, #appt-date {
   color: #2c5b94;
   font-weight: bold;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 20px;
-  margin-top: 0.6em;
+  margin-top: 0.2em;
+  margin-left: 3em;
 }
 
 </style>
