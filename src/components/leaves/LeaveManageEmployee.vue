@@ -17,6 +17,8 @@ export default {
     const employee = store.state.userName;
     // let employees = ref([{ name: 'mrBean' }]);
     const leaves = ref([]);
+    const leaveAllowance = ref(0);
+    const remainingLeaveAllowance = ref(0);
     onMounted(() => {
       // get leave data
       async function getLeaves() {
@@ -27,20 +29,28 @@ export default {
           if (doc.id != 'info') {
             leaves.value.push({ name: employee, date: doc.id });
           }
+          if (doc.id == 'info') {
+            const data = doc.data();
+            leaveAllowance.value = data.allowance;
+            remainingLeaveAllowance.value = data.prevLeaveBalance;
+          }
         });
       }
       getLeaves();
     });
 
-    return { leaves };
+    return { leaves, leaveAllowance, remainingLeaveAllowance };
   }
 };
 </script>
 
 <template>
   <div class="main">
+    <h1 class="title">Your Leaves</h1>
+    <p class="allowance">Leave Allowance: {{ leaveAllowance }} days</p>
+    <p class="allowance">Remaining Leave Allowance: {{ remainingLeaveAllowance }} days</p>
     <ul class="leaves">
-      <li v-for="item in leaves" v-bind:key="item.name" class="leaveItem">
+      <li v-for="item in leaves" v-bind:key="item.name">
         <LeaveItem :info="item" />
       </li>
     </ul>
@@ -50,21 +60,25 @@ export default {
 <style scoped>
 .main {
   display: flex;
-  text-align: center;
-  justify-content: flex-start;
+  flex-direction: column;
   align-items: center;
 }
-.leaves {
-  margin-top: 5%;
-  overflow: scroll;
-  list-style-type: none;
-  width: 80%;
-  justify-content: center;
-  text-align: center;
-  border: solid;
-  border-radius: 2em;
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 2rem;
 }
-.leaveItem {
-  padding: 1em;
+
+.allowance {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.leaves {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 500px;
 }
 </style>
