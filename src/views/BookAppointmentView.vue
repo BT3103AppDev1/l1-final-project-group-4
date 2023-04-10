@@ -2,7 +2,8 @@
 //need to pull from database the pet name, avai date and time!!
 import TheHeader from '@/components/TheHeader.vue';
 import AppointmentPopUp from '@/components/AppointmentPopUp.vue';
-import { ref } from 'vue';
+import LoadingPopUp from '@/components/LoadingPopUp.vue';
+import { ref, onMounted } from 'vue';
 import app from '../firebase.js';
 import { getFirestore } from 'firebase/firestore';
 import {
@@ -17,14 +18,15 @@ import {
 import { useStore } from 'vuex';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
+import loadingAudio from '../assets/loadingAudio.mp3';
 
 export default {
   components: {
     TheHeader,
     AppointmentPopUp,
+    LoadingPopUp,
     VueDatePicker
   },
-
   computed: {
     minDate() {
       const now = new Date();
@@ -53,6 +55,17 @@ export default {
     let isServiceMenuOpen = ref(false);
     let isPetMenuOpen = ref(false);
     let isTimeMenuOpen = ref(false);
+
+    // loading popup
+    const isLoading = ref(false);
+    const audio = ref(null);
+    const playAudio = () => {
+      // Play the audio
+      audio.value.play();
+    };
+    const pauseAudio = () => {
+      audio.value.pause();
+    };
 
     // Method to handle click outside event
     function handleClickOutsidePet(event) {
@@ -134,6 +147,9 @@ export default {
     getDogs();
 
     async function getSlots() {
+      isLoading.value = true;
+      playAudio();
+      console.log('Loading is: ', isLoading.value);
       if (selectedDate.value == 'Select Date' || selectedDate.value == null) {
         return;
       }
@@ -210,6 +226,9 @@ export default {
       for (let i = 0; i < lis.length; i++) {
         ul.appendChild(lis[i]);
       }
+      isLoading.value = false;
+      pauseAudio();
+      console.log(isLoading.value);
     }
 
     async function handleSubmit() {
@@ -260,7 +279,6 @@ export default {
         date: toIsoString(selectedDate.value).substring(0, 10)
       });
 
-
       await addDoc(
         collection(
           db,
@@ -284,6 +302,10 @@ export default {
         }
       );
     }
+    onMounted(() => {
+      audio.value = new Audio(loadingAudio);
+      audio.value.loop = true;
+    });
 
     return {
       userEmail,
@@ -295,6 +317,7 @@ export default {
       isPetMenuOpen,
       isTimeMenuOpen,
       show,
+      isLoading,
       popUpMsg,
       getSlots,
       handleClickOutsideService,
@@ -407,6 +430,7 @@ export default {
       <AppointmentPopUp v-model="show">
         <h3 id="popup-msg">{{ popUpMsg }}</h3>
       </AppointmentPopUp>
+      <LoadingPopUp v-model="isLoading" />
     </div>
   </div>
 </template>
