@@ -2,15 +2,19 @@
 import app from '../firebase.js';
 import { getFirestore } from 'firebase/firestore';
 import { doc, collection, getDocs, deleteDoc } from 'firebase/firestore';
+import { ref as vueRef, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import AddDogPopUp from '@/components/AddDogPopUp.vue';
 import { getStorage, ref, getDownloadURL, deleteObject } from 'firebase/storage';
+import LoadingPopUp from '@/components/LoadingPopUp.vue';
+import loadingAudio from '../assets/loadingAudio.mp3';
 
 const storage = getStorage(app);
 
 export default {
   components: {
-    AddDogPopUp
+    AddDogPopUp,
+    LoadingPopUp
   },
   data() {
     return {
@@ -26,8 +30,23 @@ export default {
     const db = getFirestore(app);
     const store = useStore();
 
+    // loading popup
+    const isLoading = vueRef(false);
+    const audio = vueRef(null);
+    const playAudio = () => {
+      audio.value.play();
+    };
+    const pauseAudio = () => {
+      audio.value.pause();
+    };
+
     const userEmail = store.state.userEmail;
     async function display() {
+      console.log('Function runs');
+      isLoading.value = true;
+      playAudio();
+      console.log('Loading is: ', isLoading.value);
+
       const docRef = doc(db, 'customers', userEmail);
       const querySnapshot = await getDocs(collection(docRef, 'dogs'));
 
@@ -91,8 +110,10 @@ export default {
           deleteDog(String(dogId), String(dogName));
         };
       });
+      isLoading.value = false;
+      pauseAudio();
+      console.log('Loading is ', isLoading.value);
     }
-    display();
 
     async function deleteDog(dogId, dogName) {
       alert('You are going to delete ' + dogName);
@@ -118,7 +139,15 @@ export default {
       display();
     }
 
-    return { userEmail, display, refresh };
+    onMounted(() => {
+      console.log('Mounted runs');
+      audio.value = new Audio(loadingAudio);
+      audio.value.loop = true;
+      console.log('Mounted done');
+      display();
+    });
+
+    return { userEmail, display, refresh, isLoading };
   }
 };
 </script>
@@ -129,6 +158,7 @@ export default {
       <table id="table" class="auto-index"></table>
       <button class="bwt" @click="showAddDogPopUp">Add Dog</button>
       <AddDogPopUp v-model="show" @update:modelValue="refresh"></AddDogPopUp>
+      <LoadingPopUp v-model="isLoading" />
     </div>
   </div>
 </template>
