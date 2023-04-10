@@ -10,12 +10,15 @@ import 'primevue/resources/themes/lara-light-indigo/theme.css';
 import 'primevue/resources/primevue.min.css';
 import 'primeicons/primeicons.css';
 import PopUp from '@/components/PopUp.vue';
+import LoadingPopUp from '@/components/LoadingPopUp.vue';
+import loadingAudio from '../../assets/loadingAudio.mp3';
 
 export default {
   components: {
     VueDatePicker,
     Dropdown,
-    PopUp
+    PopUp,
+    LoadingPopUp
   },
   props: ['employees'],
   setup(props) {
@@ -39,6 +42,15 @@ export default {
     // popup Message
     const popUpMsg = ref('');
     const show = ref(false);
+    // loading popup
+    const isLoading = ref(false);
+    const audio = ref(null);
+    const playAudio = () => {
+      audio.value.play();
+    };
+    const pauseAudio = () => {
+      audio.value.pause();
+    };
 
     // to format initial dates
     const resetDates = () => {
@@ -137,6 +149,10 @@ export default {
 
     // get leave data
     const getLeaves = async () => {
+      console.log('Function runs');
+      isLoading.value = true;
+      playAudio();
+      console.log('Loading is: ', isLoading.value);
       // reset input fields
       conflictLeaves.value = [];
       haveConflictLeaves.value = false;
@@ -210,6 +226,9 @@ export default {
           console.log('Existing appointment ', element);
         });
       }
+      isLoading.value = false;
+      pauseAudio();
+      console.log('Loading is ', isLoading.value);
     };
 
     const handleSubmit = async () => {
@@ -277,9 +296,13 @@ export default {
 
     // For demo purposes assign range from the current date
     onMounted(() => {
+      console.log('Mounted runs');
+      audio.value = new Audio(loadingAudio);
+      audio.value.loop = true;
       const startDate = new Date();
       const endDate = new Date();
       date.value = [startDate, endDate];
+      console.log('Mounted done');
     });
     return {
       date,
@@ -297,7 +320,8 @@ export default {
       conflictAppts,
       show,
       popUpMsg,
-      handleSubmit
+      handleSubmit,
+      isLoading
     };
   }
 };
@@ -372,6 +396,7 @@ export default {
         <PopUp v-model="show">
           <h3 id="popup-msg">{{ popUpMsg }}</h3>
         </PopUp>
+        <LoadingPopUp v-model="isLoading" />
       </div>
     </div>
   </div>

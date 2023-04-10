@@ -1,16 +1,29 @@
 <script>
 import app from '../firebase.js';
-import { getFirestore, getDocs, collection, query, where, doc, deleteDoc } from 'firebase/firestore';
+import {
+  getFirestore,
+  getDocs,
+  collection,
+  query,
+  where,
+  doc,
+  deleteDoc
+} from 'firebase/firestore';
 import { useStore } from 'vuex';
-import { toRef } from 'vue';
+import { toRef, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import LoadingPopUp from '@/components/LoadingPopUp.vue';
+import loadingAudio from '../assets/loadingAudio.mp3';
 
 export default {
+  components: {
+    LoadingPopUp
+  },
   props: {
     newDate: {
       type: String,
-      default: null,
-    },
+      default: null
+    }
   },
   setup(props) {
     const router = useRouter();
@@ -21,18 +34,30 @@ export default {
     let noappts = true;
     const slots = ['s1', 's2', 's3', 's4'];
     let bookingsInfo = [];
-   
-    
+
+    // loading popup
+    const isLoading = ref(false);
+    const audio = ref(null);
+    const playAudio = () => {
+      audio.value.play();
+    };
+    const pauseAudio = () => {
+      audio.value.pause();
+    };
 
     async function getUpcomingAppointments(todaysdate) {
+      console.log('Function runs');
+      isLoading.value = true;
+      playAudio();
+      console.log('Loading is: ', isLoading.value);
       const apptsCollection = collection(db, 'new-appointments');
-      const querySnapshot = await getDocs(apptsCollection)
+      const querySnapshot = await getDocs(apptsCollection);
 
       for (const doc of querySnapshot.docs) {
         if (doc.id >= todaysdate) {
-          
-          for (var i = 0; i < slots.length; i++) { //check each slot s1, s2, s3, s4 to see if user has an appt below
-            const slotRef = collection(doc.ref, slots[i]);//check if s1/s2/s3/s4 exists in the document i am in now
+          for (var i = 0; i < slots.length; i++) {
+            //check each slot s1, s2, s3, s4 to see if user has an appt below
+            const slotRef = collection(doc.ref, slots[i]); //check if s1/s2/s3/s4 exists in the document i am in now
             const slotSnapshot = await getDocs(slotRef);
             if (!slotSnapshot.empty) {
               const userEmailQuery = query(slotRef, where('appt_email', '==', userEmail)); //query for documents where the email atrribute == userEmail in this slot
@@ -54,32 +79,31 @@ export default {
                 });
               }
             }
-          } 
+          }
         }
       }
       if (noappts == true) {
-      
         let nothing = document.getElementById('no-appts');
         let text = document.createElement('h2');
         text.id = 'no-appt-text';
         nothing.appendChild(text);
-        text.innerHTML = "No upcoming appointments, we miss you!";
-        text.style.color ='white';
+        text.innerHTML = 'No upcoming appointments, we miss you!';
+        text.style.color = 'white';
         text.style.fontWeight = 'bold';
         text.style.fontSize = '3em';
         text.style.display = 'flex';
         //ok i will come back to this bc adi is adding stuff to appts
-
       } else {
-        display(bookingsInfo)
+        display(bookingsInfo);
       }
+      isLoading.value = false;
+      pauseAudio();
+      console.log('Loading is ', isLoading.value);
     }
+
     getUpcomingAppointments(todaysdate)
 
-
-
     async function display(bookingsInfo) {
-      
       for (let i = 0; i < bookingsInfo.length; i++) {
         console.log(bookingsInfo[i])
 
@@ -90,8 +114,7 @@ export default {
         let time = bookingsInfo[i][4]
         let slot = bookingsInfo[i][5]
         let docID = bookingsInfo[i][6]
-        
-        
+
         let table = document.getElementById('appointments-table');
         let tr = document.createElement('tr');
         table.appendChild(tr);
@@ -134,7 +157,7 @@ export default {
         header4.id = 'appt-groomer';
         div2.appendChild(header4);
         if (groomer != null) {
-            header4.innerHTML = 'Groomer: ' + groomer;
+          header4.innerHTML = 'Groomer: ' + groomer;
         }
 
         let header5 = document.createElement('h3');
@@ -172,41 +195,42 @@ export default {
         closeButton.style.top = '-7px';
         closeButton.style.right = '-7px';
         closeButton.innerHTML = 'X';
-        div1.append(closeButton)
+        div1.append(closeButton);
 
-        closeButton.addEventListener('click', async() => {
+        closeButton.addEventListener('click', async () => {
           const docRef = doc(db, 'new-appointments', date);
           const subCollectionRef = collection(docRef, slot);
           const docToDeleteRef = doc(subCollectionRef, docID);
           await deleteDoc(docToDeleteRef);
           div1.remove();
-     
         });
-
-
-
-        
       }
     }
+    onMounted(() => {
+      console.log('Mounted runs');
+      audio.value = new Audio(loadingAudio);
+      audio.value.loop = true;
+      console.log('Mounted done');
+      getUpcomingAppointments(todaysdate);
+      console.log(noappts);
+    });
+
+    return { isLoading };
   }
 };
-
-
-
 </script>
 
 <template>
-    <div id = "appointments-container" > 
-      <div id= "appts-cards" >
-        <div id = "no-appts" > </div>
-        <table id = "appointments-table"> </table>
-       </div> 
+  <div id="appointments-container">
+    <div id="appts-cards">
+      <div id="no-appts"></div>
+      <table id="appointments-table"></table>
     </div>
-
+    <LoadingPopUp v-model="isLoading" />
+  </div>
 </template>
 
 <style>
-
 #appointments-container {
   width: 100%;
   display: flex;
@@ -222,7 +246,6 @@ export default {
   border-radius: 20px;
 }
 
-
 #appts-cards {
   width: 95%;
   margin: 0 auto; /* Update margin to center the element horizontally */
@@ -235,23 +258,20 @@ export default {
 }
 
 #appt-details {
-  display:flex;
+  display: flex;
   flex-direction: column;
   flex-grow: 4;
-  
 }
 #card-profile-img {
   width: 200px;
   height: 200px;
   margin-left: 3em;
-  display:flex;
-  
+  display: flex;
 }
 #button {
-  display:flex;
+  display: flex;
   flex-grow: 1;
   height: 20%;
-  
 }
 .progress-button {
   background-color: #2c5b94;
@@ -261,13 +281,16 @@ export default {
   color: white;
   margin-top: 5em;
   padding: 1em;
-  border:none;
+  border: none;
   border-radius: 10px;
   box-shadow: 3px 3px 3px #c3c0c0;
-
 }
 
-#pet-name, #appt-time, #appt-service, #appt-groomer, #appt-date {
+#pet-name,
+#appt-time,
+#appt-service,
+#appt-groomer,
+#appt-date {
   color: #2c5b94;
   font-weight: bold;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -275,5 +298,4 @@ export default {
   margin-top: 0.2em;
   margin-left: 3em;
 }
-
 </style>

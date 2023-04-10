@@ -15,7 +15,6 @@ export default {
       <div class="popup-inner">
         <div class="popup-content">
           <img src="../assets/loading.gif" id="loadingGif" class="popup-image" />
-          <!-- <audio id="loadingAudio" src="../assets/loadingAudio.mp3" autoplay></audio> -->
         </div>
         <div class="popup-text">
           <span class="loading-text">Loading</span><span class="loading-dots">...</span>

@@ -2,13 +2,10 @@
 import TheHeader from '@/components/TheHeader.vue';
 import AppointmentDetails from '@/components/AppointmentDetails.vue';
 
-
-
 export default {
   components: {
     TheHeader,
-    AppointmentDetails, 
-  
+    AppointmentDetails
   },
   setup() {
     const currentDate = new Date();
@@ -16,15 +13,10 @@ export default {
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
     const day = String(currentDate.getDate()).padStart(2, '0');
     const date = `${year}-${month}-${day}`;
-
- 
-
-    return { date }
-    }
-}
-
+    return { date };
+  }
+};
 </script>
-
 
 <template>
   <div class="main">
@@ -39,7 +31,7 @@ export default {
         </div>
       </div>
       <div id="my-appts">
-        <AppointmentDetails :newDate=date />
+        <AppointmentDetails :newDate="date" />
       </div>
     </div>
   </div>
@@ -61,7 +53,6 @@ a {
 h3 {
   font-weight: bold;
 }
-
 .main {
   display: flex;
   height: 100vh;
@@ -98,9 +89,8 @@ h3 {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center; 
+  align-items: center;
 }
-
 
 #my-appts {
   width: 90%;
@@ -113,7 +103,4 @@ h3 {
   overflow: scroll;
   height: 70vh;
 } 
-
-
-
 </style>
