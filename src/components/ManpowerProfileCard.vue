@@ -104,7 +104,7 @@ export default {
 </script>
 
 <template>
-  <div class="container-manpower">
+  <div class="container-manpowerprofilecard">
     <button class="bwt" @click="showAddManpowerPopUp">Add Employee</button>
     <AddManpowerPopUp v-model="show" @update:modelValue="refresh"></AddManpowerPopUp>
   </div>
@@ -114,7 +114,7 @@ export default {
 </template>
 
 <style>
-.container-manpower {
+.container-manpowerprofilecard {
   width: 100%;
   display: flex;
   flex-direction: column;

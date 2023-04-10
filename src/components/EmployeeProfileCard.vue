@@ -62,7 +62,7 @@ export default {
 </script>
 
 <template>
-  <div class="container">
+  <div class="employeeprofilecard-container">
     <div id="employee-profile-cards">
       <h3 id="employee-header">Employees</h3>
       <table id="employee-table" class="auto-index"></table>
@@ -71,7 +71,7 @@ export default {
 </template>
 
 <style>
-.container {
+.employeeprofilecard-container {
   display: flex;
   justify-content: center;
   align-items: center;

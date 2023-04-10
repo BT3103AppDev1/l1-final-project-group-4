@@ -124,7 +124,7 @@ export default {
 </script>
 
 <template>
-  <div class="container">
+  <div class="dogprofilecard-container">
     <div id="dog-profile-cards">
       <table id="table" class="auto-index"></table>
       <button class="bwt" @click="showAddDogPopUp">Add Dog</button>
@@ -134,7 +134,7 @@ export default {
 </template>
 
 <style>
-.container {
+.dogprofilecard-container {
   width: 100%;
   display: flex;
   flex-direction: column;

@@ -17,7 +17,7 @@ export default {
 </script>
 
 <template>
-  <div class="container" v-if="authIsReady">
+  <div class="navigation-bar" v-if="authIsReady">
     <div class="logo-nav-container">
       <img alt="Elsa" class="logo" src="@/assets/logo.svg" width="125" height="125" />
       <nav class="TheHeader">
@@ -106,11 +106,12 @@ export default {
 </template>
 
 <style scoped>
-.container {
+.navigation-bar {
   display: flex;
   flex-direction: column;
   background-color: white;
   padding: 0;
+  margin-left: 0;
 }
 
 .headerButton {

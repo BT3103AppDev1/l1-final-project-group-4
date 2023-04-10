@@ -81,7 +81,7 @@ export default {
 
 <template>
   <div class="main">
-    <div class="container">
+    <div class="leave-container">
       <div class="row">
         <h3 id="label">Name:</h3>
         <Dropdown
@@ -126,7 +126,7 @@ export default {
   justify-content: flex-start;
   align-items: center;
 }
-.container {
+.leave-container {
   display: flex;
   margin-top: 5%;
   width: 80%;

@@ -89,11 +89,31 @@ export default {
     };
     document.addEventListener('click', handleClickOutsideEmployee);
 
+    function getToday() {
+      var today = new Date();
+      var dd = today.getDate();
+
+      var mm = today.getMonth()+1; 
+      var yyyy = today.getFullYear();
+      if(dd<10) {
+          dd='0'+dd;
+      } 
+
+      if (mm<10) {
+          mm='0'+mm;
+      } 
+      today = yyyy+'-'+mm+'-'+dd;
+      return today;
+    }
+
     const getAppts = async () => {
       console.log('getAppts Called');
       const querySnapshot = await getDocs(collection(db, 'new-appointments'));
       const slotArray = ['s1', 's2', 's3', 's4'];
       const promises = querySnapshot.docs.map(async (docDates) => {
+        if (docDates.id < getToday()) {
+          return;
+        }
         for (let j = 0; j < slotArray.length; j++) {
           const querySnapshot1 = await getDocs(
             collection(db, 'new-appointments/' + docDates.id + '/' + slotArray[j])
@@ -285,7 +305,7 @@ export default {
 
 <template>
   <div class="main">
-    <div class="container">
+    <div class="leave-application">
       <h1>Leave Application Form</h1>
       <p>Only apply for leaves for this calendar year.</p>
       <!-- Row 1 -->
@@ -367,7 +387,7 @@ export default {
   justify-content: flex-start;
   align-items: center;
 }
-.container {
+.leave-application {
   display: flex;
   flex-direction: column;
   width: 60vw;

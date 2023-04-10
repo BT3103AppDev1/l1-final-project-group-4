@@ -56,7 +56,7 @@ export default {
 </script>
 
 <template>
-  <div class="container">
+  <div class="manpowerinfo-container">
     <div class="col1">
       <img class="card-profile-img" id="profilepic" src="@/assets/default-avatar-profile.png" />
       <h3 class="profile-info" id="profile-name">Name: {{ name }}</h3>
@@ -70,7 +70,7 @@ export default {
 </template>
 
 <style scoped>
-.container {
+.manpowerinfo-container {
   width: 95%;
   height: 80vh;
   background-color: #193a6a;
