@@ -36,7 +36,7 @@ export default {
 </script>
 
 <template>
-  <div class="container" v-if="authIsReady">
+  <div class="employeeheader-container" v-if="authIsReady">
     <div id="admin">
       <h3 id="headerWords">ADMINISTRATOR</h3>
     </div>
@@ -102,7 +102,7 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Nunito');
 
-.container {
+.employeeheader-container {
   display: flex;
   flex-direction: row;
   background-color: #193a6a;
