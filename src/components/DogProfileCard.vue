@@ -5,24 +5,27 @@ import { doc, collection, getDocs, deleteDoc } from 'firebase/firestore';
 import { useStore } from 'vuex';
 import AddDogPopUp from '@/components/AddDogPopUp.vue';
 import { getStorage, ref, getDownloadURL, deleteObject } from 'firebase/storage';
+import { ref as vueref } from 'vue';
+import DeletePopUp from '@/components/DeletePopUp.vue';
 
 const storage = getStorage(app);
 
 export default {
   components: {
-    AddDogPopUp
-  },
-  data() {
-    return {
-      show: false
-    };
-  },
-  methods: {
-    showAddDogPopUp() {
-      this.show = true;
-    }
+    AddDogPopUp,
+    DeletePopUp
   },
   setup() {
+    const show = vueref(false);
+    const showDelete = vueref(false);
+    const deleteMessage = vueref('');
+    function showAddDogPopUp() {
+      show.value = true;
+    }
+    function showDeletePopUp() {
+      showDelete.value = true;
+    }
+
     const db = getFirestore(app);
     const store = useStore();
 
@@ -94,11 +97,13 @@ export default {
     }
     display();
 
-    async function deleteDog(dogId, dogName) {
-      alert('You are going to delete ' + dogName);
+    async function handleDeleteDog() {
+      const dogId = toDeleteDogId.value;
+      const dogName = toDeleteDogName.value;
+
       const docRef = doc(db, 'customers/' + userEmail + '/dogs', dogId);
       await deleteDoc(docRef);
-      const imgRef = ref(storage, userEmail + '-' + dogName);
+      const imgRef = ref(storage, userEmail + '-' + dogName + '.png');
       // Delete the file
       await deleteObject(imgRef);
 
@@ -110,6 +115,16 @@ export default {
       display();
     }
 
+    const toDeleteDogId = vueref('');
+    const toDeleteDogName = vueref('');
+
+    function deleteDog(dogId, dogName) {
+      deleteMessage.value = 'You are going to delete ' + dogName;
+      toDeleteDogId.value = dogId;
+      toDeleteDogName.value = dogName;
+      showDeletePopUp();
+    }
+
     async function refresh() {
       let tb = document.getElementById('table');
       while (tb.rows.length > 0) {
@@ -118,7 +133,17 @@ export default {
       display();
     }
 
-    return { userEmail, display, refresh };
+    return {
+      userEmail,
+      display,
+      refresh,
+      show,
+      showDelete,
+      deleteMessage,
+      showAddDogPopUp,
+      showDeletePopUp,
+      handleDeleteDog
+    };
   }
 };
 </script>
@@ -130,6 +155,9 @@ export default {
       <button class="bwt" @click="showAddDogPopUp">Add Dog</button>
       <AddDogPopUp v-model="show" @update:modelValue="refresh"></AddDogPopUp>
     </div>
+    <DeletePopUp id="error-popup" v-model="showDelete" :onSubmit="handleDeleteDog">
+      <h3>{{ deleteMessage }}</h3>
+    </DeletePopUp>
   </div>
 </template>
 

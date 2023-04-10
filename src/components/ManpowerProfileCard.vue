@@ -6,24 +6,30 @@ import AddManpowerPopUp from '@/components/AddManpowerPopUp.vue';
 import { getStorage, ref, getDownloadURL, deleteObject } from 'firebase/storage';
 import { ref as vueref } from 'vue';
 import PopUp from '@/components/PopUp.vue';
+import DeletePopUp from '@/components/DeletePopUp.vue';
 
 const storage = getStorage(app);
 
 export default {
   components: {
     AddManpowerPopUp,
-    PopUp
+    PopUp,
+    DeletePopUp
   },
   setup() {
     const show = vueref(false);
     const showError = vueref(false);
     const errorMessage = vueref('');
+    const showDelete = vueref(false);
+    const deleteMessage = vueref('');
     function showAddManpowerPopUp() {
       show.value = true;
     }
-
     function showErrorPopUp() {
       showError.value = true;
+    }
+    function showDeletePopUp() {
+      showDelete.value = true;
     }
 
     const db = getFirestore(app);
@@ -110,26 +116,36 @@ export default {
     };
 
     async function deleteEmployee(employeeId, employeeName) {
+      deleteMessage.value = 'You are going to delete ' + employeeName;
       await getAppts(employeeName);
-      console.log(appts.value);
-
       if (appts.value.length > 0) {
         errorMessage.value =
           'Unable to delete. ' + employeeName + ' has pending appointments: ' + appts.value;
         showErrorPopUp();
       } else {
-        alert('You are going to delete employee: ' + employeeName);
-        const docRef = doc(db, 'employees', employeeId); // use the document ID to create the document reference
-        await deleteDoc(docRef);
-        const imgRef = ref(storage, 'employee-' + employeeName + '.png');
-        // Delete the file
-        await deleteObject(imgRef);
-        console.log('Document successfully deleted!', employeeId);
-
-        // remove the row from the HTML table
-        let row = document.querySelector(`[data-employee-id="${employeeId}"]`).closest('tr');
-        row.remove();
+        toDeleteEmployeeId.value = employeeId;
+        toDeleteEmployeeName.value = employeeName;
+        showDeletePopUp();
       }
+    }
+
+    const toDeleteEmployeeId = vueref('');
+    const toDeleteEmployeeName = vueref('');
+
+    async function handleDeleteEmployee() {
+      const employeeId = toDeleteEmployeeId.value;
+      const employeeName = toDeleteEmployeeName.value;
+
+      const docRef = doc(db, 'employees', employeeId); // use the document ID to create the document reference
+      await deleteDoc(docRef);
+      const imgRef = ref(storage, 'employee-' + employeeName + '.png');
+      // Delete the file
+      await deleteObject(imgRef);
+      console.log('Document successfully deleted!', employeeId);
+
+      // remove the row from the HTML table
+      let row = document.querySelector(`[data-employee-id="${employeeId}"]`).closest('tr');
+      row.remove();
     }
 
     async function refresh() {
@@ -146,7 +162,11 @@ export default {
       showError,
       errorMessage,
       showAddManpowerPopUp,
-      showErrorPopUp
+      showErrorPopUp,
+      deleteMessage,
+      showDelete,
+      showDeletePopUp,
+      handleDeleteEmployee
     };
   }
 };
@@ -163,6 +183,9 @@ export default {
   <PopUp id="error-popup" v-model="showError">
     <h3>{{ errorMessage }}</h3>
   </PopUp>
+  <DeletePopUp id="error-popup" v-model="showDelete" :onSubmit="handleDeleteEmployee">
+    <h3>{{ deleteMessage }}</h3>
+  </DeletePopUp>
 </template>
 
 <style>

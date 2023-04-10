@@ -103,7 +103,7 @@ export default {
 }
 .profile-info-box {
   width: 90%;
-  height: 80%;
+  height: 90%;
   background-color: #2c5b94;
   border-radius: 20px;
   overflow-y: auto;
