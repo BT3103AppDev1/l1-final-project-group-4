@@ -16,9 +16,6 @@ export default {
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
     const day = String(currentDate.getDate()).padStart(2, '0');
     const date = `${year}-${month}-${day}`;
-
- 
-
     return { date }
     }
 }
@@ -47,6 +44,7 @@ export default {
 .main {
   display: flex;
   height: 100vh;
+  overflow: hidden;
   
 }
 
@@ -70,10 +68,10 @@ export default {
   background-color: #2c5b94;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
   border-radius: 20px;
-  overflow-y: auto;
   display: flex;
   justify-content: center;
-  overflow-y: auto;
+  overflow: scroll;
+  height: 70vh;
 } 
 
 
