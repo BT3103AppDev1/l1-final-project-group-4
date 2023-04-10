@@ -46,13 +46,11 @@ export default {
                 let groomer = docData.appt_groomer
                 let pet = docData.appt_pet;
                 let service = docData.appt_service;
-                let statusbath = docData.status_bath;
-                let statuscut = docData.status_cut;
-                let statusgroom = docData.status_groom;
                 let time = docData.appt_time;
                 let slot = slots[i];
                 let docID = userDoc.id
-                bookingsInfo.push([date, groomer, pet, service, time, statusbath, statuscut, statusgroom, slot, docID])             
+             
+                bookingsInfo.push([date, groomer, pet, service, time, slot, docID])            
                 });
               }
             }
@@ -77,7 +75,6 @@ export default {
       }
     }
     getUpcomingAppointments(todaysdate)
-    console.log(noappts)
 
 
 
@@ -91,11 +88,9 @@ export default {
         let pet = bookingsInfo[i][2]
         let service = bookingsInfo[i][3]
         let time = bookingsInfo[i][4]
-        let statusbath = bookingsInfo[i][5]
-        let statuscut = bookingsInfo[i][6]
-        let statusgroom = bookingsInfo[i][7]
-        let slot = bookingsInfo[i][8];
-        let docID = bookingsInfo[i][9]
+        let slot = bookingsInfo[i][5]
+        let docID = bookingsInfo[i][6]
+        
         
         let table = document.getElementById('appointments-table');
         let tr = document.createElement('tr');
@@ -156,9 +151,9 @@ export default {
           router.push({
             name: 'groomingprogress',
             query: {
-              statusBath: statusbath,
-              statusCut: statuscut,
-              statusGroom: statusgroom,
+              myDate: date,
+              myDocID: docID,
+              mySlot: slot
             },
           });
         });
