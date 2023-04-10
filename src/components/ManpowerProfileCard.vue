@@ -4,6 +4,7 @@ import { getFirestore } from 'firebase/firestore';
 import { doc, collection, getDocs, deleteDoc } from 'firebase/firestore';
 import AddManpowerPopUp from '@/components/AddManpowerPopUp.vue';
 import { getStorage, ref, getDownloadURL, deleteObject } from 'firebase/storage';
+import { ref as vueref } from 'vue';
 
 const storage = getStorage(app);
 
@@ -77,18 +78,58 @@ export default {
     }
     display();
 
-    async function deleteEmployee(employeeId, employeeName) {
-      alert('You are going to delete employee: ' + employeeName);
-      const docRef = doc(db, 'employees', employeeId); // use the document ID to create the document reference
-      await deleteDoc(docRef);
-      const imgRef = ref(storage, 'employee-' + employeeName + '.png');
-      // Delete the file
-      await deleteObject(imgRef);
-      console.log('Document successfully deleted!', employeeId);
+    const appts = vueref([]);
+    const getAppts = async (name) => {
+      appts.value = [];
+      console.log('getAppts Called');
+      const querySnapshot = await getDocs(collection(db, 'new-appointments'));
+      const slotArray = ['s1', 's2', 's3', 's4'];
+      const promises = querySnapshot.docs.map(async (docDates) => {
+        for (let j = 0; j < slotArray.length; j++) {
+          const querySnapshot1 = await getDocs(
+            collection(db, 'new-appointments/' + docDates.id + '/' + slotArray[j])
+          );
+          await Promise.all(
+            querySnapshot1.docs.map(async (docc) => {
+              let documentData = docc.data();
+              let apptDate = documentData.appt_date;
 
-      // remove the row from the HTML table
-      let row = document.querySelector(`[data-employee-id="${employeeId}"]`).closest('tr');
-      row.remove();
+              let groomer = documentData.appt_groomer;
+              if (name === groomer) {
+                appts.value.push(apptDate);
+                console.log(apptDate, ' pushed');
+              }
+            })
+          );
+        }
+      });
+      await Promise.all(promises);
+    };
+
+    async function deleteEmployee(employeeId, employeeName) {
+      await getAppts(employeeName);
+      console.log(appts.value);
+
+      if (appts.value.length > 0) {
+        alert(
+          'Unable to delete ' +
+            employeeName +
+            '. Please deconflict pending appointments first: ' +
+            appts.value
+        );
+      } else {
+        alert('You are going to delete employee: ' + employeeName);
+        const docRef = doc(db, 'employees', employeeId); // use the document ID to create the document reference
+        await deleteDoc(docRef);
+        const imgRef = ref(storage, 'employee-' + employeeName + '.png');
+        // Delete the file
+        await deleteObject(imgRef);
+        console.log('Document successfully deleted!', employeeId);
+
+        // remove the row from the HTML table
+        let row = document.querySelector(`[data-employee-id="${employeeId}"]`).closest('tr');
+        row.remove();
+      }
     }
 
     async function refresh() {
