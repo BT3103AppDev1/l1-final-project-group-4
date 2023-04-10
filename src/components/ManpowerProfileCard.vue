@@ -4,24 +4,34 @@ import { getFirestore } from 'firebase/firestore';
 import { doc, collection, getDocs, deleteDoc } from 'firebase/firestore';
 import AddManpowerPopUp from '@/components/AddManpowerPopUp.vue';
 import { getStorage, ref, getDownloadURL, deleteObject } from 'firebase/storage';
+import { ref as vueref } from 'vue';
+import PopUp from '@/components/PopUp.vue';
+import DeletePopUp from '@/components/DeletePopUp.vue';
 
 const storage = getStorage(app);
 
 export default {
   components: {
-    AddManpowerPopUp
-  },
-  data() {
-    return {
-      show: false
-    };
-  },
-  methods: {
-    showAddManpowerPopUp() {
-      this.show = true;
-    }
+    AddManpowerPopUp,
+    PopUp,
+    DeletePopUp
   },
   setup() {
+    const show = vueref(false);
+    const showError = vueref(false);
+    const errorMessage = vueref('');
+    const showDelete = vueref(false);
+    const deleteMessage = vueref('');
+    function showAddManpowerPopUp() {
+      show.value = true;
+    }
+    function showErrorPopUp() {
+      showError.value = true;
+    }
+    function showDeletePopUp() {
+      showDelete.value = true;
+    }
+
     const db = getFirestore(app);
 
     async function display() {
@@ -77,8 +87,55 @@ export default {
     }
     display();
 
+    const appts = vueref([]);
+    const getAppts = async (name) => {
+      appts.value = [];
+      console.log('getAppts Called');
+      const querySnapshot = await getDocs(collection(db, 'new-appointments'));
+      const slotArray = ['s1', 's2', 's3', 's4'];
+      const promises = querySnapshot.docs.map(async (docDates) => {
+        for (let j = 0; j < slotArray.length; j++) {
+          const querySnapshot1 = await getDocs(
+            collection(db, 'new-appointments/' + docDates.id + '/' + slotArray[j])
+          );
+          await Promise.all(
+            querySnapshot1.docs.map(async (docc) => {
+              let documentData = docc.data();
+              let apptDate = documentData.appt_date;
+
+              let groomer = documentData.appt_groomer;
+              if (name === groomer) {
+                appts.value.push(apptDate);
+                console.log(apptDate, ' pushed');
+              }
+            })
+          );
+        }
+      });
+      await Promise.all(promises);
+    };
+
     async function deleteEmployee(employeeId, employeeName) {
-      alert('You are going to delete employee: ' + employeeName);
+      deleteMessage.value = 'You are going to delete ' + employeeName;
+      await getAppts(employeeName);
+      if (appts.value.length > 0) {
+        errorMessage.value =
+          'Unable to delete. ' + employeeName + ' has pending appointments: ' + appts.value;
+        showErrorPopUp();
+      } else {
+        toDeleteEmployeeId.value = employeeId;
+        toDeleteEmployeeName.value = employeeName;
+        showDeletePopUp();
+      }
+    }
+
+    const toDeleteEmployeeId = vueref('');
+    const toDeleteEmployeeName = vueref('');
+
+    async function handleDeleteEmployee() {
+      const employeeId = toDeleteEmployeeId.value;
+      const employeeName = toDeleteEmployeeName.value;
+
       const docRef = doc(db, 'employees', employeeId); // use the document ID to create the document reference
       await deleteDoc(docRef);
       const imgRef = ref(storage, 'employee-' + employeeName + '.png');
@@ -98,23 +155,41 @@ export default {
       }
       display();
     }
-    return { display, refresh };
+    return {
+      display,
+      refresh,
+      show,
+      showError,
+      errorMessage,
+      showAddManpowerPopUp,
+      showErrorPopUp,
+      deleteMessage,
+      showDelete,
+      showDeletePopUp,
+      handleDeleteEmployee
+    };
   }
 };
 </script>
 
 <template>
-  <div class="container-manpower">
+  <div class="container-manpowerprofilecard">
     <button class="bwt" @click="showAddManpowerPopUp">Add Employee</button>
     <AddManpowerPopUp v-model="show" @update:modelValue="refresh"></AddManpowerPopUp>
   </div>
   <div id="manpower-profile-cards">
     <table id="manpower-table" class="auto-index"></table>
   </div>
+  <PopUp id="error-popup" v-model="showError">
+    <h3>{{ errorMessage }}</h3>
+  </PopUp>
+  <DeletePopUp id="error-popup" v-model="showDelete" :onSubmit="handleDeleteEmployee">
+    <h3>{{ deleteMessage }}</h3>
+  </DeletePopUp>
 </template>
 
 <style>
-.container-manpower {
+.container-manpowerprofilecard {
   width: 100%;
   display: flex;
   flex-direction: column;

@@ -8,25 +8,27 @@ import AddDogPopUp from '@/components/AddDogPopUp.vue';
 import { getStorage, ref, getDownloadURL, deleteObject } from 'firebase/storage';
 import LoadingPopUp from '@/components/LoadingPopUp.vue';
 import loadingAudio from '../assets/loadingAudio.mp3';
+import DeletePopUp from '@/components/DeletePopUp.vue';
 
 const storage = getStorage(app);
 
 export default {
   components: {
     AddDogPopUp,
-    LoadingPopUp
-  },
-  data() {
-    return {
-      show: false
-    };
-  },
-  methods: {
-    showAddDogPopUp() {
-      this.show = true;
-    }
+    LoadingPopUp,
+    DeletePopUp
   },
   setup() {
+    const show = vueRef(false);
+    const showDelete = vueRef(false);
+    const deleteMessage = vueRef('');
+    function showAddDogPopUp() {
+      show.value = true;
+    }
+    function showDeletePopUp() {
+      showDelete.value = true;
+    }
+
     const db = getFirestore(app);
     const store = useStore();
 
@@ -115,11 +117,13 @@ export default {
       console.log('Loading is ', isLoading.value);
     }
 
-    async function deleteDog(dogId, dogName) {
-      alert('You are going to delete ' + dogName);
+    async function handleDeleteDog() {
+      const dogId = toDeleteDogId.value;
+      const dogName = toDeleteDogName.value;
+
       const docRef = doc(db, 'customers/' + userEmail + '/dogs', dogId);
       await deleteDoc(docRef);
-      const imgRef = ref(storage, userEmail + '-' + dogName);
+      const imgRef = ref(storage, userEmail + '-' + dogName + '.png');
       // Delete the file
       await deleteObject(imgRef);
 
@@ -131,6 +135,16 @@ export default {
       display();
     }
 
+    const toDeleteDogId = vueRef('');
+    const toDeleteDogName = vueRef('');
+
+    function deleteDog(dogId, dogName) {
+      deleteMessage.value = 'You are going to delete ' + dogName;
+      toDeleteDogId.value = dogId;
+      toDeleteDogName.value = dogName;
+      showDeletePopUp();
+    }
+
     async function refresh() {
       let tb = document.getElementById('table');
       while (tb.rows.length > 0) {
@@ -139,6 +153,7 @@ export default {
       display();
     }
 
+
     onMounted(() => {
       console.log('Mounted runs');
       audio.value = new Audio(loadingAudio);
@@ -146,25 +161,38 @@ export default {
       console.log('Mounted done');
       display();
     });
-
-    return { userEmail, display, refresh, isLoading };
+    return {
+      userEmail,
+      display,
+      refresh,
+      show,
+      showDelete,
+      deleteMessage,
+      showAddDogPopUp,
+      showDeletePopUp,
+      handleDeleteDog,
+      isLoading
+    };
   }
 };
 </script>
 
 <template>
-  <div class="container">
+  <div class="dogprofilecard-container">
     <div id="dog-profile-cards">
       <table id="table" class="auto-index"></table>
       <button class="bwt" @click="showAddDogPopUp">Add Dog</button>
       <AddDogPopUp v-model="show" @update:modelValue="refresh"></AddDogPopUp>
       <LoadingPopUp v-model="isLoading" />
     </div>
+    <DeletePopUp id="error-popup" v-model="showDelete" :onSubmit="handleDeleteDog">
+      <h3>{{ deleteMessage }}</h3>
+    </DeletePopUp>
   </div>
 </template>
 
 <style>
-.container {
+.dogprofilecard-container {
   width: 100%;
   display: flex;
   flex-direction: column;

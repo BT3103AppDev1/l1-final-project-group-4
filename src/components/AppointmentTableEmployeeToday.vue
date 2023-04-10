@@ -166,9 +166,9 @@ export default {
                     submitButton.addEventListener('click', async function() {
                       console.log(dropdown.value, dropdown1.value, dropdown2.value)
                       await updateDoc(doc(db, 'new-appointments/' + today + "/" + slotArray[j], docc.id), {
-                        status_bath: dropdown.value,
-                        status_groom: dropdown1.value,
-                        status_cut: dropdown2.value,
+                        status_bath: parseInt(dropdown.value),
+                        status_groom: parseInt(dropdown1.value),
+                        status_cut: parseInt(dropdown2.value)
                       });
                     })
                     td.appendChild(submitButton)

@@ -2,10 +2,13 @@
 import TheHeader from '@/components/TheHeader.vue';
 import AppointmentDetails from '@/components/AppointmentDetails.vue';
 
+
+
 export default {
   components: {
     TheHeader,
-    AppointmentDetails
+    AppointmentDetails, 
+  
   },
   setup() {
     const currentDate = new Date();
@@ -13,25 +16,30 @@ export default {
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
     const day = String(currentDate.getDate()).padStart(2, '0');
     const date = `${year}-${month}-${day}`;
-    return { date };
-  }
-};
+
+ 
+
+    return { date }
+    }
+}
+
 </script>
+
 
 <template>
   <div class="main">
     <TheHeader />
     <div id="my-appts-body">
       <div id="appts-header">
-        <div id="headerappointmentsview">Upcoming Appointments</div>
+        <div id="headerappointmentsview">Past Appointments</div>
         <div id="route-container">
-          <router-link to="/myappointments/past">
-            <h3>Past Appointments &#x2794;</h3>
+          <router-link to="/myappointments">
+            <h3>Upcoming Appointments &#x2794;</h3>
           </router-link>
         </div>
       </div>
       <div id="my-appts">
-        <AppointmentDetails :newDate="date" />
+        <AppointmentDetails :newDate=date />
       </div>
     </div>
   </div>
@@ -41,7 +49,7 @@ export default {
 #route-container {
   margin-top: 0.8em;
   justify-self: flex-end;
-  width: 12.5em;
+  width: 16.9em;
 }
 
 a {
@@ -53,6 +61,7 @@ a {
 h3 {
   font-weight: bold;
 }
+
 .main {
   display: flex;
   height: 100vh;
@@ -89,8 +98,9 @@ h3 {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: center; 
 }
+
 
 #my-appts {
   width: 90%;
@@ -103,4 +113,7 @@ h3 {
   overflow: scroll;
   height: 70vh;
 } 
+
+
+
 </style>

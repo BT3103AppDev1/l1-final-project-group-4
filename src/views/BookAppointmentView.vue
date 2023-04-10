@@ -150,9 +150,16 @@ export default {
       isLoading.value = true;
       playAudio();
       console.log('Loading is: ', isLoading.value);
+      
       if (selectedDate.value == 'Select Date' || selectedDate.value == null) {
+        isLoading.value = false;
+        pauseAudio();
         return;
       }
+
+      isLoading.value = true;
+      playAudio();
+      console.log('Loading is: ', isLoading.value);
 
       async function countAvailableEmployees() {
         var counter = 0;

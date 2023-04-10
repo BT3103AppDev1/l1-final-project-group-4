@@ -50,10 +50,6 @@ export default {
         <div>
           <ProfileCard />
           <br />
-          <router-link style="text-decoration: none; color: inherit" to="/groomingprogress">
-            <button class="btn" id="progress-page">Dog Progress</button>
-          </router-link>
-          <br />
           <button class="btn" id="change-pw" @click="showPasswordPopup()">Change Password</button>
           <br />
           <button class="btn" id="log-out" @click="handleSubmit()">Log Out</button>
@@ -107,10 +103,11 @@ export default {
 }
 .profile-info-box {
   width: 90%;
-  height: 80%;
+  height: 90%;
   background-color: #2c5b94;
   border-radius: 20px;
   overflow-y: auto;
+  box-shadow: 0 0 5px #616f82;
 }
 .btn {
   background-color: #2c5b94;

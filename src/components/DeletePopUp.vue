@@ -3,7 +3,10 @@
     <div class="popup" v-show="modelValue">
       <div class="popup-inner">
         <slot id="message"></slot>
-        <button class="close-popup" @click="$emit('update:modelValue', false)">OK</button>
+        <div>
+          <button class="close-popup" @click="submitOk">OK</button>
+          <button class="close-popup" @click="submitCancel">Cancel</button>
+        </div>
       </div>
     </div>
   </div>
@@ -15,6 +18,19 @@ export default {
     modelValue: {
       type: Boolean,
       default: false
+    },
+    onSubmit: {
+      type: Function,
+      required: true
+    }
+  },
+  methods: {
+    submitOk() {
+      this.onSubmit();
+      this.$emit('update:modelValue', false); // this just closes the popup after submitting the form
+    },
+    submitCancel() {
+      this.$emit('update:modelValue', false); // this just closes the popup after submitting the form
     }
   }
 };
@@ -46,7 +62,7 @@ export default {
 }
 
 .close-popup {
-  margin-top: 10px;
+  margin: 10px;
   width: 10vw;
   cursor: pointer;
   background-color: #2c5b94;
