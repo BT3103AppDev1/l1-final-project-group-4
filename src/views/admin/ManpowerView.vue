@@ -58,11 +58,20 @@ export default {
 .profile-info-box-manpower {
   width: 95%;
   height: 80vh;
-  background-color: #193a6a;
+  /* background-color: #193a6a; */
   border-radius: 20px;
-  overflow: scroll;
+  overflow-y: scroll;
   margin: auto;
   margin-top: 30px;
+}
+/* Hide scrollbar for Chrome, Safari and Opera */
+.profile-info-box-manpower::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.profile-info-box-manpower {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 .profile-info-manpower {
   display: flex;

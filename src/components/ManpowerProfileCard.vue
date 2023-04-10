@@ -4,9 +4,11 @@ import { getFirestore } from 'firebase/firestore';
 import { doc, collection, getDocs, deleteDoc } from 'firebase/firestore';
 import AddManpowerPopUp from '@/components/AddManpowerPopUp.vue';
 import { getStorage, ref, getDownloadURL, deleteObject } from 'firebase/storage';
-import { ref as vueref } from 'vue';
+import { ref as vueref, onMounted } from 'vue';
 import PopUp from '@/components/PopUp.vue';
 import DeletePopUp from '@/components/DeletePopUp.vue';
+import LoadingPopUp from '@/components/LoadingPopUp.vue';
+import loadingAudio from '../assets/loadingAudio.mp3';
 
 const storage = getStorage(app);
 
@@ -14,7 +16,8 @@ export default {
   components: {
     AddManpowerPopUp,
     PopUp,
-    DeletePopUp
+    DeletePopUp,
+    LoadingPopUp
   },
   setup() {
     const show = vueref(false);
@@ -22,6 +25,16 @@ export default {
     const errorMessage = vueref('');
     const showDelete = vueref(false);
     const deleteMessage = vueref('');
+    // loading popup
+    const isLoading = vueref(false);
+    const audio = vueref(null);
+    const playAudio = () => {
+      audio.value.play();
+    };
+    const pauseAudio = () => {
+      audio.value.pause();
+    };
+
     function showAddManpowerPopUp() {
       show.value = true;
     }
@@ -35,6 +48,11 @@ export default {
     const db = getFirestore(app);
 
     async function display() {
+      console.log('Function runs');
+      isLoading.value = true;
+      // playAudio();
+      console.log('Loading is: ', isLoading.value);
+
       const querySnapshot = await getDocs(collection(db, 'employees'));
 
       querySnapshot.forEach(async function readDoc(doc) {
@@ -43,6 +61,8 @@ export default {
         let documentData = doc.data();
         let employeeName = documentData.name;
         let employeeFullTime = documentData.fullTime;
+        let email = documentData.email;
+        let phoneNum = documentData.phoneNum;
 
         let table = document.getElementById('manpower-table');
         let tr = document.createElement('tr');
@@ -75,6 +95,16 @@ export default {
         div2.appendChild(header2);
         header2.innerHTML = employeeFullTime;
 
+        let header3 = document.createElement('h3');
+        header3.id = 'manpower-email';
+        div2.appendChild(header3);
+        header3.innerHTML = email;
+
+        let header4 = document.createElement('h3');
+        header4.id = 'manpower-phoneNum';
+        div2.appendChild(header4);
+        header4.innerHTML = phoneNum;
+
         let deleteButton = document.createElement('button');
         deleteButton.className = 'bwt-small';
         deleteButton.innerHTML = 'x';
@@ -84,11 +114,18 @@ export default {
           deleteEmployee(doc.id, employeeName); // pass the document ID as parameter to the delete function
         };
       });
+      isLoading.value = false;
+      // pauseAudio();
+      console.log('Loading is ', isLoading.value);
     }
-    display();
 
     const appts = vueref([]);
     const getAppts = async (name) => {
+      console.log('Function runs');
+      isLoading.value = true;
+      playAudio();
+      console.log('Loading is: ', isLoading.value);
+
       appts.value = [];
       console.log('getAppts Called');
       const querySnapshot = await getDocs(collection(db, 'new-appointments'));
@@ -113,6 +150,9 @@ export default {
         }
       });
       await Promise.all(promises);
+      isLoading.value = false;
+      pauseAudio();
+      console.log('Loading is ', isLoading.value);
     };
 
     async function deleteEmployee(employeeId, employeeName) {
@@ -155,6 +195,14 @@ export default {
       }
       display();
     }
+    onMounted(() => {
+      console.log('Mounted runs');
+      audio.value = new Audio(loadingAudio);
+      audio.value.loop = true;
+      console.log('Mounted done');
+      display();
+    });
+
     return {
       display,
       refresh,
@@ -166,7 +214,8 @@ export default {
       deleteMessage,
       showDelete,
       showDeletePopUp,
-      handleDeleteEmployee
+      handleDeleteEmployee,
+      isLoading
     };
   }
 };
@@ -186,6 +235,7 @@ export default {
   <DeletePopUp id="error-popup" v-model="showDelete" :onSubmit="handleDeleteEmployee">
     <h3>{{ deleteMessage }}</h3>
   </DeletePopUp>
+  <LoadingPopUp v-model="isLoading" />
 </template>
 
 <style>
@@ -203,18 +253,24 @@ export default {
   grid-template-columns: repeat(auto-fill, minmax(100%, 100%));
 }
 
+#manpower-table {
+  margin-inline: 25%;
+}
+
 #manpower-info {
-  width: 100%;
   display: flex;
-  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   background-color: rgb(215, 229, 243);
-  border-radius: 20px;
-  color: #2c5b94;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 0rem 1rem;
+  margin-bottom: 1rem;
 }
 
 #manpower-details {
   flex-grow: 1;
+  text-align: center;
 }
 
 #manpower-profile-img {
@@ -244,7 +300,7 @@ export default {
   border-radius: 20px;
   border: none;
   margin: 0 auto 40px auto;
-  width: 90%;
+  width: 20%;
   box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.4);
   transition: opacity 0.2s ease-in-out;
 }
@@ -256,17 +312,19 @@ export default {
 .bwt-small {
   position: absolute;
   right: -10px;
-  top: -5px;
+  top: -8px;
   width: 30px;
   height: 30px;
   border-radius: 50%;
   border: none;
   background-color: red;
   color: white;
-  font-size: 16px;
   font-weight: bold;
   font-size: 23px;
   text-align: center;
   cursor: pointer;
+}
+.bwt-small:hover {
+  background-color: darkred;
 }
 </style>
