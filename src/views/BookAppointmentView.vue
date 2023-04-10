@@ -60,7 +60,6 @@ export default {
     const isLoading = ref(false);
     const audio = ref(null);
     const playAudio = () => {
-      // Play the audio
       audio.value.play();
     };
     const pauseAudio = () => {
@@ -147,6 +146,7 @@ export default {
     getDogs();
 
     async function getSlots() {
+      console.log('Mounted runs');
       isLoading.value = true;
       playAudio();
       console.log('Loading is: ', isLoading.value);
@@ -228,7 +228,7 @@ export default {
       }
       isLoading.value = false;
       pauseAudio();
-      console.log(isLoading.value);
+      console.log('Loading is ', isLoading.value);
     }
 
     async function handleSubmit() {
@@ -303,8 +303,10 @@ export default {
       );
     }
     onMounted(() => {
+      console.log('Mounted runs');
       audio.value = new Audio(loadingAudio);
       audio.value.loop = true;
+      console.log('Mounted done');
     });
 
     return {
