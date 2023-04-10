@@ -111,7 +111,6 @@ export default {
 
     async function deleteEmployee(employeeId, employeeName) {
       await getAppts(employeeName);
-      console.log(appts.value);
 
       if (appts.value.length > 0) {
         errorMessage.value =
