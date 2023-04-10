@@ -1,13 +1,29 @@
-<script setup>
+<script>
 import TheHeader from '@/components/TheHeader.vue';
+import { useStore } from 'vuex';
+
+export default {
+  components: {
+    TheHeader
+  },
+  setup() {
+    const store = useStore();
+    const userName = store.state.userName;
+    const hasUserName = userName == null ? false : true;
+
+    return { hasUserName, userName };
+  }
+};
 </script>
 
 <template>
   <div class="main">
     <TheHeader class="header" />
     <div class="body">
-      <h1>The World's Best Team for</h1>
-      <h1>Pet Care Services</h1>
+      <br v-if="hasUserName" />
+      <h1 v-if="hasUserName">Welcome Back, {{ userName }}</h1>
+      <h1 v-if="!hasUserName">The World's Best Team for</h1>
+      <h1 v-if="!hasUserName">Pet Care Services</h1>
       <h2>We cater to all your pet needs such as wellness,</h2>
       <h2>consultations, grooming and nutrition</h2>
     </div>
