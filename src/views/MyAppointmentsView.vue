@@ -47,7 +47,7 @@ export default {
 .main {
   display: flex;
   height: 100vh;
-  overflow: auto; /* Enable scrolling within the main container if needed */
+  
 }
 
 #my-appts-body {

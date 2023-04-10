@@ -1,7 +1,9 @@
 <script>
+import app from '../firebase.js';
 import TheHeader from '@/components/TheHeader.vue'
 import {  useRoute } from 'vue-router';
-import { computed } from 'vue';
+import { computed , ref } from 'vue';
+import { getFirestore, collection, doc, getDoc } from 'firebase/firestore';
 
 export default {
   components: {
@@ -9,24 +11,42 @@ export default {
   },
   setup() {
     const route = useRoute()
-    const statusBath = computed(() => route.query.statusBath);
-    const statusCut = computed(() => route.query.statusCut);
-    const statusGroom = computed(() => route.query.statusGroom);
+    const db = getFirestore(app);
+    const myDocID = computed(() => route.query.myDocID);
+    const myDate = computed(() => route.query.myDate);
+    const mySlot = computed(() => route.query.mySlot);
+    const info = ref('');
+    
 
-    const isBathing = computed(() => statusBath.value == 1);
-    const isCuttingHair = computed(() => statusCut.value == 1);
-    const isGrooming = computed(() => statusGroom.value == 1);
-
-    return {
-      isBathing,
-      isCuttingHair,
-      isGrooming,
+    async function test(myDocID, myDate, mySlot) {
+      const docRef = doc(db, 'new-appointments', myDate);
+      const subCollectionRef = collection(docRef, mySlot);
+      const document = doc(subCollectionRef, myDocID);
+      const documentSnapshot = await getDoc(document);
+      const documentData = documentSnapshot.data();
+      const info = [documentData.status_bath, documentData.status_cut, documentData.status_groom]
+      return info
     }
-  }, 
+    test(myDocID.value, myDate.value, mySlot.value).then((result) => {
+      info.value = result;
+      console.log("info.value:", info.value[0]);
+    });
+
+    const isBathing = computed(() => info.value && info.value[0] === 1);
+    const isCutting = computed(() => info.value && info.value[1] === 1);
+    const isGrooming = computed(() => info.value && info.value[2] === 1);
+   
+    return {
+      myDocID,
+      myDate,
+      mySlot,
+      isBathing,
+      isCutting,
+      isGrooming
+    }
+  }
   
-
 }
-
 </script>
 
 <template>
@@ -42,16 +62,16 @@ export default {
       <br>
 
     <div class="columns">
-      <div class="bath completed" :class=" isBathing? 'active' : 'inactive' ">
+      <div class="bath completed" :class =" isBathing? 'active' : 'inactive' " >
         <h2>Bath</h2>
       </div>
 
 
-      <div class="cut in-progress" :class=" isCuttingHair? 'active' : 'inactive' ">
+      <div class="cut in-progress" :class =" isCutting? 'active' : 'inactive' " >
         <h2>Cut</h2>
       </div>
       
-      <div class="groom" :class=" isGrooming? 'active' : 'inactive' ">
+      <div class="groom" :class =" isGrooming? 'active' : 'inactive' ">
         <h2>Groom</h2>
       </div>
       </div>
