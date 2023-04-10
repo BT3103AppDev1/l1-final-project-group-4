@@ -34,11 +34,13 @@ export default {
     //       appt_date: getToday(),
     //       appt_pet: "Elsa",
     //       appt_time: "9am",
-    //       appt_email: "admin@gmail.com",
+    //       appt_email: "test@gmail.com",
     //       appt_name: "test",
     //       appt_service: "Full Grooming",
     //       appt_groomer: "mrsBeans",
-    //       appt_status: "Not Completed"
+    //       status_bath: 0,
+    //       status_groom: 0,
+    //       status_cut: 0
     //   })
       
     // }
@@ -88,7 +90,7 @@ export default {
       })
       querySnapshot.forEach(async (docDates) => {
         // console.log(docDates.id, getToday())
-        if (docDates.id <= getToday()) {
+        if (docDates.id < getToday()) {
           console.log("Dont show todays appointment dates")
           return;
         }

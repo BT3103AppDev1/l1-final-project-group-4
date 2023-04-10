@@ -31,7 +31,11 @@ export default {
        
     async function display() {
       let index = 1  
-      const mapStatus = new Map([[0, "Not Started"], [1, "In Progress"], [2, "Completed"]])
+      const mapStatus = new Map([
+        [0, "Not Started"], 
+        [1, "In Progress"], 
+        [2, "Completed"]
+      ])
       console.log(mapStatus.get(0))
       const slotArray = ["s1", "s2", "s3", "s4"]
       // const statusArray = ['Not Completed', 'Bath', 'Cut', 'Groom']

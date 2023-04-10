@@ -55,11 +55,15 @@ export default {
       const slotArray = ["s1", "s2", "s3", "s4"]
     
       querySnapshot.forEach(async (docDates) => {
-        // console.log(docDates.id, getToday())
-        if (docDates.id === getToday()) {
+        if (docDates.id < getToday()) {
           console.log("Dont show todays appointment dates")
           return;
         }
+        // console.log(docDates.id, getToday())
+        // if (docDates.id === getToday()) {
+        //   console.log("Dont show todays appointment dates")
+        //   return;
+        // }
         // doc.data() is never undefined for query doc snapshots
         // move dates to today-appointments
         
