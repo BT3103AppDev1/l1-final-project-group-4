@@ -49,6 +49,12 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
+      path: '/myappointments/past',
+      name: 'myappointments/past',
+      component: () => import('../views/MyAppointmentsPastView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
       path: '/groomingprogress',
       name: 'groomingprogress',
       component: () => import('../views/GroomingProgressView.vue'),
