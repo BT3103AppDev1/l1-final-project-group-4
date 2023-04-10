@@ -5,24 +5,27 @@ import { doc, collection, getDocs, deleteDoc } from 'firebase/firestore';
 import AddManpowerPopUp from '@/components/AddManpowerPopUp.vue';
 import { getStorage, ref, getDownloadURL, deleteObject } from 'firebase/storage';
 import { ref as vueref } from 'vue';
+import PopUp from '@/components/PopUp.vue';
 
 const storage = getStorage(app);
 
 export default {
   components: {
-    AddManpowerPopUp
-  },
-  data() {
-    return {
-      show: false
-    };
-  },
-  methods: {
-    showAddManpowerPopUp() {
-      this.show = true;
-    }
+    AddManpowerPopUp,
+    PopUp
   },
   setup() {
+    const show = vueref(false);
+    const showError = vueref(false);
+    const errorMessage = vueref('');
+    function showAddManpowerPopUp() {
+      show.value = true;
+    }
+
+    function showErrorPopUp() {
+      showError.value = true;
+    }
+
     const db = getFirestore(app);
 
     async function display() {
@@ -111,12 +114,9 @@ export default {
       console.log(appts.value);
 
       if (appts.value.length > 0) {
-        alert(
-          'Unable to delete ' +
-            employeeName +
-            '. Please deconflict pending appointments first: ' +
-            appts.value
-        );
+        errorMessage.value =
+          'Unable to delete. ' + employeeName + ' has pending appointments: ' + appts.value;
+        showErrorPopUp();
       } else {
         alert('You are going to delete employee: ' + employeeName);
         const docRef = doc(db, 'employees', employeeId); // use the document ID to create the document reference
@@ -139,7 +139,15 @@ export default {
       }
       display();
     }
-    return { display, refresh };
+    return {
+      display,
+      refresh,
+      show,
+      showError,
+      errorMessage,
+      showAddManpowerPopUp,
+      showErrorPopUp
+    };
   }
 };
 </script>
@@ -152,6 +160,9 @@ export default {
   <div id="manpower-profile-cards">
     <table id="manpower-table" class="auto-index"></table>
   </div>
+  <PopUp id="error-popup" v-model="showError">
+    <h3>{{ errorMessage }}</h3>
+  </PopUp>
 </template>
 
 <style>
