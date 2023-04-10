@@ -38,11 +38,16 @@ export default {
 }
 .popup-inner {
   width: 330px;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .close-popup {
   margin-top: 10px;
+  width: 10vw;
   cursor: pointer;
   background-color: #2c5b94;
   border: none;
