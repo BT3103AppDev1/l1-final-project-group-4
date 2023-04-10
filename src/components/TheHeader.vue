@@ -110,6 +110,7 @@ export default {
   display: flex;
   flex-direction: column;
   background-color: white;
+  padding: 0;
 }
 
 .headerButton {
