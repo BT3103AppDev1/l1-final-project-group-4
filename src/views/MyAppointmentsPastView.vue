@@ -31,10 +31,10 @@ export default {
     <TheHeader />
     <div id="my-appts-body">
       <div id="appts-header">
-        <div id="headerappointmentsview">Upcoming Appointments</div>
+        <div id="headerappointmentsview">Past Appointments</div>
         <div id="route-container">
-          <router-link to="/myappointments/past">
-            <h3>Past Appointments &#x2794;</h3>
+          <router-link to="/myappointments">
+            <h3>Upcoming Appointments &#x2794;</h3>
           </router-link>
         </div>
       </div>
@@ -49,7 +49,7 @@ export default {
 #route-container {
   margin-top: 0.8em;
   justify-self: flex-end;
-  width: 12.5em;
+  width: 16.9em;
 }
 
 a {
