@@ -13,8 +13,10 @@ export default {
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
     const day = String(currentDate.getDate()).padStart(2, '0');
     const date = `${year}-${month}-${day}`;
+  
     return { date };
   }
+  
 };
 </script>
 
@@ -31,7 +33,7 @@ export default {
         </div>
       </div>
       <div id="my-appts">
-        <AppointmentDetails :newDate="date" />
+        <AppointmentDetails :newDate="date" :newTime="time" />
       </div>
     </div>
   </div>
