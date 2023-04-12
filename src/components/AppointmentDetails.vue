@@ -92,7 +92,7 @@ export default {
         text.style.fontWeight = 'bold';
         text.style.fontSize = '3em';
         text.style.display = 'flex';
-        //ok i will come back to this bc adi is adding stuff to appts
+        
       } else {
         display(bookingsInfo);
       }
@@ -105,7 +105,7 @@ export default {
 
     async function display(bookingsInfo) {
       for (let i = 0; i < bookingsInfo.length; i++) {
-        console.log(bookingsInfo[i])
+        //console.log(bookingsInfo[i])
 
         let date = bookingsInfo[i][0]
         let groomer = bookingsInfo[i][1]
@@ -169,17 +169,21 @@ export default {
         progressButton.className = 'progress-button';
         progressButton.innerHTML = 'View Progress';
         div3.appendChild(progressButton);
-
-        progressButton.addEventListener('click', () => {
-          router.push({
-            name: 'groomingprogress',
-            query: {
-              myDate: date,
-              myDocID: docID,
-              mySlot: slot
-            },
+        if (date == todaysdate) {
+          progressButton.addEventListener('click', () => {
+            router.push({
+              name: 'groomingprogress',
+                query: {
+                  myDate: date,
+                  myDocID: docID,
+                  mySlot: slot
+                },
+            });
           });
-        });
+        }
+        else {
+          progressButton.style.opacity = '0.5';
+        }   
 
         let closeButton = document.createElement('button');
         closeButton.className = 'delete-appt-button';
