@@ -163,9 +163,8 @@ h2 {
 .back {
   background-color:#193a6a;
   color:white;
-  margin-left: 2em;
-  margin-top: 1em;
-  font-size: 30px;;
+  margin-left: 3em;
+  font-size: 20px;
   padding: 0.7em 1.3em 0.7em 1.3em;
   border-radius: 20px;
   border: none;
