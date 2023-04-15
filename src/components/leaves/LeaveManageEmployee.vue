@@ -76,9 +76,9 @@ export default {
 
 .leaves {
   list-style: none;
-  padding: 0;
-  margin: 0;
+  padding-bottom: 10rem;
   width: 100%;
   max-width: 500px;
+  overflow-y: scroll;
 }
 </style>

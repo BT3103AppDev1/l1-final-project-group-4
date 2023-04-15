@@ -8,17 +8,20 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
+      meta: { isCustomer: true }
     },
     {
       path: '/about',
       name: 'about',
-      component: () => import('../views/AboutView.vue')
+      component: () => import('../views/AboutView.vue'),
+      meta: { isCustomer: true }
     },
     {
       path: '/services',
       name: 'services',
       component: () => import('../views/ServicesView.vue'),
+      meta: { isCustomer: true }
     },
     {
       path: '/login',
@@ -34,7 +37,7 @@ const router = createRouter({
       path: '/profile',
       name: 'profile',
       component: () => import('../views/ProfileView.vue'),
-      meta: { requiresAuth: true}
+      meta: { requiresAuth: true, isCustomer: true }
     },
     {
       path: '/bookappointment',
@@ -139,6 +142,13 @@ router.beforeEach((to, from) => {
   } 
   let isOwner = store.state.isOwner
   if (to.meta.isOwner && !isOwner) {
+    return {
+      path: '/employee/schedulerEmployee',
+      query: { redirect: to.fullPath}
+    }
+  }
+  let isCustomer = !store.state.isAdmin
+  if (to.meta.isCustomer && !isCustomer) {
     return {
       path: '/employee/schedulerEmployee',
       query: { redirect: to.fullPath}

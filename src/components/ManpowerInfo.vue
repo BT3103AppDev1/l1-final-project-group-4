@@ -28,6 +28,8 @@ export default {
     const store = useStore();
     const name = vueRef('');
     const employmentStatus = vueRef('');
+    const email = vueRef('');
+    const phoneNum = vueRef('');
 
     async function display() {
       const querySnapshot = await getDocs(collection(db, 'employees'));
@@ -40,6 +42,8 @@ export default {
         if (employeeName == store.state.userName) {
           name.value = employeeName;
           employmentStatus.value = documentData.fullTime;
+          email.value = documentData.email;
+          phoneNum.value = documentData.phoneNum;
 
           let img = document.getElementById('profilepic');
           await getDownloadURL(ref(storage, 'employee-' + employeeName + '.png')).then((url) => {
@@ -50,7 +54,7 @@ export default {
     }
     display();
 
-    return { name, employmentStatus };
+    return { name, employmentStatus, email, phoneNum };
   }
 };
 </script>
@@ -63,7 +67,9 @@ export default {
     <div class="col2">
       <h3 class="profile-info" id="profile-name">Name: {{ name }}</h3>
       <h3 class="profile-info" id="profile-status">Status: {{ employmentStatus }}</h3>
-      <br>
+      <h3 class="profile-info" id="profile-status">Email: {{ email }}</h3>
+      <h3 class="profile-info" id="profile-status">Phone Number: {{ phoneNum }}</h3>
+      <br />
       <button class="btn" id="change-pw" @click="showPasswordPopup()">Change Password</button>
       <ChangePasswordPopUp v-model="show" />
     </div>
@@ -84,7 +90,6 @@ export default {
   height: 100%;
   display: flex;
   justify-content: center;
-  
 }
 .col2 {
   width: 60%;
@@ -130,5 +135,9 @@ export default {
   justify-content: center;
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.4);
   transition: opacity 0.2s ease-in-out;
+}
+.btn:hover {
+  opacity: 90%;
+  cursor: pointer;
 }
 </style>
