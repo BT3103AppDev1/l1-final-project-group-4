@@ -59,12 +59,13 @@ export default {
   <div class="manpowerinfo-container">
     <div class="col1">
       <img class="card-profile-img" id="profilepic" src="@/assets/default-avatar-profile.png" />
-      <h3 class="profile-info" id="profile-name">Name: {{ name }}</h3>
-      <button class="btn" id="change-pw" @click="showPasswordPopup()">Change Password</button>
-      <ChangePasswordPopUp v-model="show" />
     </div>
     <div class="col2">
+      <h3 class="profile-info" id="profile-name">Name: {{ name }}</h3>
       <h3 class="profile-info" id="profile-status">Status: {{ employmentStatus }}</h3>
+      <br>
+      <button class="btn" id="change-pw" @click="showPasswordPopup()">Change Password</button>
+      <ChangePasswordPopUp v-model="show" />
     </div>
   </div>
 </template>
@@ -76,24 +77,21 @@ export default {
   background-color: #193a6a;
   border-radius: 20px;
   margin: auto;
-  flex-direction: row;
-  justify-content: space-between;
   display: flex;
 }
 .col1 {
   width: 40%;
   height: 100%;
-  flex-direction: column;
+  display: flex;
   justify-content: center;
-  align-items: center;
-  /* background-color: green; */
+  
 }
 .col2 {
   width: 60%;
   height: 100%;
+  display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  margin-top: 6%;
   /* background-color: pink; */
 }
 #manpower-profile-cards {
@@ -107,20 +105,23 @@ export default {
   color: white;
   font-size: 24px;
   margin: 2%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bold;
 }
+
 .card-profile-img {
-  height: 200px;
+  height: 300px;
   border-radius: 50%;
-  margin: 2%;
+  margin: 15%;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 .btn {
   background-color: #2c5b94;
   color: white;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* change font */
-  font-size: 1em;
+  font-size: 1.3em;
   font-weight: bold;
-  padding: 0.7em 1.2em;
+  padding: 0.7em 1em;
   border-radius: 15px;
   border: none;
   width: 40%;
