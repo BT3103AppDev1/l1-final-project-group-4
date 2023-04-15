@@ -1,19 +1,11 @@
 <script>
 import TheEmployeeHeader from '@/components/TheEmployeeHeader.vue';
-import { ref } from 'vue';
-import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
 import ManpowerInfo from '../../components/ManpowerInfo.vue';
 
 export default {
   components: {
     TheEmployeeHeader,
     ManpowerInfo
-  },
-  setup() {
-    const errorMsg = ref(null);
-    const store = useStore();
-    const router = useRouter();
   }
 };
 </script>
@@ -22,9 +14,7 @@ export default {
   <div class="main">
     <TheEmployeeHeader />
     <div class="body">
-      <!-- <div class="profile-info-box"> -->
       <ManpowerInfo />
-      <!-- </div> -->
     </div>
   </div>
 </template>
