@@ -30,7 +30,7 @@ export default {
   computed: {
     minDate() {
       const now = new Date();
-      now.setDate(now.getDate() + 1);
+      now.setDate(now.getDate());
       const year = now.getFullYear();
       const month = (now.getMonth() + 1).toString().padStart(2, '0');
       const day = now.getDate().toString().padStart(2, '0');
@@ -150,7 +150,7 @@ export default {
       isLoading.value = true;
       playAudio();
       console.log('Loading is: ', isLoading.value);
-      
+
       if (selectedDate.value == 'Select Date' || selectedDate.value == null) {
         isLoading.value = false;
         pauseAudio();
@@ -606,5 +606,13 @@ body {
 
 #popup-msg {
   text-align: center;
+}
+@media (max-width: 1040px) {
+  .appt-picture {
+    display: none;
+  }
+  .appt-details {
+    justify-self: center;
+  }
 }
 </style>
