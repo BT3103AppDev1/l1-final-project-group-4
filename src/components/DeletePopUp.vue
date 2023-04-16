@@ -3,7 +3,7 @@
     <div class="popup" v-show="modelValue">
       <div class="popup-inner">
         <slot id="message"></slot>
-        <div>
+        <div id="buttons">
           <button class="close-popup" @click="submitOk">OK</button>
           <button class="close-popup" @click="submitCancel">Cancel</button>
         </div>
@@ -63,7 +63,7 @@ export default {
 
 .close-popup {
   margin: 10px;
-  width: 10vw;
+  width: 7vw;
   cursor: pointer;
   background-color: #2c5b94;
   border: none;
@@ -75,5 +75,9 @@ export default {
 }
 #message {
   text-align: center;
+}
+#buttons {
+  display: flex;
+  flex-direction: row;
 }
 </style>

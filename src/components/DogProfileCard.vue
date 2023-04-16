@@ -22,7 +22,7 @@ export default {
     const show = vueRef(false);
     const showDelete = vueRef(false);
     const deleteMessage = vueRef('');
-    
+
     // The showAddDogPopUp() and showDeletePopUp() functions are called to set the values of show and showDelete variables to true,
     // respectively, which triggers the display of pop-up windows in the UI.
     function showAddDogPopUp() {
@@ -121,7 +121,7 @@ export default {
       console.log('Loading is ', isLoading.value);
     }
 
-    // The handleDeleteDog() function is called when a user 
+    // The handleDeleteDog() function is called when a user
     // confirms deletion of a dog. It deletes the corresponding document
     // from Firestore and the corresponding image from a Firebase storage.
     async function handleDeleteDog() {
@@ -146,7 +146,7 @@ export default {
     const toDeleteDogName = vueRef('');
 
     // The deleteDog() function is called when a user clicks the delete button
-    // for a dog. It sets the values of deleteMessage, toDeleteDogId, 
+    // for a dog. It sets the values of deleteMessage, toDeleteDogId,
     // and toDeleteDogName variables, and calls the showDeletePopUp() function to display a confirmation pop-up window.
     function deleteDog(dogId, dogName) {
       deleteMessage.value = 'You are going to delete ' + dogName;
@@ -162,7 +162,6 @@ export default {
       }
       display();
     }
-
 
     onMounted(() => {
       console.log('Mounted runs');

@@ -145,7 +145,7 @@ export default {
         await getDownloadURL(storageref(storage, userEmail + '-' + pet + '.png')).then((url) => {
           img.setAttribute('src', url);
         });
-        img.id = 'dog-img';
+        img.id = 'appointments-dog-img';
         div1.appendChild(img);
 
         let div2 = document.createElement('div');
@@ -355,7 +355,7 @@ export default {
   margin-left: 3em;
 }
 
-#dog-img {
+#appointments-dog-img {
   height: 200px;
   width: 200px;
   border-radius: 50%;
@@ -363,7 +363,7 @@ export default {
 }
 
 @media (max-width: 1040px) {
-  #dog-img {
+  #appointments-dog-img {
     display: none;
   }
 }
