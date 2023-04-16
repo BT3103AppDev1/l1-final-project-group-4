@@ -28,25 +28,7 @@ export default {
       return today;
     }
     const today = getToday()
-    // async function addApptToday() {
-    //   console.log("add")
-    //   await addDoc(collection(db, "new-appointments/" + getToday() + "/s1"), {
-    //       appt_id: '20230409S11',
-    //       appt_date: getToday(),
-    //       appt_pet: "Elsa",
-    //       appt_time: "9am",
-    //       appt_email: "peter@gmail.com",
-    //       appt_name: "test",
-    //       appt_service: "Full Grooming",
-    //       appt_groomer: "peter",
-    //       appt_status: "Not Completed"
-    //   });
-      
-    // }
 
-    // addApptToday()
-
-       
     async function display() {
       const store = useStore();
 
@@ -75,7 +57,7 @@ export default {
             let statusGroom = documentData.status_groom;
             let statusCut = documentData.status_cut;
 
-            const values = [index, bookingid, email, customer, pet, service, apptdate, appttime, groomer, statusBath, statusGroom, statusCut]
+            const values = [index, bookingid, email, customer, pet, service, apptdate, appttime, groomer, statusBath, statusCut, statusGroom]
 
 
 
@@ -209,8 +191,8 @@ export default {
             <th>TIME</th>
             <th>EMPLOYEE</th>
             <th>BATH</th>
-            <th>GROOM</th>
             <th>CUT</th>
+            <th>GROOM</th>
             <th>SAVE</th>
         </tr>
     </table><br><br>
