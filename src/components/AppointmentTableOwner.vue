@@ -85,28 +85,21 @@ export default {
       employeeSnapshot.forEach((doc) => {
         let documentData = doc.data();
         let employeeName = documentData.name;
-        // console.log("Adding")
-        // console.log(employeeName)
         employeeArray.push(employeeName);
       });
       querySnapshot.forEach(async (docDates) => {
-        // console.log(docDates.id, getToday())
         if (docDates.id < getToday()) {
           console.log('Dont show todays appointment dates');
           return;
         }
-        // doc.data() is never undefined for query doc snapshots
-        // move dates to today-appointments
 
-        // console.log(docDates.id)
         for (let j = 0; j < slotArray.length; j++) {
           const querySnapshot1 = await getDocs(
             collection(db, 'new-appointments/' + docDates.id + '/' + slotArray[j])
           );
-          // querySnapshot1.forEach(())
+
           querySnapshot1.forEach(async (docc) => {
             let documentData = docc.data();
-            // console.log(documentData)
 
             let apptdate = documentData.appt_date;
             let email = documentData.appt_email;
@@ -240,6 +233,7 @@ export default {
     const toDeleteSlot = vueref('');
     const toDeleteDocID = vueref('');
 
+    // function is called when owner hits the delete button. Confirmation popup is shown from this function
     function deleteAppt(date, slot, docID) {
       deleteMessage.value = 'You are going to delete appointment on: ' + date;
       toDeleteDate.value = date;
@@ -249,6 +243,7 @@ export default {
     }
 
     display();
+     // On onbeforeunmount the tables rows are deleted there is only the header left.
     onBeforeUnmount(() => {
       let table = document.getElementById('appointment-table');
       while (table.rows.length > 1) {

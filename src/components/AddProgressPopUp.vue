@@ -46,9 +46,7 @@ export default {
   methods: {
     async upload(dogName, dogStatus) {
       const storage = getStorage(app);
-
       var file = document.getElementById('dogpic').files[0];
-      // console.log(file);
       await uploadBytes(ref(storage, dogName + '-' + dogStatus + '.png'), file);
     },
 

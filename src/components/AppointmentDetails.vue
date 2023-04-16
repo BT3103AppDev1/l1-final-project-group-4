@@ -92,6 +92,7 @@ export default {
           }
         }
       }
+      // If noappts, white bold text appears and encourage user to book an appointment'
       if (noappts == true) {
         let nothing = document.getElementById('no-appts');
         let text = document.createElement('h2');
@@ -115,6 +116,8 @@ export default {
 
     getUpcomingAppointments(todaysdate);
 
+    // The display() function displays the bookingsInfo in the desired manner by creating their own elements and appending it to
+    // the appointments-table.
     async function display(bookingsInfo) {
       for (let i = 0; i < bookingsInfo.length; i++) {
         //console.log(bookingsInfo[i])

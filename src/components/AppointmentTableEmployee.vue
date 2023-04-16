@@ -12,12 +12,12 @@ export default {
     const store = useStore();
 
     const userName = store.state.userName;
-    // console.log(userEmail)
     const db = getFirestore(app)
+    
+     // getToday() returns todays date in YYYY-MM-DD format
     function getToday() {
       var today = new Date();
       var dd = today.getDate();
-
       var mm = today.getMonth()+1; 
       var yyyy = today.getFullYear();
       if(dd<10) {
@@ -30,51 +30,23 @@ export default {
       today = yyyy+'-'+mm+'-'+dd;
       return today;
     };
-
-    // async function addApptToday() {
-    //   console.log("add")
-    //   await addDoc(collection(db, "new-appointments/" + getToday() + "/s1"), {
-    //       appt_id: '20230406S11',
-    //       appt_date: getToday(),
-    //       appt_pet: "Elsa",
-    //       appt_time: "9am",
-    //       appt_email: "admin@gmail.com",
-    //       appt_name: "test",
-    //       appt_service: "Full Grooming",
-    //       appt_groomer: "mrsBeans",
-    //       appt_status: "Not Completed"
-    //   })
-      
     
-
-    // addApptToday()
-       
+    // display() fetches all appointment happening today and in the future. It creates table elements that would be displayed. 
     async function display() {
       let index = 1  
       const querySnapshot = await getDocs(collection(db, 'new-appointments'))
       const slotArray = ["s1", "s2", "s3", "s4"]
     
       querySnapshot.forEach(async (docDates) => {
+        // filters out past appointment dates
         if (docDates.id < getToday()) {
-          console.log("Dont show todays appointment dates")
           return;
         }
-        // console.log(docDates.id, getToday())
-        // if (docDates.id === getToday()) {
-        //   console.log("Dont show todays appointment dates")
-        //   return;
-        // }
-        // doc.data() is never undefined for query doc snapshots
-        // move dates to today-appointments
-        
-        // console.log(docDates.id)
+
         for (let j = 0; j < slotArray.length; j++) {
             const querySnapshot1 = await getDocs(collection(db, 'new-appointments/' + docDates.id + "/" + slotArray[j]))
-        // querySnapshot1.forEach(())
             querySnapshot1.forEach(async docc => { 
-
                 let documentData = docc.data()
-                // console.log(documentData)
 
                 let apptdate = (documentData.appt_date)
                 let email = (documentData.appt_email)
@@ -92,8 +64,8 @@ export default {
                 let table = document.getElementById('appointment-table-employee')
                 let tr = document.createElement('tr')
                 console.log(userName, groomer)
+                // filters userName that is not the groomer
                 if (userName === groomer) {
-
                   table.appendChild(tr)
                   for (let i = 0; i < 9; i++) {
                       let td = document.createElement('td')

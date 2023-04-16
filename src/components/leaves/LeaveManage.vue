@@ -21,36 +21,40 @@ export default {
     const leaves = ref([]);
     const isClicked = ref([]);
 
+    // fetch leave data from firestore
     const getLeaves = async () => {
-      // reset vars
-      leaves.value = [];
-      isClicked.value = {};
+      leaves.value = []; // Reset leaves array and isClicked
+      isClicked.value = {}; 
       const querySnapshot = await getDocs(
         collection(db, 'schedule', 'leaves', selectedOptionEmployee.value.name)
-      );
+      ); 
       querySnapshot.forEach((doc) => {
         console.log(doc.id);
+        // Exclude 'info' document
         if (doc.id != 'info') {
-          leaves.value.push({ name: selectedOptionEmployee, date: doc.id });
+          // Update leaves array with leave data and isClicked
+          leaves.value.push({ name: selectedOptionEmployee, date: doc.id }); 
           isClicked.value[doc.id] = false;
         }
       });
       console.log(leaves);
     };
+    // Function to toggle clicked state
     const clicked = (date) => {
-      isClicked.value[date] = !isClicked.value[date];
+      isClicked.value[date] = !isClicked.value[date]; // Toggle clicked state
       console.log(isClicked.value);
     };
+    // Function to handle submit for deleting leave items
     const handleSubmit = async () => {
       console.log('deleted');
       for (var key in isClicked.value) {
         if (isClicked.value[key]) {
-          await deleteDoc(doc(db, 'schedule', 'leaves', selectedOptionEmployee.value.name, key));
+          // If leave item is clicked
+          await deleteDoc(doc(db, 'schedule', 'leaves', selectedOptionEmployee.value.name, key)); 
           console.log('Deleted');
 
           const docRef = doc(db, 'schedule', 'leaves', selectedOptionEmployee.value.name, 'info');
 
-          // Atomically increment the leave balance by 1.
           await updateDoc(docRef, {
             prevLeaveBalance: increment(1)
           });
@@ -58,12 +62,11 @@ export default {
       }
       getLeaves();
     };
+     // Function to handle clear action for resetting clicked state of leave items
     const handleClear = () => {
       console.log('cleared');
       for (var key in isClicked.value) {
         isClicked.value[key] = false;
-
-        // do something with "key" and "value" variables
       }
     };
     return {

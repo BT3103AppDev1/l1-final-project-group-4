@@ -15,20 +15,22 @@ export default {
     const db = getFirestore(app);
     const store = useStore();
     const employee = store.state.userName;
-    // let employees = ref([{ name: 'mrBean' }]);
     const leaves = ref([]);
     const leaveAllowance = ref(0);
     const remainingLeaveAllowance = ref(0);
     onMounted(() => {
-      // get leave data
+      // fetch leave data and set fields to right values if applicable
       async function getLeaves() {
         const querySnapshot = await getDocs(collection(db, 'schedule', 'leaves', employee));
         console.log(employee);
         querySnapshot.forEach((doc) => {
           console.log(doc.id);
+          // If the document ID is not 'info', push employee's username and doc ID into the 'leaves' array
           if (doc.id != 'info') {
             leaves.value.push({ name: employee, date: doc.id });
           }
+          // If the document ID is 'info', fetch data from the doc and set the 'leaveAllowance' 
+          // and 'remainingLeaveAllowance'
           if (doc.id == 'info') {
             const data = doc.data();
             leaveAllowance.value = data.allowance;

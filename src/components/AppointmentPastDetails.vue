@@ -39,7 +39,8 @@ export default {
       audio.value.pause();
     };
 
-    async function getUpcomingAppointments(todaysdate) {
+    // Get all past appointment based on today's date. If there are past appointments, they will display the appointment fetched.
+    async function getPastAppointments(todaysdate) {
       console.log('Function runs');
       isLoading.value = true;
       playAudio();
@@ -48,11 +49,14 @@ export default {
       const querySnapshot = await getDocs(apptsCollection);
 
       for (const doc of querySnapshot.docs) {
+        // filters for pasts appointments
         if (doc.id < todaysdate) {
           for (var i = 0; i < slots.length; i++) {
             //check each slot s1, s2, s3, s4 to see if user has an appt below
             const slotRef = collection(doc.ref, slots[i]); //check if s1/s2/s3/s4 exists in the document i am in now
             const slotSnapshot = await getDocs(slotRef);
+            // if the slot exist on that date, it will check if the email is the same as the user email.
+            // And get the relevant data that will be parsed in to the display() function
             if (!slotSnapshot.empty) {
               const userEmailQuery = query(slotRef, where('appt_email', '==', userEmail)); //query for documents where the email atrribute == userEmail in this slot
               const userEmailSnapshot = await getDocs(userEmailQuery);
@@ -76,6 +80,7 @@ export default {
           }
         }
       }
+      // If noappts, white bold text appearsm indicating 'No past appointments, schedule one now!'
       if (noappts == true) {
         let nothing = document.getElementById('no-appts');
         let text = document.createElement('h2');
@@ -97,11 +102,13 @@ export default {
       console.log('Loading is ', isLoading.value);
     }
 
-    getUpcomingAppointments(todaysdate);
+    getPastAppointments(todaysdate);
 
+
+    // The display() function displays the bookingsInfo in the desired manner by creating their own elements and appending it to
+    // the appointments-table.
     async function display(bookingsInfo) {
       for (let i = 0; i < bookingsInfo.length; i++) {
-        //console.log(bookingsInfo[i])
 
         let date = bookingsInfo[i][0];
         let groomer = bookingsInfo[i][1];
@@ -193,7 +200,7 @@ export default {
       audio.value = new Audio(loadingAudio);
       audio.value.loop = true;
       console.log('Mounted done');
-      getUpcomingAppointments(todaysdate);
+      getPastAppointments(todaysdate);
       console.log(noappts);
     });
 

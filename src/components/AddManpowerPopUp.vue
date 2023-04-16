@@ -28,11 +28,15 @@ export default {
     async createEmployee(name, fullTime, phoneNum, email, password, leaveAllowance, errorMsg) {
       const db = getFirestore(app);
       let fullTimeStatus = fullTime ? 'Full-Time' : 'Part-Time';
+
       try {
+        // Dispatch an action to sign up an employee with email and password
         await this.$store.dispatch('signUpForEmployee', {
           email: email.toLowerCase(),
           password: password
         });
+
+        // Set employee data to Firestore collection 'customers'
         await setDoc(doc(db, 'customers', email.toLowerCase()), {
           customer_name: name,
           customer_email: email.toLowerCase(),
@@ -46,6 +50,7 @@ export default {
         console.log(error.code);
 
         switch (error.code) {
+          // Handle authentication error cases
           case 'auth/invalid-email':
             errorMsg = 'Invalid Email';
             break;
@@ -61,7 +66,7 @@ export default {
         }
       }
 
-      // save employee data
+      // Save employee data to Firestore collection 'employees'
       const docRef = await addDoc(collection(db, 'employees'), {
         name: name,
         fullTime: fullTimeStatus,
@@ -70,11 +75,11 @@ export default {
       });
       console.log('Document written with ID: ', docRef.id);
 
-      // save image
+      // Save employee image to Firebase Storage
       var file = document.getElementById('employeepic').files[0];
       await uploadBytes(ref(storage, 'employee-' + name + '.png'), file);
 
-      // save leave info data
+      // Save leave info data to Firestore document 'schedule/leaves/{name}/info'
       const leaveRef = await setDoc(doc(db, 'schedule', 'leaves', name, 'info'), {
         allowance: leaveAllowance,
         prevLeaveBalance: leaveAllowance
@@ -91,10 +96,10 @@ export default {
         this.leaveAllowance,
         this.errorMsg
       );
-      this.$emit('update:modelValue', false); //  closes the popup after submitting the form
+      this.$emit('update:modelValue', false); // Close the popup after submitting the form
     },
     closeForm() {
-      this.$emit('update:modelValue', false); // this just closes the popup after submitting the form
+      this.$emit('update:modelValue', false); // Close the popup after submitting the form
     }
   }
 };

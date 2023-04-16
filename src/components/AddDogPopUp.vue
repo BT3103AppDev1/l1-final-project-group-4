@@ -63,7 +63,7 @@ export default {
     async createDoggo(name, sex, breed, dob) {
       const db = getFirestore(app);
       const email = this.userEmail;
-
+      // Add a document to the 'dogs' subcol under the email doc in the 'customers' collection
       const docRef = await addDoc(collection(db, 'customers', email, 'dogs'), {
         dog_name: name,
         dog_sex: sex,

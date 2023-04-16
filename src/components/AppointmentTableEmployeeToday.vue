@@ -27,10 +27,11 @@ export default {
     }
 
     const db = getFirestore(app);
+
+    // getToday() returns todays date in YYYY-MM-DD format
     function getToday() {
       var today = new Date();
       var dd = today.getDate();
-
       var mm = today.getMonth() + 1;
       var yyyy = today.getFullYear();
       if (dd < 10) {
@@ -45,6 +46,7 @@ export default {
     }
     const today = getToday()
 
+    // display() fetches all appointment fields for the employee happening today. It creates table elements that would be displayed. 
     async function display() {
       const store = useStore();
 
@@ -53,6 +55,7 @@ export default {
       let index = 1;
       const slotArray = ['s1', 's2', 's3', 's4'];
       const statusArray = ['Not Started', 'In Progress', 'Completed'];
+      // Only 4 slots, loop through all 4 slots to check if they exist. If exist, details will be added to a table row
       for (let j = 0; j < slotArray.length; j++) {
         var querySnapshot = await getDocs(
           collection(db, 'new-appointments/' + today + '/' + slotArray[j])
@@ -77,6 +80,7 @@ export default {
           const values = [index, bookingid, email, customer, pet, service, apptdate, appttime, groomer, statusBath, statusCut, statusGroom]
           let table = document.getElementById('appointment-table-today-employee');
 
+          // filters the groomer to match the userName. Groomers that do not match the user are not shown in this component.
           if (groomer === userName) {
             let tr = document.createElement('tr');
             for (let i = 0; i < 14; i++) {
@@ -186,6 +190,7 @@ export default {
     }
 
     display();
+     // On onbeforeunmount the tables rows are deleted there is only the header left.
     onBeforeUnmount(() => {
       let table = document.getElementById('appointment-table-today-employee');
       while (table.rows.length > 1) {
