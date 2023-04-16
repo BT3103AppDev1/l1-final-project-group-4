@@ -39,14 +39,12 @@ export default {
         [2, "Completed"]
       ])
 
-      console.log(mapStatus.get(0))
       const slotArray = ["s1", "s2", "s3", "s4"]
       // const statusArray = ['Not Completed', 'Bath', 'Cut', 'Groom']
       for (let slot of slotArray) {
         const querySnapshot = await getDocs(collection(db, 'new-appointments/' + getToday(), slot))
         querySnapshot.forEach(async (doc) => {
           let documentData = doc.data()
-          console.log(documentData)
 
           let apptdate = (documentData.appt_date)
           let email = (documentData.appt_email)
@@ -71,7 +69,6 @@ export default {
                   if (i < 9) {
                     td.innerHTML = values[i]
                   } else if (i >= 9) {
-                    console.log("Mapping", mapStatus.get(values[i]))
                     // the bath, groom and cut values are 0, 1 or 2. Map these integers to the String progress
                     td.innerHTML = mapStatus.get(values[i])
                   }

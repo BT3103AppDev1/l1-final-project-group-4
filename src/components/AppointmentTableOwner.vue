@@ -56,12 +56,9 @@ export default {
           (docccData.appt_groomer === new String(selectedValue).valueOf()) &
           (docccData.appt_id != bookingid)
         ) {
-          console.log('false');
           return false;
         }
       }
-
-      console.log('schedule/leaves/' + selectedValue + '/' + date);
       const querySnapshot2 = await getDoc(doc(db, 'schedule/leaves/' + selectedValue + '/' + date));
       // if owner can approve leave
       if (querySnapshot2.exists()) {
@@ -89,7 +86,6 @@ export default {
       });
       querySnapshot.forEach(async (docDates) => {
         if (docDates.id < getToday()) {
-          console.log('Dont show todays appointment dates');
           return;
         }
 
@@ -139,8 +135,6 @@ export default {
                 let k = 0;
 
                 for (var employee of employeeArray) {
-                  console.log('Groomer: ', groomer);
-                  console.log('Employee: ', employee);
                   var option = document.createElement('option');
                   if (employee != 'Select') {
                     option.value = employee;
@@ -174,7 +168,7 @@ export default {
                     message.value = 'Saved';
                   } else {
                     // if cannot change, it would change to the correct index based on what is in the database
-                    console.log('cannot change');
+                    console.log('Cannot change groomer');
                     const l = await getDoc(
                       doc(db, 'new-appointments/' + docDates.id + '/' + slotArray[j], docc.id)
                     );

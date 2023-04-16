@@ -48,7 +48,6 @@ export default {
         console.log('account saved to firebase');
       } catch (error) {
         console.log(error.code);
-
         switch (error.code) {
           // Handle authentication error cases
           case 'auth/invalid-email':
@@ -73,7 +72,6 @@ export default {
         phoneNum: phoneNum,
         email: email
       });
-      console.log('Document written with ID: ', docRef.id);
 
       // Save employee image to Firebase Storage
       var file = document.getElementById('employeepic').files[0];

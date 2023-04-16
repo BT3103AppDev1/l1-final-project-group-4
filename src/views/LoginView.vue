@@ -24,17 +24,17 @@ export default {
       router.push('/signup');
     };
 
+    // function that handles the submit button in login
     const handleSubmit = async () => {
       try {
         await store.dispatch('logIn', {
           email: email.value,
           password: password.value
         });
-        console.log('doc ref is customers/' + email.value);
         const docRef = doc(db, 'customers', email.value);
-        console.log();
         const docSnap = await getDoc(docRef);
 
+        // pushes user to the appropriate site
         if (docSnap.exists()) {
           if (docSnap.data().isAdmin == true) {
             if (docSnap.data().isOwner == true) {
@@ -49,6 +49,7 @@ export default {
           // doc.data() will be undefined in this case
           console.log('No such document!');
         }
+        // error is caught if cannot login
       } catch (error) {
         console.log(error.code);
 

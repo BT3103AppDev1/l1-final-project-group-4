@@ -72,10 +72,9 @@ export default {
       });
 
       var file = document.getElementById('dogpic').files[0];
-      // console.log(file);
+      
       await uploadBytes(ref(storage, email + '-' + name + '.png'), file);
 
-      console.log('Document written with ID: ', docRef.id);
     },
     async submitForm() {
       await this.createDoggo(this.dogName, this.sex, this.breed, this.dob);

@@ -56,10 +56,8 @@ export default {
     }
 
     async function getUpcomingAppointments(todaysdate) {
-      console.log('Function runs');
       isLoading.value = true;
       playAudio();
-      console.log('Loading is: ', isLoading.value);
       const apptsCollection = collection(db, 'new-appointments');
       const querySnapshot = await getDocs(apptsCollection);
 
@@ -111,7 +109,6 @@ export default {
       }
       isLoading.value = false;
       pauseAudio();
-      console.log('Loading is ', isLoading.value);
     }
 
     getUpcomingAppointments(todaysdate);
@@ -120,8 +117,6 @@ export default {
     // the appointments-table.
     async function display(bookingsInfo) {
       for (let i = 0; i < bookingsInfo.length; i++) {
-        //console.log(bookingsInfo[i])
-
         let date = bookingsInfo[i][0];
         let groomer = bookingsInfo[i][1];
         let pet = bookingsInfo[i][2];
@@ -247,12 +242,11 @@ export default {
 
       console.log('Document successfully deleted!', deleteDate);
       let elements = document.getElementsByClassName(deleteDocID);
-      console.log(elements);
       while (elements.length > 0) {
         elements[0].remove();
       }
     }
-
+    
     const toDeleteDate = ref('');
     const toDeleteSlot = ref('');
     const toDeleteDocID = ref('');
@@ -266,12 +260,9 @@ export default {
     }
 
     onMounted(() => {
-      console.log('Mounted runs');
       audio.value = new Audio(loadingAudio);
       audio.value.loop = true;
-      console.log('Mounted done');
       getUpcomingAppointments(todaysdate);
-      console.log(noappts);
     });
 
     return { isLoading, showDelete, deleteMessage, showDeletePopUp, handleDeleteAppt };

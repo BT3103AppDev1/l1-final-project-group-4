@@ -33,12 +33,10 @@ export default {
       async function getEmployees() {
         const querySnapshot = await getDocs(collection(db, 'employees'));
         querySnapshot.forEach((doc) => {
-          console.log(doc.id, ' => ', doc.data().name);
           let documentData = doc.data();
           let employeeName = documentData.name;
           let employmentStatus = documentData.fullTime;
           employees.value.push({ name: employeeName, fullTime: employmentStatus });
-          //   console.log(employees);
         });
       }
       getEmployees();
