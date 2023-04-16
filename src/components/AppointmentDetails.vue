@@ -240,12 +240,13 @@ export default {
       const docToDeleteRef = doc(subCollectionRef, deleteDocID);
       await deleteDoc(docToDeleteRef);
 
+      console.log('Document successfully deleted!', deleteDate);
       let elements = document.getElementsByClassName(deleteDocID);
       while (elements.length > 0) {
         elements[0].remove();
       }
     }
-
+    
     const toDeleteDate = ref('');
     const toDeleteSlot = ref('');
     const toDeleteDocID = ref('');

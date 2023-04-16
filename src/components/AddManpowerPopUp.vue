@@ -45,7 +45,9 @@ export default {
           isEmployee: true,
           isOwner: false
         });
+        console.log('account saved to firebase');
       } catch (error) {
+        console.log(error.code);
         switch (error.code) {
           // Handle authentication error cases
           case 'auth/invalid-email':
