@@ -35,36 +35,14 @@ export default {
       return today;
     }
 
-    // async function addApptToday() {
-    //   console.log("add")
-    //   await addDoc(collection(db, "new-appointments/" + getToday() + "/s1"), {
-    //       appt_id: '20230406S11',
-    //       appt_date: getToday(),
-    //       appt_pet: "Elsa",
-    //       appt_time: "9am",
-    //       appt_email: "test@gmail.com",
-    //       appt_name: "test",
-    //       appt_service: "Full Grooming",
-    //       appt_groomer: "mrsBeans",
-    //       status_bath: 0,
-    //       status_groom: 0,
-    //       status_cut: 0
-    //   })
-
-    // }
-
-    // addApptToday()
-
+    // canSwapGroomer() function checks if a groomer is available to swap appointments. 
+    // The function retrieves data from Firestore collections and documents to determine if the groomer is available for the given date and time slot.
     async function canSwapGroomer(selectedValue, date, slot, bookingid) {
       const querySnapshot1 = await getDocs(collection(db, 'new-appointments/' + date + '/' + slot));
       let slots = querySnapshot1.docs;
 
       for await (let slot of slots) {
-        console.log(slot.id);
         let docccData = slot.data();
-
-        // const doccccSnap = await getDoc(doc(db, "bookingtogroomer", docccData.appt_id))
-        console.log('Comparing ', docccData.appt_groomer, ' and ', selectedValue);
         if (
           (docccData.appt_groomer === new String(selectedValue).valueOf()) &
           (docccData.appt_id != bookingid)
@@ -73,14 +51,13 @@ export default {
           return false;
         }
       }
+
       console.log('schedule/leaves/' + selectedValue + '/' + date);
       const querySnapshot2 = await getDoc(doc(db, 'schedule/leaves/' + selectedValue + '/' + date));
       // if owner can approve leave
       if (querySnapshot2.exists()) {
-        // uncomment if dont need to approve leave
-        // return false;
-        console.log('Document data:', querySnapshot2.data());
-        return !querySnapshot2.data().approved;
+    
+        return false;
       }
       return true;
     }
@@ -124,19 +101,9 @@ export default {
             let pet = documentData.appt_pet;
             let service = documentData.appt_service;
             let appttime = documentData.appt_time;
-
             let bookingid = documentData.appt_id;
-
-            // let bookingRef = doc(db, "bookingtogroomer", bookingid);
-            // let bookingSnap = await getDoc(bookingRef);
-
-            // let bookingData = bookingSnap.data();
-
-            // let groomer = bookingData.groomer;
             let groomer = documentData.appt_groomer;
 
-            // let groomer = (documentData.appt_groomer)
-            // not working
             const values = [
               index,
               bookingid,
@@ -148,20 +115,7 @@ export default {
               appttime,
               groomer
             ];
-            // if (docDates.id === getToday() ) {
-            //   await addDoc(collection(db, "today-appointments/" + docDates.id + "/" + slotArray[j]), {
-            //     appt_date: apptdate,
-            //     appt_email: email,
-            //     appt_id: bookingid,
-            //     appt_name: customer,
-            //     appt_pet: pet,
-            //     appt_service: service,
-            //     appt_time: appttime,
-            //     appt_status: "Not Started"
-            //   });
-            //   // TODO: NEED TO DELETE FROM NEW-APPOINTMENT
-            //   await deleteDoc(doc(db, "new-appointments", docDates.id));
-            // } else {
+
             let table = document.getElementById('appointment-table');
             let tr = document.createElement('tr');
             table.appendChild(tr);
