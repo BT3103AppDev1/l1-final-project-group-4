@@ -106,11 +106,11 @@ export default {
             <div id="card-body">
               Each spa treatment consists of beneficial properties for your dog:
               <ol>
-                <br>
+                <br />
                 <li>Japan Nanotechnology Spa Treatment</li>
                 <li>Japan Ayurveda Herb Spa Treatment</li>
               </ol>
-              <br>
+              <br />
               <strong>Price:</strong> From $45
             </div>
             <router-link to="/bookappointment" v-if="authIsReady" id="getService">
@@ -131,7 +131,6 @@ export default {
   height: 100vh;
   display: flex;
   overflow: hidden;
-  
 }
 #body {
   background: url(@/assets/dog1.png) bottom left no-repeat,
@@ -226,5 +225,54 @@ export default {
 .services h1 {
   text-align: center;
   font-size: 40px;
+}
+
+@media (max-width: 940px) {
+  .cards {
+    overflow-y: scroll;
+    padding-top: 68vh;
+    padding-bottom: 15vh;
+  }
+  #row {
+    flex-direction: column;
+    align-self: center;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 5px 15px;
+    width: 65vw;
+    height: 34vh;
+    background: white;
+    border-radius: 25px;
+    border-style: solid;
+    border-color: #193a6a;
+    border-width: thin;
+  }
+  #row:last-child {
+    margin-top: 0em;
+  }
+}
+@media (max-width: 500px) {
+  .main {
+    overflow-x: scroll;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 5px 15px;
+    width: 325px;
+    height: 34vh;
+    background: white;
+    border-radius: 25px;
+    border-style: solid;
+    border-color: #193a6a;
+    border-width: thin;
+  }
+  #row:last-child {
+    margin-top: 0em;
+  }
 }
 </style>
