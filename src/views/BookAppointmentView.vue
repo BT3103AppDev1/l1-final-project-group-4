@@ -30,7 +30,7 @@ export default {
   computed: {
     minDate() {
       const now = new Date();
-      now.setDate(now.getDate() + 1);
+      now.setDate(now.getDate());
       const year = now.getFullYear();
       const month = (now.getMonth() + 1).toString().padStart(2, '0');
       const day = now.getDate().toString().padStart(2, '0');
