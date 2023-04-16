@@ -28,6 +28,7 @@ export default {
     VueDatePicker
   },
   computed: {
+    // minDate to select where they can book their appointment. Set to today.
     minDate() {
       const now = new Date();
       now.setDate(now.getDate());
@@ -41,10 +42,12 @@ export default {
   setup() {
     const db = getFirestore(app);
     const store = useStore();
-
+    
+    // store variables
     const userEmail = store.state.userEmail;
     const userName = store.state.userName;
 
+    // creating refs
     let selectedOptionPet = ref('Select Pet');
     let selectedOptionService = ref('Select Service');
     let selectedDate = ref('Select Date');
@@ -66,7 +69,7 @@ export default {
       audio.value.pause();
     };
 
-    // Method to handle click outside event
+    // Methods to handle click outside events
     function handleClickOutsidePet(event) {
       const petMenu = document.querySelector('.dropdown.toggle');
       if (isPetMenuOpen.value && petMenu && !petMenu.contains(event.target)) {
@@ -121,6 +124,7 @@ export default {
 
     let show = ref(false);
 
+    // function to get all dogs belonging to owner
     async function getDogs() {
       const docRef = doc(db, 'customers', userEmail);
       const querySnapshot = await getDocs(collection(docRef, 'dogs'));
@@ -145,9 +149,11 @@ export default {
     }
     getDogs();
 
+    // function to get slots for the selected Date
     async function getSlots() {
       console.log('Mounted runs');
       isLoading.value = true;
+      // plays music
       playAudio();
       console.log('Loading is: ', isLoading.value);
 
@@ -161,6 +167,7 @@ export default {
       playAudio();
       console.log('Loading is: ', isLoading.value);
 
+      // made helper function to count available employees at given timeslot
       async function countAvailableEmployees() {
         var counter = 0;
         const querySnapshot = await getDocs(collection(db, 'employees'));
@@ -186,7 +193,9 @@ export default {
 
       getAvailableSlots(await countAvailableEmployees());
     }
-
+    
+    // function that gets available slots from the employee count and create the dropdown elements.
+    // if slot is unavailable. Slot cannot be selected
     async function getAvailableSlots(employeeCount) {
       let ul = document.getElementById('select-time');
       ul.innerHTML = '';
@@ -238,6 +247,7 @@ export default {
       console.log('Loading is ', isLoading.value);
     }
 
+    // handling submit function
     async function handleSubmit() {
       if (selectedOptionPet.value == 'Select Pet') {
         popUpMsg.value = 'Please select pet';
@@ -278,10 +288,12 @@ export default {
         selectedOptionTimeSlot.value.toUpperCase() +
         counter;
 
+        // sets doc to allow doc to accessed
       await setDoc(doc(db, 'new-appointments', toIsoString(selectedDate.value).substring(0, 10)), {
         date: toIsoString(selectedDate.value).substring(0, 10)
       });
 
+      // add doc in subcollection
       await addDoc(
         collection(
           db,

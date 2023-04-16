@@ -38,6 +38,7 @@ export default {
       }
     };
 
+    // handles the submit in signup page
     const handleSubmit = async () => {
       try {
         await store.dispatch('signUp', {
@@ -46,6 +47,7 @@ export default {
           displayName: name.value,
           phoneNumber: phone.value
         });
+        // adds user to customer, with appropriate site privileges
         await setDoc(doc(db, 'customers', email.value.toLowerCase()), {
           customer_name: name.value,
           customer_email: email.value.toLowerCase(),
@@ -67,6 +69,7 @@ export default {
         console.log();
         const docSnap = await getDoc(docRef);
 
+        // pushes user to appropriate site
         if (docSnap.exists()) {
           if (docSnap.data().isAdmin == true) {
             if (docSnap.data().isOwner == true) {

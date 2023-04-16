@@ -21,6 +21,8 @@ export default {
 
     const storage = getStorage(app); // Create a storage instance using the 'getStorage' function from Firebase, passing in the 'app' instance
 
+    // function fetches video/image of the dog that is in the midst of their service.
+    // attaches the multimedia to the div if found. If not use default image.
     async function test(myDocID, myDate, mySlot) {
       const docRef = doc(db, 'new-appointments', myDate);
       const subCollectionRef = collection(docRef, mySlot);
