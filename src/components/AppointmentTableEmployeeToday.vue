@@ -43,7 +43,7 @@ export default {
       today = yyyy + '-' + mm + '-' + dd;
       return today;
     }
-    const today = getToday();
+    const today = getToday()
 
     async function display() {
       const store = useStore();
@@ -74,21 +74,7 @@ export default {
           let statusGroom = documentData.status_groom;
           let statusCut = documentData.status_cut;
 
-          const values = [
-            index,
-            bookingid,
-            email,
-            customer,
-            pet,
-            service,
-            apptdate,
-            appttime,
-            groomer,
-            statusBath,
-            statusGroom,
-            statusCut
-          ];
-
+          const values = [index, bookingid, email, customer, pet, service, apptdate, appttime, groomer, statusBath, statusCut, statusGroom]
           let table = document.getElementById('appointment-table-today-employee');
 
           if (groomer === userName) {
@@ -231,8 +217,8 @@ export default {
       <th>TIME</th>
       <th>EMPLOYEE</th>
       <th>BATH</th>
-      <th>GROOM</th>
       <th>CUT</th>
+      <th>GROOM</th>
       <th>PIC</th>
       <th>SAVE</th>
     </tr>

@@ -36,6 +36,7 @@ export default {
 </script>
 
 <template>
+  <!-- Header when the length of the header is long enough -->
   <div class="employeeheader-container" v-if="authIsReady">
     <div id="admin">
       <h3 id="headerWords">ADMINISTRATOR</h3>
@@ -58,6 +59,7 @@ export default {
     <div id="logout">
       <button class="logoutButton" @click="handleSubmit()">LOGOUT</button>
     </div>
+    <!-- Header becomes a drawer when view becomes too small -->
     <img
       alt="Menu"
       class="drawer"

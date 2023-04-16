@@ -16,6 +16,7 @@ export default {
 <template>
     <nav>
         <div class="buttons">
+            <!-- router links show up appropriately depending on if the user is an employee -->
             <router-link to="/admin/scheduler" v-if="!employee">
                 <h3>UPCOMING</h3>
             </router-link>

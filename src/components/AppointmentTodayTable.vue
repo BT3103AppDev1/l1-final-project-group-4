@@ -12,6 +12,7 @@ export default {
 
     const db = getFirestore(app);
 
+    // Function to get today's date in YYYY-MM-DD format
     function getToday() {
       var today = new Date();
       var dd = today.getDate();
@@ -28,14 +29,16 @@ export default {
       today = yyyy+'-'+mm+'-'+dd;
       return today;
     }
-       
+    // Function that fetches data from new-appointments collection, since there are only 4 slots, we loop through each slope together
+    // with today's date to get appointment information that happen today. The fields are appended to table elements which would be displayed.
     async function display() {
-      let index = 1  
+      let index = 1;
       const mapStatus = new Map([
         [0, "Not Started"], 
         [1, "In Progress"], 
         [2, "Completed"]
       ])
+
       console.log(mapStatus.get(0))
       const slotArray = ["s1", "s2", "s3", "s4"]
       // const statusArray = ['Not Completed', 'Bath', 'Cut', 'Groom']
@@ -51,63 +54,40 @@ export default {
           let pet = (documentData.appt_pet)
           let service = (documentData.appt_service)
           let appttime = (documentData.appt_time)
-
           let bookingid = (documentData.appt_id)
-
-          // let bookingRef = doc(db, "bookingtogroomer", bookingid);
-          // let bookingSnap = await getDoc(bookingRef);
-
-          // let bookingData = bookingSnap.data();
-
-          // let groomer = bookingData.groomer;
           let groomer = documentData.appt_groomer;
           let statusBath = documentData.status_bath;
           let statusGroom = documentData.status_groom;
           let statusCut = documentData.status_cut;
 
-              // let groomer = (documentData.appt_groomer)
-              // not working
           const values = [index, bookingid, email, customer, pet, service, apptdate, appttime, groomer, statusBath, statusGroom, statusCut]
-              // if (docDates.id === getToday() ) {
-              //   await addDoc(collection(db, "today-appointments/" + docDates.id + "/" + slotArray[j]), {
-              //     appt_date: apptdate,
-              //     appt_email: email,
-              //     appt_id: bookingid,
-              //     appt_name: customer,
-              //     appt_pet: pet,
-              //     appt_service: service,
-              //     appt_time: appttime,
-              //     appt_status: "Not Started"
-              //   });
-              //   // TODO: NEED TO DELETE FROM NEW-APPOINTMENT
-              //   await deleteDoc(doc(db, "new-appointments", docDates.id));
-              // } else {
-              let table = document.getElementById('appointment-table-today')
-              let tr = document.createElement('tr')
-              table.appendChild(tr)
-              for (let i = 0; i < 12; i++) {
-                  let td = document.createElement('td')
-                  console.log(values[i])
-                  if (values[i] != null) {
-                      if (i < 9) {
-                        td.innerHTML = values[i]
-                      } else if (i >= 9) {
-                        console.log("Mapping", mapStatus.get(values[i]))
-                        td.innerHTML = mapStatus.get(values[i])
-                      }
+
+          let table = document.getElementById('appointment-table-today')
+          let tr = document.createElement('tr')
+          table.appendChild(tr)
+          for (let i = 0; i < 12; i++) {
+              let td = document.createElement('td')
+              if (values[i] != null) {
+                  if (i < 9) {
+                    td.innerHTML = values[i]
+                  } else if (i >= 9) {
+                    console.log("Mapping", mapStatus.get(values[i]))
+                    // the bath, groom and cut values are 0, 1 or 2. Map these integers to the String progress
+                    td.innerHTML = mapStatus.get(values[i])
                   }
-                  tr.appendChild(td)
               }
-              index += 1
-            })
+              tr.appendChild(td)
+          }
+          index += 1
+        })
                         
           
       }
     }
-  
-    
 
     display()
+
+    // On onbeforeunmount the tables rows are deleted there is only the header left.
     onBeforeUnmount(() => {
       let table = document.getElementById('appointment-table-today')
       while (table.rows.length > 1) {

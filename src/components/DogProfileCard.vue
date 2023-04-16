@@ -22,6 +22,9 @@ export default {
     const show = vueRef(false);
     const showDelete = vueRef(false);
     const deleteMessage = vueRef('');
+    
+    // The showAddDogPopUp() and showDeletePopUp() functions are called to set the values of show and showDelete variables to true,
+    // respectively, which triggers the display of pop-up windows in the UI.
     function showAddDogPopUp() {
       show.value = true;
     }
@@ -43,6 +46,9 @@ export default {
     };
 
     const userEmail = store.state.userEmail;
+
+    // The display() function retrieves dog data from Firestore the user's email address, and creates and
+    // appends elements to a table to display the retrieved dog data.
     async function display() {
       console.log('Function runs');
       isLoading.value = true;
@@ -53,8 +59,6 @@ export default {
       const querySnapshot = await getDocs(collection(docRef, 'dogs'));
 
       querySnapshot.forEach(async function readDoc(doc) {
-        // doc.data() is never undefined for query doc snapshots
-        // console.log(doc.id, ' => ', doc.data())
         let documentData = doc.data();
         let dogId = doc.id;
         let dogName = documentData.dog_name;
@@ -117,6 +121,9 @@ export default {
       console.log('Loading is ', isLoading.value);
     }
 
+    // The handleDeleteDog() function is called when a user 
+    // confirms deletion of a dog. It deletes the corresponding document
+    // from Firestore and the corresponding image from a Firebase storage.
     async function handleDeleteDog() {
       const dogId = toDeleteDogId.value;
       const dogName = toDeleteDogName.value;
@@ -138,6 +145,9 @@ export default {
     const toDeleteDogId = vueRef('');
     const toDeleteDogName = vueRef('');
 
+    // The deleteDog() function is called when a user clicks the delete button
+    // for a dog. It sets the values of deleteMessage, toDeleteDogId, 
+    // and toDeleteDogName variables, and calls the showDeletePopUp() function to display a confirmation pop-up window.
     function deleteDog(dogId, dogName) {
       deleteMessage.value = 'You are going to delete ' + dogName;
       toDeleteDogId.value = dogId;

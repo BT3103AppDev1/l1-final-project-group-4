@@ -36,6 +36,7 @@ export default {
     };
   },
   methods: {
+    // function would handle users to change their password
     async updatePassword(newPassword) {
       const auth = getAuth(app);
       const user = auth.currentUser;

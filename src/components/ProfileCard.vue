@@ -1,19 +1,22 @@
 <script>
-import { useStore } from 'vuex';
-import app from '../firebase.js';
-import { getStorage, ref, getDownloadURL } from 'firebase/storage';
+import { useStore } from 'vuex'; 
+import app from '../firebase.js'; 
+import { getStorage, ref, getDownloadURL } from 'firebase/storage'; 
 
-const storage = getStorage(app);
+const storage = getStorage(app); // Create a storage instance using the 'getStorage' function from Firebase, passing in the 'app' instance
 
 export default {
   setup() {
-    const store = useStore();
+    const store = useStore(); // Access the Vuex store using the 'useStore' function
+    
+    // Get appropriate properties from the Vuex store's state
 
-    const userEmail = store.state.userEmail;
-    const userName = store.state.userName;
-    const userPhone = store.state.userPhone;
+    const userEmail = store.state.userEmail; 
+    const userName = store.state.userName; 
+    const userPhone = store.state.userPhone; 
 
     getDownloadURL(ref(storage, userEmail + '.png')).then((url) => {
+      // Retrieve the image for the profile card
       const img = document.getElementById('profilepic');
       img.setAttribute('src', url);
     });
