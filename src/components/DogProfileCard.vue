@@ -50,10 +50,8 @@ export default {
     // The display() function retrieves dog data from Firestore the user's email address, and creates and
     // appends elements to a table to display the retrieved dog data.
     async function display() {
-      console.log('Function runs');
       isLoading.value = true;
       playAudio();
-      console.log('Loading is: ', isLoading.value);
 
       const docRef = doc(db, 'customers', userEmail);
       const querySnapshot = await getDocs(collection(docRef, 'dogs'));
@@ -118,7 +116,6 @@ export default {
       });
       isLoading.value = false;
       pauseAudio();
-      console.log('Loading is ', isLoading.value);
     }
 
     // The handleDeleteDog() function is called when a user
@@ -164,10 +161,8 @@ export default {
     }
 
     onMounted(() => {
-      console.log('Mounted runs');
       audio.value = new Audio(loadingAudio);
       audio.value.loop = true;
-      console.log('Mounted done');
       display();
     });
     return {

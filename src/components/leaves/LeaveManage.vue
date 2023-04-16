@@ -29,7 +29,6 @@ export default {
         collection(db, 'schedule', 'leaves', selectedOptionEmployee.value.name)
       ); 
       querySnapshot.forEach((doc) => {
-        console.log(doc.id);
         // Exclude 'info' document
         if (doc.id != 'info') {
           // Update leaves array with leave data and isClicked
@@ -37,21 +36,18 @@ export default {
           isClicked.value[doc.id] = false;
         }
       });
-      console.log(leaves);
     };
     // Function to toggle clicked state
     const clicked = (date) => {
       isClicked.value[date] = !isClicked.value[date]; // Toggle clicked state
-      console.log(isClicked.value);
     };
     // Function to handle submit for deleting leave items
     const handleSubmit = async () => {
-      console.log('deleted');
       for (var key in isClicked.value) {
         if (isClicked.value[key]) {
           // If leave item is clicked
           await deleteDoc(doc(db, 'schedule', 'leaves', selectedOptionEmployee.value.name, key)); 
-          console.log('Deleted');
+          console.log('Leave Deleted');
 
           const docRef = doc(db, 'schedule', 'leaves', selectedOptionEmployee.value.name, 'info');
 
@@ -64,9 +60,9 @@ export default {
     };
      // Function to handle clear action for resetting clicked state of leave items
     const handleClear = () => {
-      console.log('cleared');
       for (var key in isClicked.value) {
         isClicked.value[key] = false;
+
       }
     };
     return {

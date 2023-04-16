@@ -22,9 +22,7 @@ export default {
       // fetch leave data and set fields to right values if applicable
       async function getLeaves() {
         const querySnapshot = await getDocs(collection(db, 'schedule', 'leaves', employee));
-        console.log(employee);
         querySnapshot.forEach((doc) => {
-          console.log(doc.id);
           // If the document ID is not 'info', push employee's username and doc ID into the 'leaves' array
           if (doc.id != 'info') {
             leaves.value.push({ name: employee, date: doc.id });

@@ -5,7 +5,7 @@ import DogProfileCard from '@/components/DogProfileCard.vue';
 import { ref } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-import ChangePasswordPopUp from '../components/ChangePasswordPopUp.vue';
+import ChangePasswordPopUp from '../components/customer/ChangePasswordPopUp.vue';
 
 export default {
   components: {

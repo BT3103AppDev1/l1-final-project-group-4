@@ -39,12 +39,10 @@ export default {
       audio.value.pause();
     };
 
-    // Get all past appointment based on today's date. If there are past appointments, they will display the appointment fetched.
+    // Get all past appointment based on today's date. If there are past appointments, they will display the appointment fetched,
     async function getPastAppointments(todaysdate) {
-      console.log('Function runs');
       isLoading.value = true;
       playAudio();
-      console.log('Loading is: ', isLoading.value);
       const apptsCollection = collection(db, 'new-appointments');
       const querySnapshot = await getDocs(apptsCollection);
 
@@ -99,7 +97,6 @@ export default {
       }
       isLoading.value = false;
       pauseAudio();
-      console.log('Loading is ', isLoading.value);
     }
 
     getPastAppointments(todaysdate);
@@ -133,7 +130,7 @@ export default {
         await getDownloadURL(storageref(storage, userEmail + '-' + pet + '.png')).then((url) => {
           img.setAttribute('src', url);
         });
-        img.id = 'appointments-dog-img';
+        img.id = 'dog-img';
         div1.appendChild(img);
 
         let div2 = document.createElement('div');
@@ -196,12 +193,10 @@ export default {
     }
 
     onMounted(() => {
-      console.log('Mounted runs');
       audio.value = new Audio(loadingAudio);
       audio.value.loop = true;
-      console.log('Mounted done');
       getPastAppointments(todaysdate);
-      console.log(noappts);
+
     });
 
     return { isLoading };
@@ -282,15 +277,15 @@ export default {
   margin-left: 3em;
 }
 
-#appointments-dog-img {
-  height: 200px;
-  width: 200px;
+#dog-img {
+  height: 150px;
+  width: 150px;
   border-radius: 50%;
   margin: 1.5em;
 }
 
 @media (max-width: 1040px) {
-  #appointments-dog-img {
+  #dog-img {
     display: none;
   }
 }

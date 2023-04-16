@@ -119,7 +119,6 @@ export default {
     }
 
     const getAppts = async () => {
-      console.log('getAppts Called');
       const querySnapshot = await getDocs(collection(db, 'new-appointments'));
       const slotArray = ['s1', 's2', 's3', 's4'];
       const promises = querySnapshot.docs.map(async (docDates) => {
@@ -138,7 +137,6 @@ export default {
               let groomer = documentData.appt_groomer;
               if (selectedOptionEmployee.value.name === groomer) {
                 appts.value.push(apptDate);
-                console.log(apptDate, ' pushed');
               }
             })
           );
@@ -149,10 +147,8 @@ export default {
 
     // get leave data
     const getLeaves = async () => {
-      console.log('Function runs');
       isLoading.value = true;
       playAudio();
-      console.log('Loading is: ', isLoading.value);
       // reset input fields
       conflictLeaves.value = [];
       haveConflictLeaves.value = false;
@@ -174,7 +170,6 @@ export default {
         if (doc.id == 'info') {
           prevLeaveBalance.value = doc.data().prevLeaveBalance;
         } else {
-          // console.log(doc.id);
           let currDate = new Date(new Date(doc.id).toDateString());
           // if employee applies for leaves that already exist
           if (currDate >= startDate && currDate <= endDate) {
@@ -202,8 +197,8 @@ export default {
           }
         }
       }
-      console.log('conflict appts are ', conflictAppts.value);
-      console.log('conflict leaves are ', conflictLeaves.value);
+      // console.log('conflict appts are ', conflictAppts.value);
+      // console.log('conflict leaves are ', conflictLeaves.value);
       if (conflictLeaves.value.length > 0) {
         haveConflictLeaves.value = true;
       }
@@ -213,12 +208,10 @@ export default {
 
       let difference = endDate - startDate;
       requestedNumLeaves.value = Math.ceil(difference / (1000 * 3600 * 24)) + 1;
-      console.log('Num of leaves requested: ', requestedNumLeaves.value);
       remainingLeaveBalance.value = prevLeaveBalance.value - requestedNumLeaves.value;
 
       if (haveConflictAppts.value || haveConflictLeaves.value) {
         // reset filled inputs
-        console.log('CONFLICTS CAUGHT');
         conflictLeaves.value.forEach((element) => {
           console.log('Leave already applied on ', element);
         });
@@ -228,7 +221,6 @@ export default {
       }
       isLoading.value = false;
       pauseAudio();
-      console.log('Loading is ', isLoading.value);
     };
 
     const handleSubmit = async () => {
@@ -296,13 +288,11 @@ export default {
 
     // For demo purposes assign range from the current date
     onMounted(() => {
-      console.log('Mounted runs');
       audio.value = new Audio(loadingAudio);
       audio.value.loop = true;
       const startDate = new Date();
       const endDate = new Date();
       date.value = [startDate, endDate];
-      console.log('Mounted done');
     });
     return {
       date,

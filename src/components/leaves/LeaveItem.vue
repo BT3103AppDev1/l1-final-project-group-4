@@ -14,7 +14,6 @@ export default {
     // function that deletes leave
     const deleteLeave = async () => {
       await deleteDoc(doc(db, 'schedule', 'leaves', info.value.name, info.value.date));
-      console.log('Deleted');
       deleted.value = true;
 
       const docRef = doc(db, 'schedule', 'leaves', info.value.name, 'info');

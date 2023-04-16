@@ -63,7 +63,6 @@ export default {
               
                 let table = document.getElementById('appointment-table-employee')
                 let tr = document.createElement('tr')
-                console.log(userName, groomer)
                 // filters userName that is not the groomer
                 if (userName === groomer) {
                   table.appendChild(tr)

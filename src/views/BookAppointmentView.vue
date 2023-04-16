@@ -151,11 +151,9 @@ export default {
 
     // function to get slots for the selected Date
     async function getSlots() {
-      console.log('Mounted runs');
       isLoading.value = true;
       // plays music
       playAudio();
-      console.log('Loading is: ', isLoading.value);
 
       if (selectedDate.value == 'Select Date' || selectedDate.value == null) {
         isLoading.value = false;
@@ -165,7 +163,7 @@ export default {
 
       isLoading.value = true;
       playAudio();
-      console.log('Loading is: ', isLoading.value);
+
 
       // made helper function to count available employees at given timeslot
       async function countAvailableEmployees() {
@@ -220,7 +218,7 @@ export default {
           'new-appointments/' + toIsoString(selectedDate.value).substring(0, 10) + '/' + docid
         );
         const snapshot = await getCountFromServer(coll);
-        console.log('count: ' + i, snapshot.data().count);
+        // console.log('count: ' + i, snapshot.data().count);
 
         let a = document.createElement('a');
         a.id = docid;
@@ -234,7 +232,7 @@ export default {
         lis[i - 1].appendChild(a);
 
         if (snapshot.data().count >= employeeCount) {
-          console.log('cant select: ' + docid);
+          // console.log('cant select: ' + docid);
           a.className = 'disabled';
         }
       }
@@ -244,7 +242,7 @@ export default {
       }
       isLoading.value = false;
       pauseAudio();
-      console.log('Loading is ', isLoading.value);
+      // console.log('Loading is ', isLoading.value);
     }
 
     // handling submit function
@@ -318,10 +316,8 @@ export default {
       );
     }
     onMounted(() => {
-      console.log('Mounted runs');
       audio.value = new Audio(loadingAudio);
       audio.value.loop = true;
-      console.log('Mounted done');
     });
 
     return {

@@ -54,7 +54,6 @@ export default {
     }
     test(myDocID.value, myDate.value, mySlot.value).then((result) => {
       info.value = result;
-      console.log('info.value:', info.value[0]);
     });
 
     const isBathing = computed(() => info.value && info.value[0] == 1);

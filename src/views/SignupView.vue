@@ -57,16 +57,14 @@ export default {
           isOwner: false
         });
         var file = document.getElementById('profilepic').files[0];
-        // console.log(file);
         await uploadBytes(storageRef(storage, email.value.toLowerCase() + '.png'), file);
 
         await store.dispatch('logIn', {
           email: email.value,
           password: password.value
         });
-        console.log('doc ref is customers/' + email.value);
         const docRef = doc(db, 'customers', email.value);
-        console.log();
+
         const docSnap = await getDoc(docRef);
 
         // pushes user to appropriate site

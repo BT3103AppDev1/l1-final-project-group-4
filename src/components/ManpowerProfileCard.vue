@@ -52,15 +52,11 @@ export default {
     // loop through the documents to create table rows and cells with the retrieved data.
     // Handles deleting employees by calling the deleteEmployee() function and passing the employee ID and name as parameters.
     async function display() {
-      console.log('Function runs');
       isLoading.value = true;
-      // playAudio();
-      console.log('Loading is: ', isLoading.value);
 
       const querySnapshot = await getDocs(collection(db, 'employees'));
 
       querySnapshot.forEach(async function readDoc(doc) {
-        // doc.data() is never undefined for query doc snapshots
         console.log(doc.id, ' => ', doc.data());
         let documentData = doc.data();
         let employeeName = documentData.name;
@@ -120,7 +116,6 @@ export default {
       });
       isLoading.value = false;
       // pauseAudio();
-      console.log('Loading is ', isLoading.value);
     }
 
     const appts = vueref([]);
@@ -129,13 +124,10 @@ export default {
     // populates an array named appts with appointment dates that match the groomer name passed as a parameter.
     // It also handles loading state with isLoading ref, and plays/pauses audio with audio ref.
     const getAppts = async (name) => {
-      console.log('Function runs');
       isLoading.value = true;
       playAudio();
-      console.log('Loading is: ', isLoading.value);
 
       appts.value = [];
-      console.log('getAppts Called');
       const querySnapshot = await getDocs(collection(db, 'new-appointments'));
       const slotArray = ['s1', 's2', 's3', 's4'];
       const promises = querySnapshot.docs.map(async (docDates) => {
@@ -158,9 +150,9 @@ export default {
         }
       });
       await Promise.all(promises);
+      console.log("got all appts")
       isLoading.value = false;
       pauseAudio();
-      console.log('Loading is ', isLoading.value);
     };
 
     // The deleteEmployee() function handles deleting employees. It checks
@@ -212,10 +204,8 @@ export default {
       display();
     }
     onMounted(() => {
-      console.log('Mounted runs');
       audio.value = new Audio(loadingAudio);
       audio.value.loop = true;
-      console.log('Mounted done');
       display();
     });
 
