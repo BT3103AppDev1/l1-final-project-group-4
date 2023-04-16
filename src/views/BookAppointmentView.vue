@@ -278,10 +278,6 @@ export default {
         selectedOptionTimeSlot.value.toUpperCase() +
         counter;
 
-      await setDoc(doc(db, 'bookingtogroomer', id), {
-        groomer: null
-      });
-
       await setDoc(doc(db, 'new-appointments', toIsoString(selectedDate.value).substring(0, 10)), {
         date: toIsoString(selectedDate.value).substring(0, 10)
       });
