@@ -37,8 +37,15 @@ export default {
             // Retrieve the image
             document.getElementById(state).style.backgroundImage = `url(${url})`;
           })
-          .catch(() => {
-            // Handle any errors
+          .catch((error) => {
+            switch (error.code) {
+              case 'storage/object-not-found':
+                // File doesn't exist
+                document.getElementById(
+                  state
+                ).style.backgroundImage = `url(../src/assets/Dog${state}.png)`;
+                break;
+            }
           });
       }
       return info;
@@ -131,7 +138,6 @@ export default {
   margin: 50px;
   background-color: white;
   border-radius: 25px;
-  background-image: url('../assets/DogBath.png');
   background-repeat: no-repeat;
   background-size: 70%;
   background-position: center;
@@ -144,7 +150,6 @@ export default {
   margin: 50px;
   background-color: white;
   border-radius: 25px;
-  background-image: url('../assets/DogCut.png');
   background-repeat: no-repeat;
   background-size: 70%;
   background-position: center;
@@ -157,7 +162,6 @@ export default {
   margin: 50px;
   background-color: white;
   border-radius: 25px;
-  background-image: url('../assets/DogGroom.png');
   background-repeat: no-repeat;
   background-size: 70%;
   background-position: center;
