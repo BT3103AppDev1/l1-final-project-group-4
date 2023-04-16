@@ -276,8 +276,8 @@ export default {
 }
 
 #appointments-dog-img {
-  height: 150px;
-  width: 150px;
+  height: 200px;
+  width: 200px;
   border-radius: 50%;
   margin: 1.5em;
 }
