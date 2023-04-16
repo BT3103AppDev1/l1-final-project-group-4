@@ -1,7 +1,7 @@
 <script>
 import app from '../firebase.js';
 import { getFirestore } from 'firebase/firestore';
-import { collection, getDocs, getDoc, doc, deleteDoc, updateDoc, addDoc } from 'firebase/firestore';
+import { collection, getDocs, getDoc, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { onBeforeUnmount } from 'vue';
 import { ref as vueref } from 'vue';
 import PopUp from '@/components/PopUp.vue';
@@ -14,9 +14,10 @@ export default {
   },
 
   setup() {
-    const showError = vueref(false);
-    function showErrorPopUp() {
-      showError.value = true;
+    const show = vueref(false);
+    const message = vueref('');
+    function showPopUp() {
+      show.value = true;
     }
 
     const showDelete = vueref(false);
@@ -219,6 +220,7 @@ export default {
                         appt_groomer: selectedValue
                       }
                     );
+                    message.value = 'Saved';
                   } else {
                     console.log('cannot change');
                     const l = await getDoc(
@@ -241,9 +243,11 @@ export default {
                       p += 1;
                     }
                     if (employeeArray[p] != selectedValue) {
-                      showErrorPopUp();
+                      message.value =
+                        'Failed to change groomer. Groomer is already occupied at that moment or is on leave that day.';
                     }
                   }
+                  showPopUp();
                 });
                 td.appendChild(submitButton);
               }
@@ -295,8 +299,9 @@ export default {
 
     return {
       display,
-      showError,
-      showErrorPopUp,
+      show,
+      message,
+      showPopUp,
       showDelete,
       deleteMessage,
       showDeletePopUp,
@@ -323,9 +328,9 @@ export default {
     </tr>
   </table>
   <br /><br />
-  <PopUp id="error-popup" v-model="showError">
+  <PopUp id="popup" v-model="show">
     <h3>
-      Failed to change groomer. Groomer is already occupied at that moment or is on leave that day
+      {{ message }}
     </h3>
   </PopUp>
   <DeletePopUp id="delete-popup" v-model="showDelete" :onSubmit="handleDeleteAppt">
