@@ -125,4 +125,12 @@ export default {
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.4);
   transition: opacity 0.2s ease-in-out;
 }
+@media (max-width: 780px) {
+  .body {
+    flex-direction: column;
+  }
+  .profile-info {
+    justify-content: center;
+  }
+}
 </style>
