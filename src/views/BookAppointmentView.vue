@@ -150,7 +150,7 @@ export default {
       isLoading.value = true;
       playAudio();
       console.log('Loading is: ', isLoading.value);
-      
+
       if (selectedDate.value == 'Select Date' || selectedDate.value == null) {
         isLoading.value = false;
         pauseAudio();
@@ -606,5 +606,13 @@ body {
 
 #popup-msg {
   text-align: center;
+}
+@media (max-width: 1040px) {
+  .appt-picture {
+    display: none;
+  }
+  .appt-details {
+    justify-self: center;
+  }
 }
 </style>
