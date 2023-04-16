@@ -5,16 +5,24 @@ import { collection, getDocs, getDoc, doc, deleteDoc, updateDoc, addDoc } from '
 import { onBeforeUnmount } from 'vue';
 import { ref as vueref } from 'vue';
 import PopUp from '@/components/PopUp.vue';
+import DeletePopUp from '@/components/DeletePopUp.vue';
 
 export default {
   components: {
-    PopUp
+    PopUp,
+    DeletePopUp
   },
 
   setup() {
     const showError = vueref(false);
     function showErrorPopUp() {
       showError.value = true;
+    }
+
+    const showDelete = vueref(false);
+    const deleteMessage = vueref('');
+    function showDeletePopUp() {
+      showDelete.value = true;
     }
 
     const db = getFirestore(app);
@@ -242,16 +250,9 @@ export default {
               if (i == 10) {
                 var deleteButton = document.createElement('button');
                 deleteButton.innerText = 'Delete';
-                deleteButton.addEventListener('click', async function () {
-                  console.log(
-                    'new-appointments/' + docDates.id + '/' + slotArray[j] + '/' + docc.id
-                  );
-                  // add a pop up
-                  await deleteDoc(
-                    doc(db, 'new-appointments/' + docDates.id + '/' + slotArray[j], docc.id)
-                  );
-                  location.reload();
-                });
+                deleteButton.onclick = function () {
+                  deleteAppt(docDates.id, slotArray[j], docc.id);
+                };
 
                 td.appendChild(deleteButton);
               }
@@ -261,6 +262,27 @@ export default {
           });
         }
       });
+    }
+
+    async function handleDeleteAppt() {
+      const deleteDate = toDeleteDate.value;
+      const deleteSlot = toDeleteSlot.value;
+      const deleteDocID = toDeleteDocID.value;
+
+      await deleteDoc(doc(db, 'new-appointments/' + deleteDate + '/' + deleteSlot, deleteDocID));
+      location.reload();
+    }
+
+    const toDeleteDate = vueref('');
+    const toDeleteSlot = vueref('');
+    const toDeleteDocID = vueref('');
+
+    function deleteAppt(date, slot, docID) {
+      deleteMessage.value = 'You are going to delete appointment on: ' + date;
+      toDeleteDate.value = date;
+      toDeleteSlot.value = slot;
+      toDeleteDocID.value = docID;
+      showDeletePopUp();
     }
 
     display();
@@ -274,7 +296,11 @@ export default {
     return {
       display,
       showError,
-      showErrorPopUp
+      showErrorPopUp,
+      showDelete,
+      deleteMessage,
+      showDeletePopUp,
+      handleDeleteAppt
     };
   }
 };
@@ -302,6 +328,9 @@ export default {
       Failed to change groomer. Groomer is already occupied at that moment or is on leave that day
     </h3>
   </PopUp>
+  <DeletePopUp id="delete-popup" v-model="showDelete" :onSubmit="handleDeleteAppt">
+    <h3>{{ deleteMessage }}</h3>
+  </DeletePopUp>
 </template>
 
 <style scoped>

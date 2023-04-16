@@ -81,11 +81,14 @@ export default {
         let text = document.createElement('h2');
         text.id = 'no-appt-text';
         nothing.appendChild(text);
-        text.innerHTML = 'You have not booked an appointment with us before! Schedule with us now!';
+        text.innerHTML = 'No past appointments, schedule one now!';
         text.style.color = 'white';
         text.style.fontWeight = 'bold';
         text.style.fontSize = '3em';
         text.style.display = 'flex';
+        text.style.alignItems = 'center';
+        text.style.justifyContent = 'center';
+        text.style.marginTop = '2em';
       } else {
         display(bookingsInfo);
       }

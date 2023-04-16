@@ -64,7 +64,6 @@ h3 {
   width: 90%;
   font-size: 2em;
   font-weight: bold;
-  text-decoration: underline;
   padding-bottom: 0.5em;
   text-align: flex-start;
   justify-self: center;

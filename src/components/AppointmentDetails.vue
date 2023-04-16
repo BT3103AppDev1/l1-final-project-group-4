@@ -102,9 +102,9 @@ export default {
         text.style.fontWeight = 'bold';
         text.style.fontSize = '3em';
         text.style.display = 'flex';
-        text.style.alignItems = 'center'
-        text.style.justifyContent = 'center'
-        text.style.marginTop = '2em'
+        text.style.alignItems = 'center';
+        text.style.justifyContent = 'center';
+        text.style.marginTop = '2em';
       } else {
         display(bookingsInfo);
       }
@@ -283,7 +283,7 @@ export default {
       <table id="appointments-table"></table>
     </div>
     <LoadingPopUp v-model="isLoading" />
-    <DeletePopUp id="error-popup" v-model="showDelete" :onSubmit="handleDeleteAppt">
+    <DeletePopUp id="delete-popup" v-model="showDelete" :onSubmit="handleDeleteAppt">
       <h3>{{ deleteMessage }}</h3>
     </DeletePopUp>
   </div>
