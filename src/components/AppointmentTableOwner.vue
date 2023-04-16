@@ -62,6 +62,10 @@ export default {
       return true;
     }
 
+    // display() function retrieves data from new-appointments, creates an HTML table to display the data, 
+    // and populates the table with the retrieved data. The function also includes logic for handling appointments that need to 
+    // be moved to a different collection or deleted based on the current date. 
+    // The function also creates a dropdown element with options for selecting a groomer for an appointment.
     async function display() {
       let index = 1;
       const querySnapshot = await getDocs(collection(db, 'new-appointments'));
@@ -166,6 +170,7 @@ export default {
                       }
                     );
                   } else {
+                    // if cannot change, it would change to the correct index based on what is in the database
                     console.log('cannot change');
                     const l = await getDoc(
                       doc(db, 'new-appointments/' + docDates.id + '/' + slotArray[j], docc.id)

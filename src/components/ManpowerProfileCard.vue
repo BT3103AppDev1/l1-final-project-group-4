@@ -47,6 +47,10 @@ export default {
 
     const db = getFirestore(app);
 
+
+    // The display() function fetches data from a Firestore collection named 'employees', 
+    // loop through the documents to create table rows and cells with the retrieved data.
+    // Handles deleting employees by calling the deleteEmployee() function and passing the employee ID and name as parameters.
     async function display() {
       console.log('Function runs');
       isLoading.value = true;
@@ -120,6 +124,10 @@ export default {
     }
 
     const appts = vueref([]);
+
+    // The getAppts() function fetches data from 'new-appointments',
+    // populates an array named appts with appointment dates that match the groomer name passed as a parameter.
+    // It also handles loading state with isLoading ref, and plays/pauses audio with audio ref.
     const getAppts = async (name) => {
       console.log('Function runs');
       isLoading.value = true;
@@ -155,6 +163,11 @@ export default {
       console.log('Loading is ', isLoading.value);
     };
 
+    // The deleteEmployee() function handles deleting employees. It checks
+    // if the employee has pending appointments by calling the getAppts() function. If there are pending appointments,
+    // it displays an error message and calls the showErrorPopUp() function. 
+    // it calls the showDeletePopUp() function.
+
     async function deleteEmployee(employeeId, employeeName) {
       deleteMessage.value = 'You are going to delete ' + employeeName;
       await getAppts(employeeName);
@@ -172,6 +185,9 @@ export default {
     const toDeleteEmployeeId = vueref('');
     const toDeleteEmployeeName = vueref('');
 
+    // The handleDeleteEmployee() function is called when the user confirms deletion 
+    // of an employee in the delete popup, and it deletes the employee document from Firestore \
+    // and the corresponding employee image from Firebase storage.
     async function handleDeleteEmployee() {
       const employeeId = toDeleteEmployeeId.value;
       const employeeName = toDeleteEmployeeName.value;

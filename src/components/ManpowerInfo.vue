@@ -31,6 +31,8 @@ export default {
     const email = vueRef('');
     const phoneNum = vueRef('');
 
+    // The display() fetches data from the 'employees' collection in Firestore, 
+    // and fetches the attributes of an employee if it matches with the userName stored in store.
     async function display() {
       const querySnapshot = await getDocs(collection(db, 'employees'));
 

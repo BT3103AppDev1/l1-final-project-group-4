@@ -20,6 +20,7 @@ export default {
   <div class="navigation-bar" v-if="authIsReady">
     <div class="logo-nav-container">
       <img alt="Elsa" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+      <!-- Header when the length of the header is long enough -->
       <nav class="TheHeader">
         <router-link class="headerButton" to="/">
           <text class="navButton">HOME</text>
@@ -48,7 +49,7 @@ export default {
           <text class="navButton">PROFILE</text>
         </router-link>
       </nav>
-
+      <!-- Header becomes a drawer when view becomes too small -->
       <img
         alt="Menu"
         class="drawer"

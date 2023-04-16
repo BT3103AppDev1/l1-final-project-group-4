@@ -9,7 +9,9 @@ const storage = getStorage(app);
 export default {
   setup() {
     const db = getFirestore(app);
-
+    
+    // The display() function fetches employee data from a Firestore collection and for each employee document
+    // fetches its fields, and creates table elements and divs anddisplays the data to the tables elements.
     async function display() {
       const querySnapshot = await getDocs(collection(db, 'employees'));
 
