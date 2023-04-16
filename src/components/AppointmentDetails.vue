@@ -9,15 +9,18 @@ import {
   doc,
   deleteDoc
 } from 'firebase/firestore';
+import { getStorage, ref as storageref, getDownloadURL } from 'firebase/storage';
 import { useStore } from 'vuex';
 import { toRef, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import LoadingPopUp from '@/components/LoadingPopUp.vue';
 import loadingAudio from '../assets/loadingAudio.mp3';
+import DeletePopUp from '@/components/DeletePopUp.vue';
 
 export default {
   components: {
-    LoadingPopUp
+    LoadingPopUp,
+    DeletePopUp
   },
   props: {
     newDate: {
@@ -28,6 +31,7 @@ export default {
   setup(props) {
     const router = useRouter();
     const db = getFirestore(app);
+    const storage = getStorage(app);
     const store = useStore();
     const userEmail = store.state.userEmail;
     const todaysdate = toRef(props, 'newDate').value;
@@ -44,6 +48,12 @@ export default {
     const pauseAudio = () => {
       audio.value.pause();
     };
+
+    const showDelete = ref(false);
+    const deleteMessage = ref('');
+    function showDeletePopUp() {
+      showDelete.value = true;
+    }
 
     async function getUpcomingAppointments(todaysdate) {
       console.log('Function runs');
@@ -66,16 +76,16 @@ export default {
               if (!userEmailSnapshot.empty) {
                 noappts = false;
                 userEmailSnapshot.forEach((userDoc) => {
-                const docData = userDoc.data();
-                let date = docData.appt_date
-                let groomer = docData.appt_groomer
-                let pet = docData.appt_pet;
-                let service = docData.appt_service;
-                let time = docData.appt_time;
-                let slot = slots[i];
-                let docID = userDoc.id
-             
-                bookingsInfo.push([date, groomer, pet, service, time, slot, docID])            
+                  const docData = userDoc.data();
+                  let date = docData.appt_date;
+                  let groomer = docData.appt_groomer;
+                  let pet = docData.appt_pet;
+                  let service = docData.appt_service;
+                  let time = docData.appt_time;
+                  let slot = slots[i];
+                  let docID = userDoc.id;
+
+                  bookingsInfo.push([date, groomer, pet, service, time, slot, docID]);
                 });
               }
             }
@@ -92,7 +102,6 @@ export default {
         text.style.fontWeight = 'bold';
         text.style.fontSize = '3em';
         text.style.display = 'flex';
-        
       } else {
         display(bookingsInfo);
       }
@@ -101,19 +110,19 @@ export default {
       console.log('Loading is ', isLoading.value);
     }
 
-    getUpcomingAppointments(todaysdate)
+    getUpcomingAppointments(todaysdate);
 
     async function display(bookingsInfo) {
       for (let i = 0; i < bookingsInfo.length; i++) {
         //console.log(bookingsInfo[i])
 
-        let date = bookingsInfo[i][0]
-        let groomer = bookingsInfo[i][1]
-        let pet = bookingsInfo[i][2]
-        let service = bookingsInfo[i][3]
-        let time = bookingsInfo[i][4]
-        let slot = bookingsInfo[i][5]
-        let docID = bookingsInfo[i][6]
+        let date = bookingsInfo[i][0];
+        let groomer = bookingsInfo[i][1];
+        let pet = bookingsInfo[i][2];
+        let service = bookingsInfo[i][3];
+        let time = bookingsInfo[i][4];
+        let slot = bookingsInfo[i][5];
+        let docID = bookingsInfo[i][6];
 
         let table = document.getElementById('appointments-table');
         let tr = document.createElement('tr');
@@ -123,11 +132,14 @@ export default {
 
         let div1 = document.createElement('div');
         div1.id = 'appt-info';
+        div1.className = docID;
         td.appendChild(div1);
 
         let img = document.createElement('img');
-        img.id = 'card-profile-img';
-        img.src = 'src/assets/dog1.png'; // change this
+        await getDownloadURL(storageref(storage, userEmail + '-' + pet + '.png')).then((url) => {
+          img.setAttribute('src', url);
+        });
+        img.id = 'dog-img';
         div1.appendChild(img);
 
         let div2 = document.createElement('div');
@@ -137,6 +149,9 @@ export default {
         let div3 = document.createElement('div');
         div3.id = 'button';
         div1.appendChild(div3);
+
+        let br = document.createElement('br');
+        div2.appendChild(br);
 
         let header1 = document.createElement('h3');
         header1.id = 'pet-name';
@@ -153,17 +168,17 @@ export default {
         div2.appendChild(header3);
         header3.innerHTML = 'Time: ' + time;
 
+        let header5 = document.createElement('h3');
+        header5.id = 'appt-service';
+        div2.appendChild(header5);
+        header5.innerHTML = 'Service: ' + service;
+
         let header4 = document.createElement('h3');
         header4.id = 'appt-groomer';
         div2.appendChild(header4);
         if (groomer != null) {
           header4.innerHTML = 'Groomer: ' + groomer;
         }
-
-        let header5 = document.createElement('h3');
-        header5.id = 'appt-service';
-        div2.appendChild(header5);
-        header5.innerHTML = 'Service: ' + service;
 
         let progressButton = document.createElement('button');
         progressButton.className = 'progress-button';
@@ -173,17 +188,16 @@ export default {
           progressButton.addEventListener('click', () => {
             router.push({
               name: 'groomingprogress',
-                query: {
-                  myDate: date,
-                  myDocID: docID,
-                  mySlot: slot
-                },
+              query: {
+                myDate: date,
+                myDocID: docID,
+                mySlot: slot
+              }
             });
           });
-        }
-        else {
+        } else {
           progressButton.style.opacity = '0.5';
-        }   
+        }
 
         let closeButton = document.createElement('button');
         closeButton.className = 'delete-appt-button';
@@ -201,15 +215,50 @@ export default {
         closeButton.innerHTML = 'X';
         div1.append(closeButton);
 
-        closeButton.addEventListener('click', async () => {
-          const docRef = doc(db, 'new-appointments', date);
-          const subCollectionRef = collection(docRef, slot);
-          const docToDeleteRef = doc(subCollectionRef, docID);
-          await deleteDoc(docToDeleteRef);
-          div1.remove();
+        closeButton.onclick = function () {
+          deleteAppt(date, slot, docID);
+        };
+
+        closeButton.addEventListener('mouseover', () => {
+          closeButton.style.backgroundColor = 'orange';
+        });
+
+        closeButton.addEventListener('mouseout', () => {
+          closeButton.style.backgroundColor = 'red';
         });
       }
     }
+
+    async function handleDeleteAppt() {
+      const deleteDate = toDeleteDate.value;
+      const deleteSlot = toDeleteSlot.value;
+      const deleteDocID = toDeleteDocID.value;
+
+      const docRef = doc(db, 'new-appointments', deleteDate);
+      const subCollectionRef = collection(docRef, deleteSlot);
+      const docToDeleteRef = doc(subCollectionRef, deleteDocID);
+      await deleteDoc(docToDeleteRef);
+
+      console.log('Document successfully deleted!', deleteDate);
+      let elements = document.getElementsByClassName(deleteDocID);
+      console.log(elements);
+      while (elements.length > 0) {
+        elements[0].remove();
+      }
+    }
+
+    const toDeleteDate = ref('');
+    const toDeleteSlot = ref('');
+    const toDeleteDocID = ref('');
+
+    function deleteAppt(date, slot, docID) {
+      deleteMessage.value = 'You are going to delete appointment on: ' + date;
+      toDeleteDate.value = date;
+      toDeleteSlot.value = slot;
+      toDeleteDocID.value = docID;
+      showDeletePopUp();
+    }
+
     onMounted(() => {
       console.log('Mounted runs');
       audio.value = new Audio(loadingAudio);
@@ -219,7 +268,7 @@ export default {
       console.log(noappts);
     });
 
-    return { isLoading };
+    return { isLoading, showDelete, deleteMessage, showDeletePopUp, handleDeleteAppt };
   }
 };
 </script>
@@ -231,6 +280,9 @@ export default {
       <table id="appointments-table"></table>
     </div>
     <LoadingPopUp v-model="isLoading" />
+    <DeletePopUp id="error-popup" v-model="showDelete" :onSubmit="handleDeleteAppt">
+      <h3>{{ deleteMessage }}</h3>
+    </DeletePopUp>
   </div>
 </template>
 
@@ -266,12 +318,6 @@ export default {
   flex-direction: column;
   flex-grow: 4;
 }
-#card-profile-img {
-  width: 200px;
-  height: 200px;
-  margin-left: 3em;
-  display: flex;
-}
 #button {
   display: flex;
   flex-grow: 1;
@@ -301,5 +347,18 @@ export default {
   font-size: 20px;
   margin-top: 0.2em;
   margin-left: 3em;
+}
+
+#dog-img {
+  height: 150px;
+  width: 150px;
+  border-radius: 50%;
+  margin: 1.5em;
+}
+
+@media (max-width: 1040px) {
+  #dog-img {
+    display: none;
+  }
 }
 </style>
