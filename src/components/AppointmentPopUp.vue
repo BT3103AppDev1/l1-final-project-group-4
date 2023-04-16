@@ -23,7 +23,7 @@ export default {
       this.$emit('update:modelValue', false);
 
       // Navigate to "/bookappointments" route
-      this.$router.push('/myappointments');
+      this.$router.push('/');
     }
   }
 };
