@@ -1,41 +1,57 @@
 <script>
 import app from '../firebase.js';
-import TheHeader from '@/components/TheHeader.vue'
-import {  useRoute } from 'vue-router';
-import { computed , ref } from 'vue';
+import TheHeader from '@/components/TheHeader.vue';
+import { useRoute } from 'vue-router';
+import { computed, ref } from 'vue';
 import { getFirestore, collection, doc, getDoc } from 'firebase/firestore';
+import { getStorage, ref as storageref, getDownloadURL } from 'firebase/storage';
 
 export default {
   components: {
-    TheHeader,
+    TheHeader
   },
   setup() {
-    const route = useRoute()
-    
+    const route = useRoute();
+
     const db = getFirestore(app);
     const myDocID = computed(() => route.query.myDocID);
     const myDate = computed(() => route.query.myDate);
     const mySlot = computed(() => route.query.mySlot);
     const info = ref('');
-    
+
+    const storage = getStorage(app); // Create a storage instance using the 'getStorage' function from Firebase, passing in the 'app' instance
+
     async function test(myDocID, myDate, mySlot) {
       const docRef = doc(db, 'new-appointments', myDate);
       const subCollectionRef = collection(docRef, mySlot);
-      const document = doc(subCollectionRef, myDocID);
-      const documentSnapshot = await getDoc(document);
+      const document1 = doc(subCollectionRef, myDocID);
+      const documentSnapshot = await getDoc(document1);
       const documentData = documentSnapshot.data();
-      const info = [documentData.status_bath, documentData.status_cut, documentData.status_groom]
-      return info
+      const info = [documentData.status_bath, documentData.status_cut, documentData.status_groom];
+
+      const states = ['Bath', 'Cut', 'Groom'];
+      for (let i = 0; i < states.length; i++) {
+        const state = states[i];
+        await getDownloadURL(storageref(storage, documentData.appt_pet + '-' + state + '.png'))
+          .then((url) => {
+            // Retrieve the image
+            document.getElementById(state).style.backgroundImage = `url(${url})`;
+          })
+          .catch(() => {
+            // Handle any errors
+          });
+      }
+      return info;
     }
     test(myDocID.value, myDate.value, mySlot.value).then((result) => {
       info.value = result;
-      console.log("info.value:", info.value[0]);
+      console.log('info.value:', info.value[0]);
     });
 
     const isBathing = computed(() => info.value && info.value[0] == 1);
     const isCutting = computed(() => info.value && info.value[1] == 1);
     const isGrooming = computed(() => info.value && info.value[2] == 1);
-   
+
     return {
       myDocID,
       myDate,
@@ -43,47 +59,38 @@ export default {
       isBathing,
       isCutting,
       isGrooming
-    }
+    };
   },
   methods: {
     goBack() {
       this.$router.go(-1);
     }
   }
-}
+};
 </script>
-
 
 <template>
   <main>
     <TheHeader />
-    
 
     <div class="GroomingProgress">
-      
-      <h1 style="color:#193a6a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin-left: 1.5em; margin-top: 1em;">
-        Track your pet's grooming progress!
-      </h1>
-      <br>
+      <h1 id="grooming-prog-h1">Track your pet's grooming progress!</h1>
+      <br />
 
-    <div class="columns">
-      <div class="bath completed" :class =" isBathing? 'active' : 'inactive' " >
-        <h2>Bath</h2>
-      </div>
+      <div class="grooming-prog-columns">
+        <div id="Bath" :class="isBathing ? 'active' : 'inactive'">
+          <h2 class="grooming-prog-h2">Bath</h2>
+        </div>
 
+        <div id="Cut" :class="isCutting ? 'active' : 'inactive'">
+          <h2 class="grooming-prog-h2">Cut</h2>
+        </div>
 
-      <div class="cut in-progress" :class =" isCutting? 'active' : 'inactive' " >
-        <h2>Cut</h2>
+        <div id="Groom" :class="isGrooming ? 'active' : 'inactive'">
+          <h2 class="grooming-prog-h2">Groom</h2>
+        </div>
       </div>
-      
-      <div class="groom" :class =" isGrooming? 'active' : 'inactive' ">
-        <h2>Groom</h2>
-      </div>
-
-     
-      
-      </div>
-      <button class = "back" @click="goBack">Back</button>
+      <button id="grooming-prog-back" @click="goBack">Back</button>
     </div>
   </main>
 </template>
@@ -94,26 +101,30 @@ export default {
   background-color: #d4e5f3;
 }
 
-h1 {
+#grooming-prog-h1 {
   font-size: 3em;
   font-weight: bold;
   margin-left: 20px;
   color: #193a6a;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-left: 1.5em;
+  margin-top: 1em;
 }
 
-h2 {
+.grooming-prog-h2 {
   font-size: 2em;
   font-weight: bold;
   margin-left: 20px;
-  color: #193a6a;
+  color: white;
 }
-.columns {
+
+.grooming-prog-columns {
   display: flex;
   flex-direction: row;
   width: 100%;
 }
 
-.bath {
+#Bath {
   flex: 20%;
   height: 400px;
   padding: 10px;
@@ -124,9 +135,9 @@ h2 {
   background-repeat: no-repeat;
   background-size: 70%;
   background-position: center;
-  background-color:#193a6a;
+  background-color: #193a6a;
 }
-.cut {
+#Cut {
   flex: 20%;
   height: 400px;
   padding: 10px;
@@ -137,9 +148,9 @@ h2 {
   background-repeat: no-repeat;
   background-size: 70%;
   background-position: center;
-  background-color:#193a6a;
+  background-color: #193a6a;
 }
-.groom {
+#Groom {
   flex: 20%;
   height: 400px;
   padding: 10px;
@@ -149,20 +160,20 @@ h2 {
   background-image: url('../assets/DogGroom.png');
   background-repeat: no-repeat;
   background-size: 70%;
-  background-position: center; 
-  background-color:#193a6a;
+  background-position: center;
+  background-color: #193a6a;
 }
 
 .active {
   box-shadow: 0 0 70px #3679a8;
 }
 .inactive {
-  opacity: 60%
+  opacity: 60%;
 }
 
-.back {
-  background-color:#193a6a;
-  color:white;
+#grooming-prog-back {
+  background-color: #193a6a;
+  color: white;
   margin-left: 3em;
   font-size: 20px;
   padding: 0.7em 1.3em 0.7em 1.3em;
