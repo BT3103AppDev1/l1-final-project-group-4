@@ -139,11 +139,11 @@ export default {
       <div class="sub-container">
         <h1>Create your Account</h1>
         <input class="input" type="text" placeholder="Name" v-model="name" required />
+        <input type="file" id="profilepic" required />
         <input class="input" type="email" placeholder="Email" v-model="email" required />
         <input type="password" placeholder="Password" v-model="password" required />
         <input type="password" placeholder="Confirm Password" v-model="confirmPassword" required />
         <input class="input" type="phone" placeholder="Phone Number" v-model="phone" required />
-        <input type="file" id="profilepic" required />
       </div>
       <div class="sub-container">
         <button type="submit" class="submit" @click="checkPassword()">Register</button>
@@ -241,15 +241,15 @@ input[type='password'] {
 }
 
 input[type='phone'] {
-  background-image: url('../assets/user.png');
+  background-image: url('../assets/phone.png');
   background-size: 2.5em;
   background-position: 12px 4px;
   background-repeat: no-repeat;
 }
 
 input[type='file'] {
-  background-image: url('../assets/user.png');
-  background-size: 2.3em;
+  background-image: url('../assets/upload.png');
+  background-size: 2.5em;
   background-position: 15px 4px;
   background-repeat: no-repeat;
 }

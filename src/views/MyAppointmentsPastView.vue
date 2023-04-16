@@ -1,14 +1,11 @@
 <script>
 import TheHeader from '@/components/TheHeader.vue';
-import AppointmentDetails from '@/components/AppointmentDetails.vue';
-
-
+import AppointmentPastDetails from '@/components/AppointmentPastDetails.vue';
 
 export default {
   components: {
     TheHeader,
-    AppointmentDetails, 
-  
+    AppointmentPastDetails
   },
   setup() {
     const currentDate = new Date();
@@ -17,14 +14,10 @@ export default {
     const day = String(currentDate.getDate()).padStart(2, '0');
     const date = `${year}-${month}-${day}`;
 
- 
-
-    return { date }
-    }
-}
-
+    return { date };
+  }
+};
 </script>
-
 
 <template>
   <div class="main">
@@ -39,7 +32,7 @@ export default {
         </div>
       </div>
       <div id="my-appts">
-        <AppointmentDetails :newDate=date />
+        <AppointmentPastDetails :newDate="date" />
       </div>
     </div>
   </div>
@@ -55,7 +48,6 @@ export default {
 a {
   text-decoration: none;
   color: grey;
-  
 }
 
 h3 {
@@ -66,14 +58,12 @@ h3 {
   display: flex;
   height: 100vh;
   overflow: hidden;
-  
 }
 
 #headerappointmentsview {
   width: 90%;
-  font-size:2em;
-  font-weight:bold;
-  text-decoration:underline;
+  font-size: 2em;
+  font-weight: bold;
   padding-bottom: 0.5em;
   text-align: flex-start;
   justify-self: center;
@@ -98,9 +88,8 @@ h3 {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center; 
+  align-items: center;
 }
-
 
 #my-appts {
   width: 90%;
@@ -112,8 +101,5 @@ h3 {
   justify-content: center;
   overflow: scroll;
   height: 70vh;
-} 
-
-
-
+}
 </style>

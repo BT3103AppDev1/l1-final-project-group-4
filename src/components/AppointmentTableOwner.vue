@@ -1,20 +1,29 @@
 <script>
 import app from '../firebase.js';
 import { getFirestore } from 'firebase/firestore';
-import { collection, getDocs, getDoc, doc, deleteDoc, updateDoc, addDoc } from 'firebase/firestore';
+import { collection, getDocs, getDoc, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { onBeforeUnmount } from 'vue';
 import { ref as vueref } from 'vue';
 import PopUp from '@/components/PopUp.vue';
+import DeletePopUp from '@/components/DeletePopUp.vue';
 
 export default {
   components: {
-    PopUp
+    PopUp,
+    DeletePopUp
   },
 
   setup() {
-    const showError = vueref(false);
-    function showErrorPopUp() {
-      showError.value = true;
+    const show = vueref(false);
+    const message = vueref('');
+    function showPopUp() {
+      show.value = true;
+    }
+
+    const showDelete = vueref(false);
+    const deleteMessage = vueref('');
+    function showDeletePopUp() {
+      showDelete.value = true;
     }
 
     const db = getFirestore(app);
@@ -169,6 +178,7 @@ export default {
                         appt_groomer: selectedValue
                       }
                     );
+                    message.value = 'Saved';
                   } else {
                     // if cannot change, it would change to the correct index based on what is in the database
                     console.log('cannot change');
@@ -192,25 +202,20 @@ export default {
                       p += 1;
                     }
                     if (employeeArray[p] != selectedValue) {
-                      showErrorPopUp();
+                      message.value =
+                        'Failed to change groomer. Groomer is already occupied at that moment or is on leave that day.';
                     }
                   }
+                  showPopUp();
                 });
                 td.appendChild(submitButton);
               }
               if (i == 10) {
                 var deleteButton = document.createElement('button');
                 deleteButton.innerText = 'Delete';
-                deleteButton.addEventListener('click', async function () {
-                  console.log(
-                    'new-appointments/' + docDates.id + '/' + slotArray[j] + '/' + docc.id
-                  );
-                  // add a pop up
-                  await deleteDoc(
-                    doc(db, 'new-appointments/' + docDates.id + '/' + slotArray[j], docc.id)
-                  );
-                  location.reload();
-                });
+                deleteButton.onclick = function () {
+                  deleteAppt(docDates.id, slotArray[j], docc.id);
+                };
 
                 td.appendChild(deleteButton);
               }
@@ -220,6 +225,27 @@ export default {
           });
         }
       });
+    }
+
+    async function handleDeleteAppt() {
+      const deleteDate = toDeleteDate.value;
+      const deleteSlot = toDeleteSlot.value;
+      const deleteDocID = toDeleteDocID.value;
+
+      await deleteDoc(doc(db, 'new-appointments/' + deleteDate + '/' + deleteSlot, deleteDocID));
+      location.reload();
+    }
+
+    const toDeleteDate = vueref('');
+    const toDeleteSlot = vueref('');
+    const toDeleteDocID = vueref('');
+
+    function deleteAppt(date, slot, docID) {
+      deleteMessage.value = 'You are going to delete appointment on: ' + date;
+      toDeleteDate.value = date;
+      toDeleteSlot.value = slot;
+      toDeleteDocID.value = docID;
+      showDeletePopUp();
     }
 
     display();
@@ -232,8 +258,13 @@ export default {
 
     return {
       display,
-      showError,
-      showErrorPopUp
+      show,
+      message,
+      showPopUp,
+      showDelete,
+      deleteMessage,
+      showDeletePopUp,
+      handleDeleteAppt
     };
   }
 };
@@ -256,11 +287,14 @@ export default {
     </tr>
   </table>
   <br /><br />
-  <PopUp id="error-popup" v-model="showError">
+  <PopUp id="popup" v-model="show">
     <h3>
-      Failed to change groomer. Groomer is already occupied at that moment or is on leave that day
+      {{ message }}
     </h3>
   </PopUp>
+  <DeletePopUp id="delete-popup" v-model="showDelete" :onSubmit="handleDeleteAppt">
+    <h3>{{ deleteMessage }}</h3>
+  </DeletePopUp>
 </template>
 
 <style scoped>
