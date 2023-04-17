@@ -178,7 +178,7 @@ export default {
   display: flex;
   border-style: solid;
   border-width: 0.1em;
-  height: 85%;
+  height: 90%;
   width: 40vw;
   justify-content: space-around;
   flex-direction: column;
@@ -216,7 +216,7 @@ input {
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
   transition: 0.3s box-shadow;
   padding: 1em;
-  margin: 1em;
+  margin: 0.5em;
   padding-left: 5em;
 }
 
