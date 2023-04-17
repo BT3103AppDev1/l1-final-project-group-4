@@ -62,14 +62,14 @@ export default {
                 <li>Puppy Cut: $85 (Toy), $95 (S), $105(M)</li>
                 <li>Teddy Bear Cut: $120 (Toy), $130 (S), $160 (M)</li>
               </ol>
-            </div >
-            <div id ="get-service">
-            <router-link to="/bookappointment" v-if="authIsReady" id="getService">
-              <h3>Get Service &#x2794;</h3>
-            </router-link>
-            <router-link to="/login" v-if="!authIsReady" id="getService"
-              ><h3>Get Service &#x2794;</h3></router-link
-            >
+            </div>
+            <div id="get-service">
+              <router-link to="/bookappointment" v-if="authIsReady" id="getService">
+                <h3>Get Service &#x2794;</h3>
+              </router-link>
+              <router-link to="/login" v-if="!authIsReady" id="getService"
+                ><h3>Get Service &#x2794;</h3></router-link
+              >
             </div>
           </div>
         </div>
@@ -166,7 +166,7 @@ export default {
 .card {
   display: flex;
   flex-direction: column;
-  justify-content: space-between; 
+  justify-content: space-between;
   margin: 0 15px;
   width: 55vw;
   height: 34vh;
@@ -199,7 +199,6 @@ export default {
   text-align: center;
   flex-direction: row;
   align-items: center;
-  
 }
 #card-header h2 {
   display: flex;
@@ -215,7 +214,7 @@ export default {
   flex-direction: column;
   margin-bottom: 1em;
   overflow-y: auto; /* Add scrollbars when necessary */
-  max-height: calc(34vh - 200px);
+  max-height: calc(34vh - 100px);
 }
 #getService {
   margin-bottom: 0em;
@@ -265,7 +264,7 @@ export default {
     flex-direction: column;
     justify-content: space-between;
     margin: 5px 15px;
-    width: 75vw; 
+    width: 75vw;
     height: 34vh;
     background: white;
     border-radius: 25px;
@@ -277,6 +276,4 @@ export default {
     margin-top: 0em;
   }
 }
-
-
 </style>
