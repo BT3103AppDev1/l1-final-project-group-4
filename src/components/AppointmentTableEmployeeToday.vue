@@ -51,7 +51,6 @@ export default {
       const store = useStore();
 
       const userName = store.state.userName;
-      console.log(userName);
       let index = 1;
       const slotArray = ['s1', 's2', 's3', 's4'];
       const statusArray = ['Not Started', 'In Progress', 'Completed'];
@@ -63,8 +62,6 @@ export default {
         querySnapshot.docs;
         querySnapshot.forEach(async (docc) => {
           let documentData = docc.data();
-          // console.log(documentData)
-
           let apptdate = documentData.appt_date;
           let email = documentData.appt_email;
           let customer = documentData.appt_name;
@@ -110,8 +107,6 @@ export default {
                 let k = 0;
 
                 for (var status of statusArray) {
-                  console.log('status: ', status);
-                  // console.log("Employee: ", employee)
                   var option = document.createElement('option');
                   option.value = k;
                   option.text = status;
@@ -130,8 +125,6 @@ export default {
                 let k = 0;
 
                 for (var status1 of statusArray) {
-                  console.log('status: ', status1);
-                  // console.log("Employee: ", employee)
                   var option1 = document.createElement('option');
                   option1.value = k;
                   option1.text = status1;
@@ -150,16 +143,11 @@ export default {
                 let k = 0;
 
                 for (var status2 of statusArray) {
-                  console.log('status2: ', status2);
-                  // console.log("Employee: ", employee)
                   var option2 = document.createElement('option');
                   option2.value = k;
                   option2.text = status2;
                   dropdown2.add(option2);
-                  console.log('Selected:', values[i]);
-                  console.log('k', k);
                   if (parseInt(values[i]) === k) {
-                    console.log(values[i], k);
                     dropdown2.selectedIndex = k;
                   }
                   k += 1;
@@ -177,11 +165,9 @@ export default {
               }
 
               if (i == 13) {
-                console.log(slotArray[j]);
                 var submitButton = document.createElement('button');
                 submitButton.innerText = 'Save';
                 submitButton.addEventListener('click', async function () {
-                  console.log(dropdown.value, dropdown1.value, dropdown2.value);
                   await updateDoc(
                     doc(db, 'new-appointments/' + today + '/' + slotArray[j], docc.id),
                     {

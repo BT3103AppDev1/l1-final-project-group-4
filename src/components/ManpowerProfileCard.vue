@@ -56,7 +56,6 @@ export default {
       const querySnapshot = await getDocs(collection(db, 'employees'));
 
       querySnapshot.forEach(async function readDoc(doc) {
-        console.log(doc.id, ' => ', doc.data());
         let documentData = doc.data();
         let employeeName = documentData.name;
         let employeeFullTime = documentData.fullTime;
@@ -149,7 +148,6 @@ export default {
         }
       });
       await Promise.all(promises);
-      console.log('got all appts');
       isLoading.value = false;
       pauseAudio();
     };

@@ -38,7 +38,6 @@ export default {
 
       querySnapshot.forEach(async function readDoc(doc) {
         // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, ' => ', doc.data());
         let documentData = doc.data();
         let employeeName = documentData.name;
         if (employeeName == store.state.userName) {

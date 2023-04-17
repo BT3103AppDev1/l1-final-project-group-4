@@ -105,16 +105,16 @@ export default {
       var today = new Date();
       var dd = today.getDate();
 
-      var mm = today.getMonth()+1; 
+      var mm = today.getMonth() + 1;
       var yyyy = today.getFullYear();
-      if(dd<10) {
-          dd='0'+dd;
-      } 
+      if (dd < 10) {
+        dd = '0' + dd;
+      }
 
-      if (mm<10) {
-          mm='0'+mm;
-      } 
-      today = yyyy+'-'+mm+'-'+dd;
+      if (mm < 10) {
+        mm = '0' + mm;
+      }
+      today = yyyy + '-' + mm + '-' + dd;
       return today;
     }
 
@@ -197,8 +197,6 @@ export default {
           }
         }
       }
-      // console.log('conflict appts are ', conflictAppts.value);
-      // console.log('conflict leaves are ', conflictLeaves.value);
       if (conflictLeaves.value.length > 0) {
         haveConflictLeaves.value = true;
       }
