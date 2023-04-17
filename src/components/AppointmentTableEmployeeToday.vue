@@ -173,8 +173,8 @@ export default {
                     doc(db, 'new-appointments/' + today + '/' + slotArray[j], docc.id),
                     {
                       status_bath: parseInt(dropdown.value),
-                      status_groom: parseInt(dropdown1.value),
-                      status_cut: parseInt(dropdown2.value)
+                      status_cut: parseInt(dropdown1.value),
+                      status_groom: parseInt(dropdown2.value)
                     }
                   );
                   showMessagePopUp();
