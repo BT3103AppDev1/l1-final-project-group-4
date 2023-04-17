@@ -32,9 +32,9 @@ export default {
       type: Boolean,
       default: false
     },
-    dogName: {
+    apptID: {
       type: String,
-      required: true
+      required: false
     }
   },
   data() {
@@ -44,14 +44,14 @@ export default {
     };
   },
   methods: {
-    async upload(dogName, dogStatus) {
+    async upload(apptID, dogStatus) {
       const storage = getStorage(app);
       var file = document.getElementById('dogpic').files[0];
-      await uploadBytes(ref(storage, dogName + '-' + dogStatus + '.png'), file);
+      await uploadBytes(ref(storage, apptID + '-' + dogStatus + '.png'), file);
     },
 
     async submitForm() {
-      await this.upload(this.dogName, this.dogStatus);
+      await this.upload(this.apptID, this.dogStatus);
       this.$emit('update:modelValue', false); // this just closes the popup after submitting the form
     },
     closeForm() {

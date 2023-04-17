@@ -41,7 +41,7 @@ export default {
       const states = ['Bath', 'Cut', 'Groom'];
       for (let i = 0; i < states.length; i++) {
         const state = states[i];
-        await getDownloadURL(storageref(storage, documentData.appt_pet + '-' + state + '.png'))
+        await getDownloadURL(storageref(storage, documentData.appt_id + '-' + state + '.png'))
           .then((url) => {
             // Retrieve the image
             document.getElementById(state).style.backgroundImage = `url(${url})`;
@@ -57,12 +57,11 @@ export default {
             }
           });
       }
-      
+
       return info;
     }
     test(myDocID.value, myDate.value, mySlot.value).then((result) => {
       info.value = result;
-     
 
       isBathing.value = computed(() => info.value && info.value[0] == 1);
       isCutting.value = computed(() => info.value && info.value[1] == 1);
@@ -71,53 +70,48 @@ export default {
       haventCut.value = computed(() => info.value && info.value[1] == 0);
       haventGroom.value = computed(() => info.value && info.value[2] == 0);
 
-      console.log(groomClass.value)
-      console.log(cutClass.value)
-      console.log(bathClass.value)
-      
-
+      console.log(groomClass.value);
+      console.log(cutClass.value);
+      console.log(bathClass.value);
     });
     const bathClass = computed(() => {
-        if (isBathing.value === null || haventBath.value === null) {
-          return '';
-        }
-        if (isBathing.value.value) {
-          return 'in-progress';
-        } else if (haventBath.value.value) {
-          return 'not-started';
-        } else {
-          return 'done';
-        }
-      });
-      
+      if (isBathing.value === null || haventBath.value === null) {
+        return '';
+      }
+      if (isBathing.value.value) {
+        return 'in-progress';
+      } else if (haventBath.value.value) {
+        return 'not-started';
+      } else {
+        return 'done';
+      }
+    });
 
-      const cutClass = computed(() => {
-        if (isCutting.value === null || haventCut.value === null) {
-          return '';
-        }
-        if (isCutting.value.value) {
-          return 'in-progress';
-        } else if (haventCut.value.value) {
-          return 'not-started';
-        } else {
-          return 'done';
-        }
-      });
+    const cutClass = computed(() => {
+      if (isCutting.value === null || haventCut.value === null) {
+        return '';
+      }
+      if (isCutting.value.value) {
+        return 'in-progress';
+      } else if (haventCut.value.value) {
+        return 'not-started';
+      } else {
+        return 'done';
+      }
+    });
 
-      const groomClass = computed(() => {
-        if (isGrooming.value === null || haventGroom.value === null) {
-          return '';
-        }
-        if (isGrooming.value.value) {
-          return 'in-progress';
-        } else if (haventGroom.value.value) {
-          return 'not-started';
-        } else {
-          return 'done';
-        }
-      });
-  
-
+    const groomClass = computed(() => {
+      if (isGrooming.value === null || haventGroom.value === null) {
+        return '';
+      }
+      if (isGrooming.value.value) {
+        return 'in-progress';
+      } else if (haventGroom.value.value) {
+        return 'not-started';
+      } else {
+        return 'done';
+      }
+    });
 
     return {
       myDocID,
@@ -151,7 +145,6 @@ export default {
       <br />
 
       <div class="grooming-prog-columns">
-
         <div id="Bath" :class="bathClass">
           <h2 class="grooming-prog-h2">Bath</h2>
         </div>
@@ -209,6 +202,7 @@ export default {
   background-size: 70%;
   background-position: center;
   background-color: #193a6a;
+  opacity: 60%;
 }
 #Cut {
   flex: 20%;
@@ -221,6 +215,7 @@ export default {
   background-size: 70%;
   background-position: center;
   background-color: #193a6a;
+  opacity: 60%;
 }
 #Groom {
   flex: 20%;
@@ -233,13 +228,15 @@ export default {
   background-size: 70%;
   background-position: center;
   background-color: #193a6a;
+  opacity: 60%;
 }
 
 .in-progress {
   box-shadow: 0 0 70px #3679a8;
+  opacity: 100% !important;
 }
-.not-started {
-  opacity: 60%;
+.done {
+  opacity: 100% !important;
 }
 
 #grooming-prog-back {

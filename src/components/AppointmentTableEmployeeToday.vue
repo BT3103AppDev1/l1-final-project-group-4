@@ -14,10 +14,10 @@ export default {
   },
   setup() {
     const show = vueRef(false);
-    const dogName = vueRef('');
-    function showAddProgressPopUp(pet) {
+    const apptID = vueRef('');
+    function showAddProgressPopUp(id) {
       show.value = true;
-      dogName.value = pet;
+      apptID.value = id;
     }
 
     const showPopUp = vueRef(false);
@@ -44,9 +44,9 @@ export default {
       today = yyyy + '-' + mm + '-' + dd;
       return today;
     }
-    const today = getToday()
+    const today = getToday();
 
-    // display() fetches all appointment fields for the employee happening today. It creates table elements that would be displayed. 
+    // display() fetches all appointment fields for the employee happening today. It creates table elements that would be displayed.
     async function display() {
       const store = useStore();
 
@@ -77,7 +77,20 @@ export default {
           let statusGroom = documentData.status_groom;
           let statusCut = documentData.status_cut;
 
-          const values = [index, bookingid, email, customer, pet, service, apptdate, appttime, groomer, statusBath, statusCut, statusGroom]
+          const values = [
+            index,
+            bookingid,
+            email,
+            customer,
+            pet,
+            service,
+            apptdate,
+            appttime,
+            groomer,
+            statusBath,
+            statusCut,
+            statusGroom
+          ];
           let table = document.getElementById('appointment-table-today-employee');
 
           // filters the groomer to match the userName. Groomers that do not match the user are not shown in this component.
@@ -158,7 +171,7 @@ export default {
                 var button = document.createElement('button'); // Create a new dropdown element
                 button.innerText = 'Update';
                 button.onclick = function () {
-                  showAddProgressPopUp(pet);
+                  showAddProgressPopUp(bookingid);
                 };
                 td.appendChild(button);
               }
@@ -190,7 +203,7 @@ export default {
     }
 
     display();
-     // On onbeforeunmount the tables rows are deleted there is only the header left.
+    // On onbeforeunmount the tables rows are deleted there is only the header left.
     onBeforeUnmount(() => {
       let table = document.getElementById('appointment-table-today-employee');
       while (table.rows.length > 1) {
@@ -200,7 +213,7 @@ export default {
     return {
       display,
       show,
-      dogName,
+      apptID,
       showPopUp,
       message,
       showMessagePopUp
@@ -234,11 +247,7 @@ export default {
       {{ message }}
     </h3>
   </PopUp>
-  <AddProgressPopUp
-    v-model="show"
-    :dog-name="dogName"
-    @update:modelValue="refresh"
-  ></AddProgressPopUp>
+  <AddProgressPopUp v-model="show" :apptID="apptID" @update:modelValue="refresh"></AddProgressPopUp>
 </template>
 
 <style scoped>
