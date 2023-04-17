@@ -19,6 +19,13 @@ export default {
     const mySlot = computed(() => route.query.mySlot);
     const info = ref('');
 
+    const isBathing = ref(null);
+    const isCutting = ref(null);
+    const isGrooming = ref(null);
+    const haventBath = ref(null);
+    const haventCut = ref(null);
+    const haventGroom = ref(null);
+
     const storage = getStorage(app); // Create a storage instance using the 'getStorage' function from Firebase, passing in the 'app' instance
 
     // function fetches video/image of the dog that is in the midst of their service.
@@ -50,15 +57,67 @@ export default {
             }
           });
       }
+      
       return info;
     }
     test(myDocID.value, myDate.value, mySlot.value).then((result) => {
       info.value = result;
-    });
+     
 
-    const isBathing = computed(() => info.value && info.value[0] == 1);
-    const isCutting = computed(() => info.value && info.value[1] == 1);
-    const isGrooming = computed(() => info.value && info.value[2] == 1);
+      isBathing.value = computed(() => info.value && info.value[0] == 1);
+      isCutting.value = computed(() => info.value && info.value[1] == 1);
+      isGrooming.value = computed(() => info.value && info.value[2] == 1);
+      haventBath.value = computed(() => info.value && info.value[0] == 0);
+      haventCut.value = computed(() => info.value && info.value[1] == 0);
+      haventGroom.value = computed(() => info.value && info.value[2] == 0);
+
+      console.log(groomClass.value)
+      console.log(cutClass.value)
+      console.log(bathClass.value)
+      
+
+    });
+    const bathClass = computed(() => {
+        if (isBathing.value === null || haventBath.value === null) {
+          return '';
+        }
+        if (isBathing.value.value) {
+          return 'in-progress';
+        } else if (haventBath.value.value) {
+          return 'not-started';
+        } else {
+          return 'done';
+        }
+      });
+      
+
+      const cutClass = computed(() => {
+        if (isCutting.value === null || haventCut.value === null) {
+          return '';
+        }
+        if (isCutting.value.value) {
+          return 'in-progress';
+        } else if (haventCut.value.value) {
+          return 'not-started';
+        } else {
+          return 'done';
+        }
+      });
+
+      const groomClass = computed(() => {
+        if (isGrooming.value === null || haventGroom.value === null) {
+          return '';
+        }
+        if (isGrooming.value.value) {
+          return 'in-progress';
+        } else if (haventGroom.value.value) {
+          return 'not-started';
+        } else {
+          return 'done';
+        }
+      });
+  
+
 
     return {
       myDocID,
@@ -66,7 +125,13 @@ export default {
       mySlot,
       isBathing,
       isCutting,
-      isGrooming
+      isGrooming,
+      haventBath,
+      haventCut,
+      haventGroom,
+      cutClass,
+      bathClass,
+      groomClass
     };
   },
   methods: {
@@ -86,15 +151,16 @@ export default {
       <br />
 
       <div class="grooming-prog-columns">
-        <div id="Bath" :class="isBathing ? 'active' : 'inactive'">
+
+        <div id="Bath" :class="bathClass">
           <h2 class="grooming-prog-h2">Bath</h2>
         </div>
 
-        <div id="Cut" :class="isCutting ? 'active' : 'inactive'">
+        <div id="Cut" :class="cutClass">
           <h2 class="grooming-prog-h2">Cut</h2>
         </div>
 
-        <div id="Groom" :class="isGrooming ? 'active' : 'inactive'">
+        <div id="Groom" :class="groomClass">
           <h2 class="grooming-prog-h2">Groom</h2>
         </div>
       </div>
@@ -169,10 +235,10 @@ export default {
   background-color: #193a6a;
 }
 
-.active {
+.in-progress {
   box-shadow: 0 0 70px #3679a8;
 }
-.inactive {
+.not-started {
   opacity: 60%;
 }
 
