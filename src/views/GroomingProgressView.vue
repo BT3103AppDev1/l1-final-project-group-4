@@ -46,14 +46,14 @@ export default {
             // Retrieve the image
             document.getElementById(state).style.backgroundImage = `url(${url})`;
           })
-          .catch((error) => {
+          .catch(async (error) => {
             switch (error.code) {
               case 'storage/object-not-found':
                 // File doesn't exist
-                document.getElementById(
-                  state
-                ).style.backgroundImage = `url(../src/assets/Dog${state}.png)`;
-                break;
+                await getDownloadURL(storageref(storage, 'Dog' + state + '.png')).then((url) => {
+                  // Retrieve the image
+                  document.getElementById(state).style.backgroundImage = `url(${url})`;
+                });
             }
           });
       }
