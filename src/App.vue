@@ -1,15 +1,22 @@
 <script setup>
-import { RouterView } from 'vue-router'
+import { onMounted } from 'vue';
 
+onMounted(() => {
+  document.title = 'Paws & Pampers';
+  const link = document.createElement('link');
+  link.rel = 'icon';
+  link.href = 'src/assets/paws.png';
+  document.head.appendChild(link);
+});
 </script>
 
 <template>
-  <router-view class="views"/>
+  <router-view class="views" />
 </template>
 
 <style scoped>
-  .views {
-    display: flex;
-    flex-direction: column;
-  }
+.views {
+  display: flex;
+  flex-direction: column;
+}
 </style>
