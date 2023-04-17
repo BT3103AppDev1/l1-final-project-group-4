@@ -48,7 +48,9 @@ export default {
   justify-content: center;
 }
 .card-profile-img {
+  object-fit: cover;
   height: 200px;
+  width: 200px;
   border-radius: 50%;
   margin-top: 50px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

@@ -101,12 +101,10 @@ export default {
 
     getPastAppointments(todaysdate);
 
-
     // The display() function displays the bookingsInfo in the desired manner by creating their own elements and appending it to
     // the appointments-table.
     async function display(bookingsInfo) {
       for (let i = 0; i < bookingsInfo.length; i++) {
-
         let date = bookingsInfo[i][0];
         let groomer = bookingsInfo[i][1];
         let pet = bookingsInfo[i][2];
@@ -196,7 +194,6 @@ export default {
       audio.value = new Audio(loadingAudio);
       audio.value.loop = true;
       getPastAppointments(todaysdate);
-
     });
 
     return { isLoading };
@@ -278,6 +275,7 @@ export default {
 }
 
 #dog-img {
+  object-fit: cover;
   height: 200px;
   width: 200px;
   border-radius: 50%;

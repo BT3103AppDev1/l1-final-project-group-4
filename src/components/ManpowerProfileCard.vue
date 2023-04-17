@@ -47,8 +47,7 @@ export default {
 
     const db = getFirestore(app);
 
-
-    // The display() function fetches data from a Firestore collection named 'employees', 
+    // The display() function fetches data from a Firestore collection named 'employees',
     // loop through the documents to create table rows and cells with the retrieved data.
     // Handles deleting employees by calling the deleteEmployee() function and passing the employee ID and name as parameters.
     async function display() {
@@ -150,14 +149,14 @@ export default {
         }
       });
       await Promise.all(promises);
-      console.log("got all appts")
+      console.log('got all appts');
       isLoading.value = false;
       pauseAudio();
     };
 
     // The deleteEmployee() function handles deleting employees. It checks
     // if the employee has pending appointments by calling the getAppts() function. If there are pending appointments,
-    // it displays an error message and calls the showErrorPopUp() function. 
+    // it displays an error message and calls the showErrorPopUp() function.
     // it calls the showDeletePopUp() function.
 
     async function deleteEmployee(employeeId, employeeName) {
@@ -177,7 +176,7 @@ export default {
     const toDeleteEmployeeId = vueref('');
     const toDeleteEmployeeName = vueref('');
 
-    // The handleDeleteEmployee() function is called when the user confirms deletion 
+    // The handleDeleteEmployee() function is called when the user confirms deletion
     // of an employee in the delete popup, and it deletes the employee document from Firestore \
     // and the corresponding employee image from Firebase storage.
     async function handleDeleteEmployee() {
@@ -284,6 +283,7 @@ export default {
 }
 
 #employee-img {
+  object-fit: cover;
   height: 150px;
   width: 150px;
   border-radius: 50%;

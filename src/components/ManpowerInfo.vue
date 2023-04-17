@@ -31,7 +31,7 @@ export default {
     const email = vueRef('');
     const phoneNum = vueRef('');
 
-    // The display() fetches data from the 'employees' collection in Firestore, 
+    // The display() fetches data from the 'employees' collection in Firestore,
     // and fetches the attributes of an employee if it matches with the userName stored in store.
     async function display() {
       const querySnapshot = await getDocs(collection(db, 'employees'));
@@ -117,7 +117,9 @@ export default {
 }
 
 .card-profile-img {
+  object-fit: cover;
   height: 300px;
+  width: 300px;
   border-radius: 50%;
   margin: 15%;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

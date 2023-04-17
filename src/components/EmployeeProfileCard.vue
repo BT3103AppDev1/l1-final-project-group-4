@@ -9,7 +9,7 @@ const storage = getStorage(app);
 export default {
   setup() {
     const db = getFirestore(app);
-    
+
     // The display() function fetches employee data from a Firestore collection and for each employee document
     // fetches its fields, and creates table elements and divs anddisplays the data to the tables elements.
     async function display() {
@@ -102,6 +102,7 @@ export default {
 }
 
 #employee-profile-img {
+  object-fit: cover;
   height: 150px;
   width: 150px;
   border-radius: 50%;
