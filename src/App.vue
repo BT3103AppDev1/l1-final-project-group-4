@@ -5,7 +5,7 @@ onMounted(() => {
   document.title = 'Paws & Pampers';
   const link = document.createElement('link');
   link.rel = 'icon';
-  link.href = 'http://clipart-library.com/images/8czno86ji.png';
+  link.href = 'https://upload.wikimedia.org/wikipedia/commons/5/51/Paw-print.svg';
   document.head.appendChild(link);
 });
 </script>
