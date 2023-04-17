@@ -31,10 +31,12 @@ export default {
     };
 
     const checkPassword = () => {
-      if (password.value == confirmPassword.value) {
-        handleSubmit();
-      } else {
+      if (password.value != confirmPassword.value) {
         errorMsg.value = "Passwords don't match";
+      } else if (!/^\d+$/.test(phone.value)) {
+        errorMsg.value = 'Please enter a valid phone number';
+      } else {
+        handleSubmit();
       }
     };
 
@@ -56,8 +58,11 @@ export default {
           isEmployee: false,
           isOwner: false
         });
+
         var file = document.getElementById('profilepic').files[0];
-        await uploadBytes(storageRef(storage, email.value.toLowerCase() + '.png'), file);
+        if (file === !undefined) {
+          await uploadBytes(storageRef(storage, email.value.toLowerCase() + '.png'), file);
+        }
 
         await store.dispatch('logIn', {
           email: email.value,
@@ -96,6 +101,12 @@ export default {
             break;
           case 'auth/weak-password':
             errorMsg.value = 'Please choose a stronger password';
+            break;
+          case 'auth/missing-email':
+            errorMsg.value = 'Please enter a email';
+            break;
+          case 'auth/missing-password':
+            errorMsg.value = 'Please enter a password';
             break;
           default:
             errorMsg.value = 'Error Occured. Please try again later';
