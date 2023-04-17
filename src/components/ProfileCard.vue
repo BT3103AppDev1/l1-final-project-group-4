@@ -1,19 +1,19 @@
 <script>
-import { useStore } from 'vuex'; 
-import app from '../firebase.js'; 
-import { getStorage, ref, getDownloadURL } from 'firebase/storage'; 
+import { useStore } from 'vuex';
+import app from '../firebase.js';
+import { getStorage, ref, getDownloadURL } from 'firebase/storage';
 
 const storage = getStorage(app); // Create a storage instance using the 'getStorage' function from Firebase, passing in the 'app' instance
 
 export default {
   setup() {
     const store = useStore(); // Access the Vuex store using the 'useStore' function
-    
+
     // Get appropriate properties from the Vuex store's state
 
-    const userEmail = store.state.userEmail; 
-    const userName = store.state.userName; 
-    const userPhone = store.state.userPhone; 
+    const userEmail = store.state.userEmail;
+    const userName = store.state.userName;
+    const userPhone = store.state.userPhone;
 
     getDownloadURL(ref(storage, userEmail + '.png')).then((url) => {
       // Retrieve the image for the profile card
@@ -32,9 +32,9 @@ export default {
       <img class="card-profile-img" id="profilepic" src="@/assets/default-avatar-profile.png" />
       <br />
       <div class="my-details">
-        <h3 id="customer_name">Name: {{ userName }}</h3>
-        <h3 id="customer_email">Email: {{ userEmail }}</h3>
-        <h3 id="customer_phone">Contact Number: {{ userPhone }}</h3>
+        <h3 id="user_name">Name: {{ userName }}</h3>
+        <h3 id="user_email">Email: {{ userEmail }}</h3>
+        <h3 id="user_phone">Contact Number: {{ userPhone }}</h3>
       </div>
     </div>
   </div>
@@ -54,9 +54,9 @@ export default {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-#customer_name,
-#customer_email,
-#customer_phone {
+#user_name,
+#user_email,
+#user_phone {
   color: black;
   font-weight: bold;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

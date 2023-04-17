@@ -31,7 +31,7 @@ export default {
           email: email.value,
           password: password.value
         });
-        const docRef = doc(db, 'customers', email.value);
+        const docRef = doc(db, 'users', email.value);
         const docSnap = await getDoc(docRef);
 
         // pushes user to the appropriate site

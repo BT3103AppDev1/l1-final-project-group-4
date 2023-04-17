@@ -53,7 +53,7 @@ export default {
       isLoading.value = true;
       playAudio();
 
-      const docRef = doc(db, 'customers', userEmail);
+      const docRef = doc(db, 'users', userEmail);
       const querySnapshot = await getDocs(collection(docRef, 'dogs'));
 
       querySnapshot.forEach(async function readDoc(doc) {
@@ -125,7 +125,7 @@ export default {
       const dogId = toDeleteDogId.value;
       const dogName = toDeleteDogName.value;
 
-      const docRef = doc(db, 'customers/' + userEmail + '/dogs', dogId);
+      const docRef = doc(db, 'users/' + userEmail + '/dogs', dogId);
       await deleteDoc(docRef);
       const imgRef = ref(storage, userEmail + '-' + dogName + '.png');
       // Delete the file

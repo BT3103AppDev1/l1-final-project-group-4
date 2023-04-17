@@ -48,10 +48,10 @@ export default {
           phoneNumber: phone.value
         });
         // adds user to customer, with appropriate site privileges
-        await setDoc(doc(db, 'customers', email.value.toLowerCase()), {
-          customer_name: name.value,
-          customer_email: email.value.toLowerCase(),
-          customer_phone: phone.value,
+        await setDoc(doc(db, 'users', email.value.toLowerCase()), {
+          user_name: name.value,
+          user_email: email.value.toLowerCase(),
+          user_phone: phone.value,
           isAdmin: false,
           isEmployee: false,
           isOwner: false
@@ -63,7 +63,7 @@ export default {
           email: email.value,
           password: password.value
         });
-        const docRef = doc(db, 'customers', email.value);
+        const docRef = doc(db, 'users', email.value);
 
         const docSnap = await getDoc(docRef);
 
