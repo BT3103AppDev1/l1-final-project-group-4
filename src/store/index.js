@@ -67,11 +67,11 @@ const store = createStore({
       if (response) {
         context.commit('setUser', response.user);
         context.commit('setUserEmail', auth.currentUser.email);
-        const docRef = doc(db, 'customers', auth.currentUser.email);
+        const docRef = doc(db, 'users', auth.currentUser.email);
         const docSnap = await getDoc(docRef);
         let documentData = docSnap.data();
-        let name = documentData.customer_name;
-        let phone = documentData.customer_phone;
+        let name = documentData.user_name;
+        let phone = documentData.user_phone;
         let isAdmin = documentData.isAdmin;
         let isEmployee = documentData.isEmployee;
         let isOwner = documentData.isOwner;
@@ -101,9 +101,9 @@ const store = createStore({
       const response = await createUserWithEmailAndPassword(auth, email, password);
       // console.log(response)
       if (response) {
-        console.log(email, " account successfully created")
+        console.log(email, ' account successfully created');
       } else {
-        console.log("signup for employee failed")
+        console.log('signup for employee failed');
         throw new Error('Could not complete login');
       }
     },

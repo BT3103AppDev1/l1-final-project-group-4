@@ -36,11 +36,11 @@ export default {
           password: password
         });
 
-        // Set employee data to Firestore collection 'customers'
-        await setDoc(doc(db, 'customers', email.toLowerCase()), {
-          customer_name: name,
-          customer_email: email.toLowerCase(),
-          customer_phone: phoneNum,
+        // Set employee data to Firestore collection 'users'
+        await setDoc(doc(db, 'users', email.toLowerCase()), {
+          user_name: name,
+          user_email: email.toLowerCase(),
+          user_phone: phoneNum,
           isAdmin: true,
           isEmployee: true,
           isOwner: false

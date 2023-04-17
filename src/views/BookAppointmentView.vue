@@ -42,7 +42,7 @@ export default {
   setup() {
     const db = getFirestore(app);
     const store = useStore();
-    
+
     // store variables
     const userEmail = store.state.userEmail;
     const userName = store.state.userName;
@@ -126,7 +126,7 @@ export default {
 
     // function to get all dogs belonging to owner
     async function getDogs() {
-      const docRef = doc(db, 'customers', userEmail);
+      const docRef = doc(db, 'users', userEmail);
       const querySnapshot = await getDocs(collection(docRef, 'dogs'));
 
       querySnapshot.forEach((doc) => {
@@ -164,7 +164,6 @@ export default {
       isLoading.value = true;
       playAudio();
 
-
       // made helper function to count available employees at given timeslot
       async function countAvailableEmployees() {
         var counter = 0;
@@ -191,7 +190,7 @@ export default {
 
       getAvailableSlots(await countAvailableEmployees());
     }
-    
+
     // function that gets available slots from the employee count and create the dropdown elements.
     // if slot is unavailable. Slot cannot be selected
     async function getAvailableSlots(employeeCount) {
@@ -286,7 +285,7 @@ export default {
         selectedOptionTimeSlot.value.toUpperCase() +
         counter;
 
-        // sets doc to allow doc to accessed
+      // sets doc to allow doc to accessed
       await setDoc(doc(db, 'new-appointments', toIsoString(selectedDate.value).substring(0, 10)), {
         date: toIsoString(selectedDate.value).substring(0, 10)
       });

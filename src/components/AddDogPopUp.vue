@@ -63,8 +63,8 @@ export default {
     async createDoggo(name, sex, breed, dob) {
       const db = getFirestore(app);
       const email = this.userEmail;
-      // Add a document to the 'dogs' subcol under the email doc in the 'customers' collection
-      const docRef = await addDoc(collection(db, 'customers', email, 'dogs'), {
+      // Add a document to the 'dogs' subcol under the email doc in the 'users' collection
+      const docRef = await addDoc(collection(db, 'users', email, 'dogs'), {
         dog_name: name,
         dog_sex: sex,
         dog_breed: breed,
@@ -72,9 +72,8 @@ export default {
       });
 
       var file = document.getElementById('dogpic').files[0];
-      
-      await uploadBytes(ref(storage, email + '-' + name + '.png'), file);
 
+      await uploadBytes(ref(storage, email + '-' + name + '.png'), file);
     },
     async submitForm() {
       await this.createDoggo(this.dogName, this.sex, this.breed, this.dob);
