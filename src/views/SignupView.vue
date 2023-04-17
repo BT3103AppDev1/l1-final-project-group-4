@@ -60,7 +60,10 @@ export default {
         });
 
         var file = document.getElementById('profilepic').files[0];
-        if (file === !undefined) {
+        if (file === undefined) {
+          console.log('no file');
+        } else {
+          console.log('file');
           await uploadBytes(storageRef(storage, email.value.toLowerCase() + '.png'), file);
         }
 
