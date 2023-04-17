@@ -53,6 +53,7 @@ a {
 
 h3 {
   font-weight: bold;
+  width: 300px;
 }
 .main {
   display: flex;

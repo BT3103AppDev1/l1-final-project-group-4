@@ -39,7 +39,7 @@ export default {
               cleaning, haircuts, nail trimming and medicated bath to make your dog look smart and
               healthy.
               <br /><br />
-              <strong>Price:</strong> From $55 (Toy), $65 (S), $75 (M)
+              Price: From $55 (Toy), $65 (S), $75 (M)
             </div>
             <router-link to="/bookappointment" v-if="authIsReady" id="getService">
               <h3>Get Service &#x2794;</h3>
@@ -59,22 +59,18 @@ export default {
               grooming will be covered.
               <br /><br />
               <ol>
-                <li>Puppy Cut</li>
-                <ul>
-                  <li><strong>From:</strong> $85 (Toy), $95 (S), $105(M)</li>
-                </ul>
-                <li>Teddy Bear Cut</li>
-                <ul>
-                  <li><strong>From:</strong> $120 (Toy), $130 (S), $160 (M)</li>
-                </ul>
+                <li>Puppy Cut: $85 (Toy), $95 (S), $105(M)</li>
+                <li>Teddy Bear Cut: $120 (Toy), $130 (S), $160 (M)</li>
               </ol>
-            </div>
+            </div >
+            <div id ="get-service">
             <router-link to="/bookappointment" v-if="authIsReady" id="getService">
               <h3>Get Service &#x2794;</h3>
             </router-link>
             <router-link to="/login" v-if="!authIsReady" id="getService"
               ><h3>Get Service &#x2794;</h3></router-link
             >
+            </div>
           </div>
         </div>
         <div id="row">
@@ -89,7 +85,7 @@ export default {
               techs can effectively clean both above & below the gum line and polish while your dog
               remains alert & comfortable.
               <br /><br />
-              <strong>Price:</strong> From $80
+              Price: $80 onwards
             </div>
             <router-link to="/bookappointment" v-if="authIsReady" id="getService">
               <h3>Get Service &#x2794;</h3>
@@ -111,7 +107,7 @@ export default {
                 <li>Japan Ayurveda Herb Spa Treatment</li>
               </ol>
               <br />
-              <strong>Price:</strong> From $45
+              Price: $45 onwards
             </div>
             <router-link to="/bookappointment" v-if="authIsReady" id="getService">
               <h3>Get Service &#x2794;</h3>
@@ -170,9 +166,9 @@ export default {
 .card {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-between; 
   margin: 0 15px;
-  width: 35vw;
+  width: 55vw;
   height: 34vh;
   background: white;
   border-radius: 25px;
@@ -189,6 +185,7 @@ export default {
   margin-left: 20px;
   color: #193a6a;
   font-weight: bold;
+  margin-bottom: 1em;
 }
 .card:hover h3 {
   color: #ffda47;
@@ -202,11 +199,13 @@ export default {
   text-align: center;
   flex-direction: row;
   align-items: center;
+  
 }
 #card-header h2 {
   display: flex;
   vertical-align: middle;
   font-weight: bold;
+  margin: 0;
 }
 #card-body {
   display: flex;
@@ -215,10 +214,13 @@ export default {
   text-align: justify;
   flex-direction: column;
   margin-bottom: 1em;
+  overflow-y: auto; /* Add scrollbars when necessary */
+  max-height: calc(34vh - 200px);
 }
 #getService {
-  margin-bottom: 1em;
+  margin-bottom: 0em;
 }
+
 .services {
   display: flex;
 }
@@ -263,7 +265,7 @@ export default {
     flex-direction: column;
     justify-content: space-between;
     margin: 5px 15px;
-    width: 325px;
+    width: 75vw; 
     height: 34vh;
     background: white;
     border-radius: 25px;
@@ -275,4 +277,6 @@ export default {
     margin-top: 0em;
   }
 }
+
+
 </style>
