@@ -246,6 +246,7 @@ export default {
 
     // handling submit function
     async function handleSubmit() {
+      document.getElementById('submit-button').disabled = true;
       if (selectedOptionPet.value == 'Select Pet') {
         popUpMsg.value = 'Please select pet';
         show.value = true;
@@ -313,6 +314,8 @@ export default {
           status_groom: 0
         }
       );
+
+      document.getElementById('submit-button').disabled = false;
     }
     onMounted(() => {
       audio.value = new Audio(loadingAudio);

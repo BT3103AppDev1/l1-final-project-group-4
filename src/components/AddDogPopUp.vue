@@ -25,7 +25,7 @@
         <input id="dogpic" type="file" required />
       </div>
 
-      <button class="close-popup">OK</button>
+      <button id="ok-btn" class="close-popup">OK</button>
     </form>
   </div>
 </template>
@@ -61,6 +61,7 @@ export default {
   },
   methods: {
     async createDoggo(name, sex, breed, dob) {
+      document.getElementById('ok-btn').disabled = true;
       const db = getFirestore(app);
       const email = this.userEmail;
       // Add a document to the 'dogs' subcol under the email doc in the 'users' collection
@@ -74,6 +75,7 @@ export default {
       var file = document.getElementById('dogpic').files[0];
 
       await uploadBytes(ref(storage, email + '-' + name + '.png'), file);
+      document.getElementById('ok-btn').disabled = false;
     },
     async submitForm() {
       await this.createDoggo(this.dogName, this.sex, this.breed, this.dob);
