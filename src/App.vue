@@ -5,7 +5,7 @@ onMounted(() => {
   document.title = 'Paws & Pampers';
   const link = document.createElement('link');
   link.rel = 'icon';
-  link.href = 'src/assets/paws.png';
+  link.href = 'http://clipart-library.com/images/8czno86ji.png';
   document.head.appendChild(link);
 });
 </script>
