@@ -12,7 +12,8 @@ Our application is hosted at: https://elsa-grooming.web.app/
 Business Owner: admin@pawsandpampers.com
 Employee: qingwei@pawsandpampers.com
 Password for business owner and employee: 123456
-Customer: <feel free to create your own account>
+
+Feel free to create your own customer account
 
 ## Getting Started
 
